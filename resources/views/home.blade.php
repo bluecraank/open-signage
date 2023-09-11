@@ -37,7 +37,6 @@
                             <td>{{ $device->description }}</td>
                             <td>{{ ($presentation[$device->presentation_id]['name']) ?? 'Keine Vorlage zugewiesen' }}</td>
                             <td>{{ $device->last_seen ?? ($device->registered ? 'Registriert...' : 'Warte auf Registrierung...') }}
-                                @if(!$device->registered) Key: <span class="blur secret">{{ $device->secret }}</span> @endif
                             </td>
                             <td>
 

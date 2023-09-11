@@ -30,20 +30,33 @@
                 </div>
 
                 <div class="field">
-                    <label class="label">PDF Datei hochladen (Slides)</label>
-                    <input class="" type="file" name="file" accept=".pdf">
-                    {{-- <div class="file">
+                    <label for="" class="label">PDF hochladen</label>
+                    <div class="file has-name" id="file-upload">
                         <label class="file-label">
+                            <input class="file-input" type="file" name="file" accept=".pdf">
                             <span class="file-cta">
                                 <span class="file-icon">
                                     <i class="mdi mdi-upload"></i>
                                 </span>
                                 <span class="file-label">
-                                    Choose a file…
+                                    PDF wählen…
                                 </span>
                             </span>
+                            <span class="file-name">
+                                Keine Datei gewählt
+                            </span>
                         </label>
-                    </div> --}}
+                    </div>
+
+                    <script>
+                        const fileInput = document.querySelector('#file-upload input[type=file]');
+                        fileInput.onchange = () => {
+                            if (fileInput.files.length > 0) {
+                                const fileName = document.querySelector('#file-upload .file-name');
+                                fileName.textContent = fileInput.files[0].name;
+                            }
+                        }
+                    </script>
                 </div>
 
                 <button type="submit" class="button is-primary is-small">Erstellen</button>
