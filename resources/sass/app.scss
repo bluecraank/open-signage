@@ -1,0 +1,51 @@
+@import 'bulma/css/bulma.css';
+@import '@mdi/font/css/materialdesignicons.css';
+
+html,
+body,
+#app {
+    height: 100%;
+}
+
+.is-fullheight {
+    height: 100%;
+}
+
+#app {
+    min-height: 100%;
+}
+
+.footer {
+    margin-top: -12px;
+}
+
+@media screen and (max-width: 768px) {
+    #menu-toggle:checked+.nav-menu {
+        display: block;
+    }
+}
+
+.custom-menu li {
+    height: 55px;
+    padding: 1px;
+    line-height: 55px;
+}
+
+.card.has-table .card-content {
+    padding: 1em 0;
+}
+
+.card-header-actions {
+    align-items: center;
+    display: flex;
+    padding-right: 1em;
+}
+
+.some-space {
+    padding-top: 4em;
+}
+
+.blur {
+    color: transparent;
+    text-shadow: 0 0 10px black;
+}
