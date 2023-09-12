@@ -24,7 +24,7 @@
                         <th>{{ __('Presentation') }}</th>
                         <th>{{ __('Current slide') }}</th>
                         <th>{{ __('Last seen') }}</th>
-                        <th>{{ __('Last update') }}</th>
+                        <th>{{ __('Last connection') }}</th>
                         <th>{{ __('Actions') }}</th>
                     </tr>
                 </thead>

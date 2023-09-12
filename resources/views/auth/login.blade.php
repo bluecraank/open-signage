@@ -8,7 +8,7 @@
                     <div class="card">
                         <header class="card-header">
                             <p class="card-header-title">
-                                Anmelden
+                                {{ __('Login') }}
                             </p>
                         </header>
 
@@ -46,7 +46,7 @@
 
                                 <div class="field">
                                     <button type="submit" class="button is-primary">
-                                        {{ __('Anmelden') }}
+                                        {{ __('Login') }}
                                     </button>
                                 </div>
                             </form>
