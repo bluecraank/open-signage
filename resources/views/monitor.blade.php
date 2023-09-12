@@ -11,11 +11,34 @@
 </head>
 
 <body>
+    @if (config('app.loading_background_type') == 'color')
+        <style>
+            .loading {
+                background-color: {{ config('app.loading_background_color') }};
+            }
+        </style>
+    @else
+        <style>
+            .loading {
+                background-color: white;
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-image: url('{{ config('app.loading_background_image') }}');
+            }
+        </style>
+    @endif
+
     <div class="loading">
         <div class="container">
-            <div class="lds-ripple">
-                <div></div>
-                <div></div>
+            <div>
+                <div class="lds-ripple">
+                    <div></div>
+                    <div></div>
+                </div>
+
+                <div class="text">
+                    {{ config('app.loading_background_text') }}
+                </div>
             </div>
         </div>
     </div>
@@ -60,7 +83,7 @@
             var slideInterval = setInterval(nextSlide, interval);
 
             setTimeout(() => {
-                $(".loading").hide();
+                $(".loading").fadeOut(1000);
             }, 6000);
 
             function nextSlide() {
@@ -74,7 +97,6 @@
                 console.log('[MISMANAGER] Triggering next slide');
 
                 if (document.hasFocus()) {
-                    $(".loading").hide();
                     $(slides[currentSlide]).animate({
                         'opacity': '0'
                     }, {{ config('app.slide_out_time') }});
@@ -91,8 +113,6 @@
         let startup_timestamp = {{ time() }};
 
         let checkUpdate = setInterval(function() {
-            console.log("[MISMANAGER] Checking for updates");
-
             $.ajax({
                 url: '/api/devices/monitor/update',
                 type: 'POST',
@@ -106,19 +126,27 @@
                 },
                 success: function(data) {
                     data = JSON.parse(data);
-                    if (data.last_update != last_update || data.presentation_id !=
-                        {{ $device->presentation_id }}) {
+                    if (data.last_update != last_update) {
 
                         console.log("[MISMANAGER] A new update is available, reloading page");
 
                         location.reload();
                     }
 
-                    if(data.force_reload) {
+                    if (data.presentation_id != {{ $device->presentation_id }}) {
+                        console.log("[MISMANAGER] A new presentation was assigned, reloading page");
+
+                        location.reload();
+                    }
+
+                    if (data.force_reload) {
                         console.log("[MISMANAGER] A force reload was requested, reloading page");
 
                         location.reload();
                     }
+                },
+                error: function(data) {
+                    console.log("[MISMANAGER] An error occured while checking for updates");
                 }
             });
         }, {{ config('app.monitor_check_update_time_seconds') }} * 1000);

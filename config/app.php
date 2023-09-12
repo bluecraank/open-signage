@@ -24,6 +24,10 @@ return [
     'slide_out_time_ms' => env('SLIDE_OUT_TIME_MS', 500),
     'slide_in_time_ms' => env('SLIDE_IN_TIME_MS', 500),
     'interval_next_slide_ms' => env('INTERVAL_NEXT_SLIDE_MS', 10000),
+    'loading_background_type' => env('LOADING_BACKGROUND_TYPE', 'color'),
+    'loading_background_color' => env('LOADING_BACKGROUND_COLOR', '#dfdfdf'),
+    'loading_background_image' => env('LOADING_BACKGROUND_IMAGE', 'https://picsum.photos/1920/1080'),
+    'loading_background_text' => env('LOADING_BACKGROUND_TEXT', ''),
 
     /*
     |--------------------------------------------------------------------------
