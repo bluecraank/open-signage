@@ -64,16 +64,30 @@
             <div class="pt-5">
                 <div class="columns">
                     <div class="column">
-                        <p><b>{{ __('IP Address') }}:</b> {{ $device->ip_address }}</p>
+                        <p><b>{{ __('IP Address') }}:</b> <br> {{ $device->ip_address }}</p>
                     </div>
 
                     <div class="column">
-                        <p><b>{{ __('Last connection') }}:</b> {{ Carbon::parse($device->last_seen)->diffForHumans() ?? 'N/A' }}</p>
+                        <p><b>{{ __('Last connection') }}:</b> <br> {{ Carbon::parse($device->last_seen)->diffForHumans() ?? 'N/A' }}</p>
                     </div>
 
                     <div class="column">
-                        <p><b>{{ __('Last monitor reload') }}:</b> {{ Carbon::parse($device->startup_timestamp)->diffForHumans() ?? 'N/A' }}
+                        <p><b>{{ __('Last monitor reload') }}:</b> <br> {{ Carbon::parse($device->startup_timestamp)->diffForHumans() ?? 'N/A' }}
                         </p>
+                    </div>
+                </div>
+
+                <div class="columns">
+                    <div class="column">
+                        <p><b>{{ __('Secret') }}:</b> <br> {{ $device->secret }}</p>
+                    </div>
+
+                    <div class="column">
+                        <p><b>{{ __('Monitor URL') }}:</b> <br> <a target="_blank" href="{{ url(route('devices.monitor', $device->secret)) }}">{{ url(route('devices.monitor', $device->secret)) }}</a></p>
+                    </div>
+
+                    <div class="column">
+
                     </div>
                 </div>
 

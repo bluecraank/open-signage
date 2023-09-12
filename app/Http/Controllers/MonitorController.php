@@ -8,30 +8,30 @@ use Illuminate\Support\Facades\Validator;
 
 class MonitorController extends Controller
 {
-    public function show($id)
+    public function show($secret)
     {
-        $device = Device::whereId($id)->first();
+        $device = Device::where('secret', $secret)->first();
 
         if(!$device) {
-            return "Device not found.";
+            return json_encode(['error' => "Device not found."]);
         }
 
         if(!$device->registered) {
-            return "<meta http-equiv='refresh' content='1'>Device not registered.";
+            return "<meta http-equiv='refresh' content='1'>".json_encode(['error' => "Device not registered."]);
         }
 
         $presentation = $device->presentation;
 
         if(!$presentation) {
-            return "<meta http-equiv='refresh' content='1'>No presentation assigned to this device.";
+            return "<meta http-equiv='refresh' content='1'>".json_encode(['error' => "No presentation assigned to this device."]);
         }
 
         $slides = $presentation->slides()->orderBy('order')->get();
 
         if(!$slides) {
-            return "<meta http-equiv='refresh' content='1'>No slides found for this presentation.";
+            return "<meta http-equiv='refresh' content='1'>".json_encode(['error' => "No slides found."]);
         }
-
+        
         $images = [];
         foreach($slides as $slide) {
             $images[] = $slide->publicpath();
