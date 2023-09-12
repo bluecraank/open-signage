@@ -54,10 +54,10 @@
                                             </span>
                                         </button>
                                     </div>
-                                    <div class="dropdown-menu">
+                                    <div class="dropdown-menu dropdown-menu-xl">
                                         <div class="dropdown-content">
                                             <div class="dropdown-item">
-                                                <img src="{{ $preview }}">
+                                                <img width="400" src="{{ $preview }}">
                                             </div>
                                         </div>
                                     </div>
