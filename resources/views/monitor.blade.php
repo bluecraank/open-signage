@@ -44,7 +44,9 @@
 
         $(document).ready(function() {
             // Set trigger for page reload
-            setTimeout(function() { reload_page() }, {{ config('app.monitor_refresh_time_seconds') }} * 1000)
+            setTimeout(function() {
+                reload_page()
+            }, {{ config('app.monitor_refresh_time_seconds') }} * 1000)
 
             // Hide cursor
             $("body").css("cursor", "none");
@@ -108,6 +110,12 @@
                         {{ $device->presentation_id }}) {
 
                         console.log("[MISMANAGER] A new update is available, reloading page");
+
+                        location.reload();
+                    }
+
+                    if(data.force_reload) {
+                        console.log("[MISMANAGER] A force reload was requested, reloading page");
 
                         location.reload();
                     }

@@ -31,7 +31,7 @@ class MonitorController extends Controller
         if(!$slides) {
             return "<meta http-equiv='refresh' content='1'>".json_encode(['error' => "No slides found."]);
         }
-        
+
         $images = [];
         foreach($slides as $slide) {
             $images[] = $slide->publicpath();
@@ -76,12 +76,19 @@ class MonitorController extends Controller
         $device->current_slide = $request->input('currentSlide');
         $device->startup_timestamp = $request->input('startup_timestamp');
         $device->touch('last_seen');
+
+        $force_reload = $device->force_reload;
+        if($device->force_reload) {
+            $device->force_reload = false;
+        }
+
         $device->save();
 
         $return = [
             'error' => false,
             'last_update' => $presentation->updated_at->timestamp,
             'presentation_id' => $presentation->id,
+            'force_reload' => $force_reload,
         ];
 
         return json_encode($return);

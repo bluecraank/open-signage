@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="title">{{ __('Create device') }}</div>
     <div class="card">
         <header class="card-header">
             <p class="card-header-title">

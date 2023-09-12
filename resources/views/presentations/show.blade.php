@@ -1,18 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    @if ($errors)
-        @foreach ($errors->all() as $error)
-            <div class="notification is-danger">
-                {{ $error }}
-            </div>
-        @endforeach
-    @endif
-
+<div class="title">{{ __('Template') }} - {{ $presentation->name }}</div>
     <div class="card">
         <header class="card-header">
             <p class="card-header-title">
-                {{ __('Template') }} - {{ $presentation->name }}
+                {{ __('Edit template') }}
             </p>
 
         </header>
@@ -72,53 +65,59 @@
 
                     <div class="column">
                         <label for="" class="label">&nbsp;</label>
-                        <button type="submit" class="button is-primary">{{ __('Save') }}</button>
+                        <button type="submit" class="is-pulled-right button is-primary">{{ __('Save') }}</button>
                     </div>
                 </div>
             </form>
 
-            <div class="some-space"></div>
 
-            <div class="box">
-                <div class="subtitle">{{ __('Devices') }}</div>
-                <table class="table is-fullwidth">
-                    <thead>
+            <hr>
+
+            <div class="subtitle pt-5">{{ __('Devices') }}</div>
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>{{ __('IP Address') }}</th>
+                        <th>{{ __('Description') }}</th>
+                        <th>{{ __('Last seen') }}</th>
+                        <th>{{ __('Actions') }}</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach ($presentation->devices as $device)
                         <tr>
-                            <th>Name</th>
-                            <th>{{ __('IP Address') }}</th>
-                            <th>{{ __('Description') }}</th>
-                            <th>{{ __('Last seen') }}</th>
-                            <th>{{ __('Actions') }}</th>
+                            <td>{{ $device->name }}</td>
+                            <td>{{ $device->ip_address }}</td>
+                            <td>{{ $device->description }}</td>
+                            <td>{{ $device->last_seen ?? 'N/A' }}</td>
+                            <td>
+                                <form action="{{ route('devices.destroy', ['id' => $device->id]) }}" method="POST"
+                                    onsubmit="return confirm('{{ __('Are you sure to delete this device?') }}')">
+                                    @method('DELETE')
+                                    @csrf
+                                    <a class="button is-info is-small"
+                                        href="{{ route('devices.update', ['id' => $device->id]) }}"><i
+                                            class="mdi mdi-pen"></i></a>
+                                    <button class="button is-danger is-small" type="submit"><i
+                                            class="mdi mdi-trash-can"></i></a>
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
+                    @endforeach
+                </tbody>
+            </table>
 
-                    <tbody>
-                        @foreach ($presentation->devices as $device)
-                            <tr>
-                                <td>{{ $device->name }}</td>
-                                <td>{{ $device->ip_address }}</td>
-                                <td>{{ $device->description }}</td>
-                                <td>{{ $device->last_seen ?? 'N/A' }}</td>
-                                <td>
-                                    <form action="{{ route('devices.destroy', ['id' => $device->id]) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure to delete this device?') }}')">
-                                        @method('DELETE')
-                                        @csrf
-                                        <a class="button is-info is-small" href="{{ route('devices.update', ['id' => $device->id]) }}"><i class="mdi mdi-pen"></i></a>
-                                        <button class="button is-danger is-small" type="submit"><i class="mdi mdi-trash-can"></i></a>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+            <hr>
 
             <div class="slides pt-5">
                 <div class="subtitle">{{ __('Slides') }}</div>
                 @if (!$presentation->processed)
                     <div class="box" style="display:flex">
                         <button style="justify-content:center" class="button is-loading has-background-white pr-4"></button>
-                        <span style="justify-content: center" class="pl-4">{{ __('Slides are being processed, please wait...')}}</span>
+                        <span style="justify-content: center"
+                            class="pl-4">{{ __('Slides are being processed, please wait...') }}</span>
                     </div>
                 @endif
                 @foreach ($presentation->slides as $slide)
@@ -138,10 +137,12 @@
 
                             </div>
 
-                            <form action="{{ route('slides.destroy', $slide->id) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure to delete this slide?') }}')">
+                            <form action="{{ route('slides.destroy', $slide->id) }}" method="POST"
+                                onsubmit="return confirm('{{ __('Are you sure to delete this slide?') }}')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="button is-danger is-smalls"><i class="mdi mdi-trash-can"></i></button>
+                                <button type="submit" class="button is-danger is-smalls"><i
+                                        class="mdi mdi-trash-can"></i></button>
                             </form>
                         </div>
                     </div>

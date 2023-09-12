@@ -1,18 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    @if ($errors)
-        @foreach ($errors->all() as $error)
-            <div class="notification is-danger">
-                {{ $error }}
-            </div>
-        @endforeach
-    @endif
-
+<div class="title">{{ __('Device') }} - {{ $device->name }}</div>
     <div class="card">
         <header class="card-header">
             <p class="card-header-title">
-                Monitor - {{ $device->name }}
+                {{ __('Edit device') }}
             </p>
 
         </header>
@@ -57,9 +50,12 @@
                     <div class="column">
                         <label for="" class="label">&nbsp;</label>
                         <button type="submit" class="button is-primary">{{ __('Save') }}</button>
+                        <button class="button is-info" type="submit" name="reload" value="force_reload">{{ __('Force page reload') }}</a>
                     </div>
                 </div>
             </form>
+
+            <hr>
 
             <div class="pt-5">
                 <div class="columns">
@@ -91,16 +87,28 @@
                     </div>
                 </div>
 
-                <div class="columns pt-5">
-                    <div class="column">
-                        <div class="notification @if (!$device->registered) is-warning @else is-primary @endif">
-                            Status: {{ $device->registered ? __('Successfully registered') : __('Not registered') }}
-                            @if (!$device->registered)
-                                <div>
-                                    <p><b>Open <a href="{{ url(route('devices.register')) }}">{{ url(route('devices.register')) }}</a> on device and enter following key:</b></p>
-                                    <b><code>{{ $device->secret }}</code></b>
-                                </div>
-                            @endif
+                <div class="pt-5">
+                    @if($device->force_reload)
+                    <div class="columns">
+                        <div class="column">
+                            <div class="notification is-warning">
+                                <b>{{ __('Force page reload') }}</b>
+                                <p>{{ __('This device will reload the page on next connection') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                    <div class="columns">
+                        <div class="column">
+                            <div class="notification @if (!$device->registered) is-warning @else is-primary @endif">
+                                Status: {{ $device->registered ? __('Successfully registered') : __('Not registered') }}
+                                @if (!$device->registered)
+                                    <div>
+                                        <p><b>Open <a href="{{ url(route('devices.register')) }}">{{ url(route('devices.register')) }}</a> on device and enter following key:</b></p>
+                                        <b><code>{{ $device->secret }}</code></b>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>

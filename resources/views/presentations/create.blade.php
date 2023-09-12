@@ -1,13 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    @if ($errors)
-        @foreach ($errors->all() as $error)
-            <div class="notification is-danger">
-                {{ $error }}
-            </div>
-        @endforeach
-    @endif
+    <div class="title">
+        {{ __('Create template') }}
+    </div>
     <div class="card">
         <header class="card-header">
             <p class="card-header-title">

@@ -111,6 +111,12 @@ class DeviceController extends Controller
             return redirect()->route('devices.index');
         }
 
+        if($request->has('reload')) {
+            $device->force_reload = true;
+            $device->save();
+            return redirect()->back()->with('success', __('Device will reload on next update'));
+        }
+
         $name = $request->input('name');
         $description = $request->input('description');
         // $ip_address = $request->input('ip_address');

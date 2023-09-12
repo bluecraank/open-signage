@@ -19,42 +19,73 @@
 </head>
 
 <body>
-    <div id="app">
+    @auth
+        <div class="container">
+            <nav class="navbar is-spaced is-dark" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    <a class="navbar-item" href="/">
+                        <b>{{ config('app.name') }}</b>
+                    </a>
 
-        <section class="main-content columns is-fullheight">
-            @auth
-            <aside class="column is-2 is-narrow-mobile is-fullheight is-hidden-mobile has-background-light">
-                <div class="logo has-text-centered p-4 is-size-4">
-                    <b>{{ config('app.name') }}</b>
+                    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+                        data-target="navbarBasicExample">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
                 </div>
-                <ul class="custom-menu">
-                    <li>
-                        <a href="/devices" class="">
-                            <span class="icon"><i class="fa fa-home"></i></span> {{ __('Devices') }}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/presentations" class="is-active">
-                            <span class="icon"><i class="fa fa-table"></i></span> {{ __('Templates') }}
-                        </a>
-                    </li>
-                </ul>
 
-                <ul class="pt-5">
-                    <li class="has-text-centered">{{ Auth::user()->getName() }}</li>
-                    <form action="/logout" method="POST">
-                        @csrf
-                        <li class="has-text-centered"><button class="button is-danger is-small" type="submit">{{ __('Logout') }}</button></li>
-                    </form>
-                </ul>
-            </aside>
-            @endauth
+                <div id="navbarBasicExample" class="navbar-menu">
+                    <div class="navbar-start">
+                        <a href="{{ route('devices.index') }}" class="navbar-item">
+                            {{ __('Devices') }}
+                        </a>
 
-            <div class="container column is-10 some-space">
-                    @yield('content')
+                        <a href="{{ route('presentations.index') }}" class="navbar-item">
+                            {{ __('Templates') }}
+                        </a>
+
+                    </div>
+
+                    <div class="navbar-end">
+                        <div class="navbar-item">
+                            {{ Auth::user()->getName() }}
+                            <form class="pl-3" id="logout-form" action="/logout" method="POST">
+                                @csrf
+                                <a onclick="document.getElementById('logout-form').submit()">{{ __('Logout') }}</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    @endauth
+
+    <div id="app">
+        <div class="container">
+            <div class="box main-box">
+                @if ($errors)
+                    @foreach ($errors->all() as $error)
+                        <div class="notification is-danger">
+                            {{ $error }}
+                        </div>
+                    @endforeach
+                @endif
+
+                @if (session()->has('success'))
+                    <div class="notification is-response is-success">
+                        {{ session()->get('success') }}
+                    </div>
+                @endif
+
+                @yield('content')
+
+                <footer>
+                    Contribute on <a href="https://github.com">GitHub</a> | Build with <a
+                        href="https://laravel.com">Laravel</a> and <i class="mdi mdi-heart"></i>
+                </footer>
             </div>
-
-        </section>
+        </div>
     </div>
 </body>
 

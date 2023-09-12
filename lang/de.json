@@ -22,7 +22,7 @@
     "Current slide": "Aktuelle Folie",
     "Last seen": "Zuletzt gesehen",
     "Create device": "Gerät erstellen",
-    "Devices": "Geräte",
+    "Devices": "Monitore",
     "Select pdf": "PDF auswählen",
     "Upload new pdf": "Neue PDF hochladen",
     "No file selected": "Keine Datei ausgewählt",
@@ -39,7 +39,13 @@
     "Upload pdf": "PDF hochladen",
     "No templates found, please create one first": "Keine Vorlagen gefunden, bitte erstellen Sie eine",
     "No devices found, please create one first": "Keine Geräte gefunden, bitte erstellen Sie eines",
-    "Device|Devices": "Gerät|Geräte",
+    "Device|Devices": "Monitor|Monitore",
+    "Device": "Monitor",
     "Select a template": "Vorlage auswählen",
-    "No template assigned": "Keine Vorlage zugewiesen"
+    "No template assigned": "Keine Vorlage zugewiesen",
+    "Edit template": "Vorlage bearbeiten",
+    "Edit device": "Gerät bearbeiten",
+    "Device will reload on next update": "Gerät wird bei nächster Aktualisierung neu geladen",
+    "Force page reload": "Erzwinge Monitor Aktualisierung",
+    "This device will reload the page on next connection": "Dieses Gerät wird bei der nächsten Verbindung neu laden"
 }

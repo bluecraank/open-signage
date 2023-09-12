@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="title">{{ __('Devices') }}</div>
+
     <div class="card has-table">
         <header class="card-header">
             <p class="card-header-title">
@@ -23,8 +25,8 @@
                         <th>{{ __('Description') }}</th>
                         <th>{{ __('Presentation') }}</th>
                         <th>{{ __('Current slide') }}</th>
-                        <th>{{ __('Last seen') }}</th>
                         <th>{{ __('Last connection') }}</th>
+                        <th>{{ __('Last monitor reload') }}</th>
                         <th>{{ __('Actions') }}</th>
                     </tr>
                 </thead>
