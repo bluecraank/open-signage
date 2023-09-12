@@ -4,7 +4,7 @@
     <div class="card">
         <header class="card-header">
             <p class="card-header-title">
-                Geräte erstellen
+                {{ __('Create device') }}
             </p>
         </header>
 
@@ -13,25 +13,25 @@
                 @csrf
 
                 <div class="field">
-                    <label class="label">Gerätename</label>
-                    <input required type="text" class="input" name="name" placeholder="Gerätename">
+                    <label class="label">Name</label>
+                    <input required type="text" class="input" name="name" placeholder="Name">
                 </div>
 
                 <div class="field">
-                    <label class="label">IP-Adresse</label>
-                    <input required type="text" class="input" name="ip_address" placeholder="IP-Adresse">
+                    <label class="label">{{ __('IP Address') }}</label>
+                    <input required type="text" class="input" name="ip_address" placeholder="{{ __('IP Address') }}">
                 </div>
 
                 <div class="field">
-                    <label class="label">Beschreibung</label>
-                    <input required type="text" class="input" name="description" placeholder="Beschreibung">
+                    <label class="label">{{ __('Description') }}</label>
+                    <input required type="text" class="input" name="description" placeholder="{{ __('Description') }}">
                 </div>
 
                 <div class="field">
-                    <label class="label">Präsentationsvorlage</label>
+                    <label class="label">{{ __('Template') }}</label>
                     <div class="select">
                         <select required name="presentation_id" id="">
-                            <option value="0">Bitte eine Vorlage wählen...</option>
+                            <option value="0">{{ __('Select a template') }}...</option>
                             @foreach ($presentations as $presentation)
                                 <option value="{{ $presentation->id }}">{{ $presentation->name }}</option>
                             @endforeach
@@ -39,8 +39,8 @@
                     </div>
                 </div>
 
-                <button type="submit" class="button is-primary is-small">Erstellen</button>
-                <button type="reset" class="button is-danger is-pulled-right is-small">Zurücksetzen</button>
+                <button type="submit" class="button is-primary is-small">{{ __('Save') }}</button>
+                <button type="reset" class="button is-danger is-pulled-right is-small">{{ __('Reset') }}</button>
             </form>
         </div>
     </div>

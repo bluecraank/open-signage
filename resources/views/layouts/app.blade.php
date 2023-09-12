@@ -25,17 +25,17 @@
             @auth
             <aside class="column is-2 is-narrow-mobile is-fullheight is-hidden-mobile has-background-light">
                 <div class="logo has-text-centered p-4 is-size-4">
-                    <b>MIS Manager</b>
+                    <b>{{ config('app.name') }}</b>
                 </div>
                 <ul class="custom-menu">
                     <li>
                         <a href="/devices" class="">
-                            <span class="icon"><i class="fa fa-home"></i></span> Geräte
+                            <span class="icon"><i class="fa fa-home"></i></span> {{ __('Devices') }}
                         </a>
                     </li>
                     <li>
                         <a href="/presentations" class="is-active">
-                            <span class="icon"><i class="fa fa-table"></i></span> Präsentationsvorlagen
+                            <span class="icon"><i class="fa fa-table"></i></span> {{ __('Templates') }}
                         </a>
                     </li>
                 </ul>
@@ -44,7 +44,7 @@
                     <li class="has-text-centered">{{ Auth::user()->getName() }}</li>
                     <form action="/logout" method="POST">
                         @csrf
-                        <li class="has-text-centered"><button class="button is-danger is-small" type="submit">Abmelden</button></li>
+                        <li class="has-text-centered"><button class="button is-danger is-small" type="submit">{{ __('Logout') }}</button></li>
                     </form>
                 </ul>
             </aside>

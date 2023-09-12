@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Device;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class MonitorController extends Controller
 {
@@ -41,22 +42,44 @@ class MonitorController extends Controller
         return view('monitor', ['slides' => $slides, 'last_update' => $presentation->updated_at->timestamp, 'device' => $device]);
     }
 
-    public function hasUpdate($id) {
-        $device = Device::whereId($id)->first();
+    public function hasUpdate(Request $request) {
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'secret' => 'required|string',
+                'currentSlide' => 'required|integer',
+                'last_update' => 'required|integer',
+                'startup_timestamp' => 'required|integer',
+                'presentation_id' => 'required|integer'
+            ]
+        );
+
+        if($validator->fails()) {
+            return json_encode(['error' => "Invalid request."]);
+        }
+
+        $secret = $request->input('secret');
+
+        $device = Device::where('secret', $secret)->first();
 
         if(!$device) {
-            return "Device not found.";
+            return json_encode(['error' => "Device not found."]);
         }
 
         $presentation = $device->presentation;
 
         if(!$presentation) {
-            return "No presentation assigned to this device.";
+            return json_encode(['error' => "No presentation assigned to this device."]);
         }
 
+        $device->current_slide = $request->input('currentSlide');
+        $device->startup_timestamp = $request->input('startup_timestamp');
         $device->touch('last_seen');
+        $device->save();
 
         $return = [
+            'error' => false,
             'last_update' => $presentation->updated_at->timestamp,
             'presentation_id' => $presentation->id,
         ];

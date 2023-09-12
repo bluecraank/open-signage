@@ -14,13 +14,23 @@ class Slide extends Model
         'order',
     ];
 
+    protected $appends = ['publicpreviewpath', 'publicpath'];
+
     public function presentation()
     {
         return $this->belongsTo(Presentation::class);
     }
 
+    public function getPublicpreviewpathAttribute() {
+        return $this->publicpreviewpath();
+    }
+
     public function publicpreviewpath() {
         return asset('data/presentations/' . $this->presentation_id . '/preview-' . $this->name_on_disk);
+    }
+
+    public function getPublicpathAttribute() {
+        return $this->publicpath();
     }
 
     public function publicpath() {

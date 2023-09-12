@@ -41,7 +41,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/register', [DeviceController::class, 'register'])->name('devices.register');
 
         Route::get('/monitor/{id}', [MonitorController::class, 'show'])->name('devices.monitor');
-        Route::get('/monitor/{id}/update', [MonitorController::class, 'hasUpdate'])->name('devices.monitor.update');
+        // Route::post('/monitor/{id}/update', [MonitorController::class, 'hasUpdate'])->name('devices.monitor.update');
 
         Route::get('/{id}', [DeviceController::class, 'show'])->name('devices.show');
         Route::put('/{id}', [DeviceController::class, 'update'])->name('devices.update');

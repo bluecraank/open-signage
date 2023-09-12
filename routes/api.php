@@ -14,6 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('/devices/monitor/update', [App\Http\Controllers\MonitorController::class, 'hasUpdate'])->name('devices.monitor.update');

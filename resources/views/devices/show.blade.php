@@ -24,13 +24,13 @@
                 <div class="columns">
                     <div class="column">
                         <div class="field">
-                            <label for="" class="label">Vorlagenname</label>
+                            <label for="" class="label">Name</label>
                             <input class="input" type="text" name="name" value="{{ $device->name }}" />
                         </div>
                     </div>
                     <div class="column">
                         <div class="field">
-                            <label for="" class="label">Beschreibung</label>
+                            <label for="" class="label">{{ __('Description') }}</label>
                             <input class="input" type="text" name="description" value="{{ $device->description }}" />
                         </div>
                     </div>
@@ -39,10 +39,10 @@
                 <div class="columns">
                     <div class="column">
                         <div class="field">
-                            <label for="" class="label">Zugewiesene Vorlage</label>
+                            <label for="" class="label">{{ __('Assigned template') }}</label>
                             <div class="select">
                                 <select name="presentation_id">
-                                    <option value="">Keine Vorlage zugewiesen</option>
+                                    <option value="">{{ __('No template assigned') }}</option>
                                     @foreach ($presentations as $presentation)
                                         <option @if ($device->presentation_id == $presentation->id) selected @endif
                                             value="{{ $presentation->id }}"
@@ -56,22 +56,41 @@
 
                     <div class="column">
                         <label for="" class="label">&nbsp;</label>
-                        <button type="submit" class="button is-primary">Speichern</button>
+                        <button type="submit" class="button is-primary">{{ __('Save') }}</button>
                     </div>
                 </div>
             </form>
 
-            <div class="columns pt-5">
-                <div class="column">
-                    <div class="notification @if (!$device->registered) is-danger @else is-primary @endif">
-                        Status: {{ $device->registered ? 'Registriert' : 'Nicht registriert' }}
-                        @if (!$device->registered)
-                            <div>Key: <span class="blur secret">{{ $device->secret }}</span></div>
-                        @endif
+            <div class="pt-5">
+                <div class="columns">
+                    <div class="column">
+                        <p><b>{{ __('IP Address') }}:</b> {{ $device->ip_address }}</p>
+                    </div>
+
+                    <div class="column">
+                        <p><b>{{ __('Last connection') }}:</b> {{ Carbon::parse($device->last_seen)->diffForHumans() ?? 'N/A' }}</p>
+                    </div>
+
+                    <div class="column">
+                        <p><b>{{ __('Last monitor reload') }}:</b> {{ Carbon::parse($device->startup_timestamp)->diffForHumans() ?? 'N/A' }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="columns pt-5">
+                    <div class="column">
+                        <div class="notification @if (!$device->registered) is-warning @else is-primary @endif">
+                            Status: {{ $device->registered ? __('Successfully registered') : __('Not registered') }}
+                            @if (!$device->registered)
+                                <div>
+                                    <p><b>Open <a href="{{ url(route('devices.register')) }}">{{ url(route('devices.register')) }}</a> on device and enter following key:</b></p>
+                                    <b><code>{{ $device->secret }}</code></b>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-    </div>
-@endsection
+        </div>
+    @endsection

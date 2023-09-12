@@ -67,7 +67,9 @@ return [
         'users' => [
             'driver' => 'ldap',
             'model' => LdapRecord\Models\ActiveDirectory\User::class,
-            'rules' => [],
+            'rules' => [
+                App\Ldap\Rules\HasPermission::class,
+            ],
             'scopes' => [],
         ],
         // 'users' => [

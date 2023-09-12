@@ -16,7 +16,14 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'MIS Manager'),
+
+    // Custom config
+    'monitor_refresh_time_seconds' => env('MONITOR_REFRESH_TIME_SECONDS', 3600),
+    'monitor_check_update_time_seconds' => env('MONITOR_CHECK_UPDATE_TIME_SECONDS', 60),
+    'slide_out_time_ms' => env('SLIDE_OUT_TIME_MS', 500),
+    'slide_in_time_ms' => env('SLIDE_IN_TIME_MS', 500),
+    'interval_next_slide_ms' => env('INTERVAL_NEXT_SLIDE_MS', 10000),
 
     /*
     |--------------------------------------------------------------------------
@@ -183,6 +190,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'Carbon' => Illuminate\Support\Carbon::class,
     ])->toArray(),
 
 ];

@@ -77,4 +77,6 @@ return [
         'driver' => env('CACHE_DRIVER', 'file'),
     ],
 
+    // LDAP group that is allowed to access the application
+    'allowed_group' => env('LDAP_ALLOWED_GROUP', 'CN=Admins,OU=Groups,DC=example,DC=com'),
 ];
