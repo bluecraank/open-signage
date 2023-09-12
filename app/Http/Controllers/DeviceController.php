@@ -129,6 +129,11 @@ class DeviceController extends Controller
         $device->name = $name;
         $device->description = $description;
         // $device->ip_address = $ip_address;
+
+        if($presentation_id != $device->presentation_id) {
+            $device->current_slide = 0;
+        }
+
         $device->presentation_id = $presentation_id;
 
         $device->save();
