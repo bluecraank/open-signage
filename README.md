@@ -4,12 +4,6 @@
 
 ## This project is still wip and lacks of security / permissions
 
-# Requirements
-- php8.2
-- php ldap extension
-- php imagick extension
-- ghostscript
-
 # Configuration
 ## Configure .env
 - Setup LDAP Connection
@@ -45,6 +39,12 @@ LOADING_BACKGROUND_IMAGE="https://picsum.photos/1920/1080"
 - Exposed port is 8080
 
 ## Install native
+### Requirements
+- php8.2
+- php ldap extension
+- php imagick extension
+- ghostscript
+### Installation
 - ```git clone https://github.com/bluecraank/open-signage```
 - Serve with ```php artisan serve```
 - Or use apache/nginx/caddy and configure root directory to ./public
@@ -55,3 +55,7 @@ LOADING_BACKGROUND_IMAGE="https://picsum.photos/1920/1080"
 - Permissions / Roles are missing (spatie/permissions?)
 - Monitor Authentication is missing
 ```
+
+# License
+The MIT License (MIT). Please see License File for more information.
+
