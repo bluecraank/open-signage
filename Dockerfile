@@ -10,7 +10,8 @@ RUN apt-get update && \
     libjpeg62-turbo-dev \
     libpng-dev \
     libzip-dev \
-    ghostscript
+    ghostscript \
+    git
 
 # Install Node.js & NPM
 RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_VERSION.x | bash - &&\
@@ -34,6 +35,7 @@ RUN install-php-extensions imagick
 # COPY .env /var/www/html/.env
 
 # Clone source code if not downloaded
+RUN rm -rf /var/www/html
 RUN git clone https://github.com/bluecraank/open-signage.git /var/www/html
 COPY .env.example /var/www/html/.env
 
