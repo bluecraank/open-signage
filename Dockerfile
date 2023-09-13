@@ -43,19 +43,22 @@ WORKDIR /var/www/html
 RUN composer install --no-dev --optimize-autoloader
 RUN npm install && npm run build
 
-# File permissions
-RUN chown -R www-data:www-data /var/www/html/storage
-RUN touch /var/www/html/storage/logs/laravel.log
-RUN chown -R www-data:www-data /var/www/html/storage/logs/laravel.log
-RUN touch /var/www/html/database/database.sqlite
-RUN chown -R www-data:www-data /var/www/html/database/database.sqlite
-
-# Artisan commands
-RUN /var/www/html/artisan key:generate
-RUN /var/www/html/artisan migrate
-
-# LDAP without certificate
-RUN echo "TLS_REQCERT never" >> /etc/ldap/ldap.conf
 
 # Copy .env file
-COPY .docker.env /var/www/html/.env
+COPY .env /var/www/html/.env
+
+# File permissions
+RUN chown -R www-data:www-data /var/www/html/
+RUN touch /var/www/html/storage/logs/laravel.log
+RUN chown -R www-data:www-data /var/www/html/storage/logs/laravel.log
+
+# Artisan commands
+USER www-data
+WORKDIR /var/www/html
+RUN php artisan key:generate
+RUN php artisan migrate --force
+
+# LDAP without certificate
+USER root
+RUN echo "TLS_REQCERT never" >> /etc/ldap/ldap.conf
+

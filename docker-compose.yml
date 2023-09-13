@@ -1,5 +1,9 @@
 services:
-    mismanager:
+    app:
         build: .
         ports:
             - "8080:80"
+        volumes:
+            - app:/var/www/html:rw
+volumes:
+    app:
