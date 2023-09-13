@@ -47,3 +47,12 @@ footer {
     border: 12px solid #000;
     border-radius: 5px;
 }
+
+.slideout {
+    transition: all 0.4s ease-in-out;
+}
+
+.slideout_hide {
+    height: 0 !important;
+    padding: 0 !important;
+}

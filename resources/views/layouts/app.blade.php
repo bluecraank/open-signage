@@ -25,17 +25,10 @@
                 <a class="navbar-item" href="/">
                     <b>{{ config('app.name') }}</b>
                 </a>
-
-                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
-                    data-target="navbarBasicExample">
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                </a>
             </div>
 
             @auth
-                <div id="navbarBasicExample" class="navbar-menu">
+                <div id="navbar-main" class="navbar-menu">
                     <div class="navbar-start">
                         <a href="{{ route('devices.index') }}" class="navbar-item">
                             {{ __('Devices') }}
@@ -66,14 +59,14 @@
             <div class="box main-box">
                 @if ($errors)
                     @foreach ($errors->all() as $error)
-                        <div class="notification is-danger">
+                        <div class="notification is-danger slideout">
                             {{ $error }}
                         </div>
                     @endforeach
                 @endif
 
                 @if (session()->has('success'))
-                    <div class="notification is-response is-success">
+                    <div class="notification is-response is-success slideout">
                         {{ session()->get('success') }}
                     </div>
                 @endif
