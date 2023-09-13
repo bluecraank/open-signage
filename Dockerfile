@@ -44,7 +44,12 @@ RUN composer install --no-dev --optimize-autoloader
 RUN npm install && npm run build
 
 
-# Copy .env file
+
+# Clone source code if not downloaded
+# RUN git clone https://github.com/bluecraank/la-signage.git /var/www/html
+# COPY .env.example /var/www/html/.env
+
+# Copy .env file if source code downloaded
 COPY .env /var/www/html/.env
 
 # File permissions
@@ -57,6 +62,7 @@ USER www-data
 WORKDIR /var/www/html
 RUN php artisan key:generate
 RUN php artisan migrate --force
+RUN php artisan optimize
 
 # LDAP without certificate
 USER root
