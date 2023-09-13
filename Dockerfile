@@ -30,7 +30,12 @@ RUN chmod +x /usr/local/bin/install-php-extensions && \
 RUN install-php-extensions imagick
 
 # Copy source code
-COPY . /var/www/html
+# COPY . /var/www/html
+# COPY .env /var/www/html/.env
+
+# Clone source code if not downloaded
+RUN git clone https://github.com/bluecraank/open-signage.git /var/www/html
+COPY .env.example /var/www/html/.env
 
 # Apache configuration
 RUN a2enmod rewrite
@@ -44,13 +49,6 @@ RUN composer install --no-dev --optimize-autoloader
 RUN npm install && npm run build
 
 
-
-# Clone source code if not downloaded
-# RUN git clone https://github.com/bluecraank/open-signage.git /var/www/html
-# COPY .env.example /var/www/html/.env
-
-# Copy .env file if source code downloaded
-COPY .env /var/www/html/.env
 
 # File permissions
 RUN chown -R www-data:www-data /var/www/html/
