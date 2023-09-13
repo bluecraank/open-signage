@@ -1,18 +1,8 @@
 @import 'bulma/css/bulma.css';
 @import '@mdi/font/css/materialdesignicons.css';
 
-html,
-body,
-#app {
-    height: 100%;
-}
-
 .is-fullheight {
     height: 100%;
-}
-
-#app {
-    min-height: 100%;
 }
 
 .footer {
@@ -44,6 +34,7 @@ body,
 .main-box {
     padding: 3em;
     padding-bottom: 0;
+    min-height: calc(100vh - 5.25rem);
 }
 
 footer {

@@ -52,7 +52,7 @@
                             {{ Auth::user()->getName() }}
                             <form class="pl-3" id="logout-form" action="/logout" method="POST">
                                 @csrf
-                                <a onclick="document.getElementById('logout-form').submit()">{{ __('Logout') }}</a>
+                                <a class="has-text-grey-light" onclick="document.getElementById('logout-form').submit()">{{ __('Logout') }}</a>
                             </form>
                         </div>
                     </div>

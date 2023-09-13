@@ -21,10 +21,10 @@
             <table class="table is-fullwidth">
                 <thead>
                     <tr>
+                        <th>{{ __('Current slide') }}</th>
                         <th>Name</th>
                         <th>{{ __('Description') }}</th>
                         <th>{{ __('Presentation') }}</th>
-                        <th>{{ __('Current slide') }}</th>
                         <th>{{ __('Last connection') }}</th>
                         <th>{{ __('Last monitor reload') }}</th>
                         <th>{{ __('Actions') }}</th>
@@ -34,35 +34,17 @@
                 <tbody>
                     @foreach ($devices as $device)
                         <tr>
-                            <td>{{ $device->name }}</td>
-                            <td>{{ $device->description }}</td>
-                            <td>{{ $presentation[$device->presentation_id]['name'] ?? 'Keine Vorlage zugewiesen' }}</td>
                             <td>
                                 @php
                                     $slides = $device->presentation?->slides;
                                     $currentSlide = $slides?->toArray()[$device->current_slide ?? 0];
-                                    $name = $currentSlide['name'] ?? 'N/A';
                                     $preview = $currentSlide['publicpreviewpath'] ?? '/data/img/placeholder.png';
-                                    $countSlides = $device->presentation?->slides->count();
                                 @endphp
-                                <div class="dropdown is-hoverable">
-                                    <div class="dropdown-trigger">
-                                        <button class="button is-small">
-                                            <span>{{ $name }} ({{ $device->current_slide+1 }}/{{ $countSlides }})</span>
-                                            <span class="icon is-small">
-                                                <i class="mdi mdi-chevron-down" aria-hidden="true"></i>
-                                            </span>
-                                        </button>
-                                    </div>
-                                    <div class="dropdown-menu dropdown-menu-xl">
-                                        <div class="dropdown-content">
-                                            <div class="dropdown-item">
-                                                <img width="400" src="{{ $preview }}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <img width="150" src="{{ $preview }}" alt="">
                             </td>
+                            <td>{{ $device->name }}</td>
+                            <td>{{ $device->description }}</td>
+                            <td>{{ $presentation[$device->presentation_id]['name'] ?? 'Keine Vorlage zugewiesen' }}</td>
                             <td>@if($device->last_seen) {{ Carbon::parse($device->last_seen)->diffForHumans() }} @else {{ ($device->registered ? __('Registered') : __('Waiting for registration...')) }} @endif</td>
                             <td>@if($device->startup_timestamp) {{ Carbon::parse($device->startup_timestamp)->diffForHumans() }} @else N/A @endif</td>
                             <td>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="title">{{ __('Device') }} - {{ $device->name }}</div>
+    <div class="title">{{ __('Device') }} - {{ $device->name }}</div>
     <div class="card">
         <header class="card-header">
             <p class="card-header-title">
@@ -50,7 +50,8 @@
                     <div class="column">
                         <label for="" class="label">&nbsp;</label>
                         <button type="submit" class="button is-primary">{{ __('Save') }}</button>
-                        <button class="button is-info" type="submit" name="reload" value="force_reload">{{ __('Force page reload') }}</a>
+                        <button class="button is-info" type="submit" name="reload"
+                            value="force_reload">{{ __('Force page reload') }}</a>
                     </div>
                 </div>
             </form>
@@ -64,11 +65,13 @@
                     </div>
 
                     <div class="column">
-                        <p><b>{{ __('Last connection') }}:</b> <br> {{ Carbon::parse($device->last_seen)->diffForHumans() ?? 'N/A' }}</p>
+                        <p><b>{{ __('Last connection') }}:</b> <br>
+                            {{ Carbon::parse($device->last_seen)->diffForHumans() ?? 'N/A' }}</p>
                     </div>
 
                     <div class="column">
-                        <p><b>{{ __('Last monitor reload') }}:</b> <br> {{ Carbon::parse($device->startup_timestamp)->diffForHumans() ?? 'N/A' }}
+                        <p><b>{{ __('Last monitor reload') }}:</b> <br>
+                            {{ Carbon::parse($device->startup_timestamp)->diffForHumans() ?? 'N/A' }}
                         </p>
                     </div>
                 </div>
@@ -79,7 +82,9 @@
                     </div>
 
                     <div class="column">
-                        <p><b>{{ __('Monitor URL') }}:</b> <br> <a target="_blank" href="{{ url(route('devices.monitor', $device->secret)) }}">{{ url(route('devices.monitor', $device->secret)) }}</a></p>
+                        <p><b>{{ __('Monitor URL') }}:</b> <br> <a target="_blank"
+                                href="{{ url(route('devices.monitor', $device->secret)) }}">{{ url(route('devices.monitor', $device->secret)) }}</a>
+                        </p>
                     </div>
 
                     <div class="column">
@@ -88,15 +93,15 @@
                 </div>
 
                 <div class="pt-5">
-                    @if($device->force_reload)
-                    <div class="columns">
-                        <div class="column">
-                            <div class="notification is-warning">
-                                <b>{{ __('Force page reload') }}</b>
-                                <p>{{ __('This device will reload the page on next connection') }}</p>
+                    @if ($device->force_reload)
+                        <div class="columns">
+                            <div class="column">
+                                <div class="notification is-warning">
+                                    <b>{{ __('Force page reload') }}</b>
+                                    <p>{{ __('This device will reload the page on next connection') }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     @endif
                     <div class="columns">
                         <div class="column">
@@ -104,7 +109,9 @@
                                 Status: {{ $device->registered ? __('Successfully registered') : __('Not registered') }}
                                 @if (!$device->registered)
                                     <div>
-                                        <p><b>Open <a href="{{ url(route('devices.register')) }}">{{ url(route('devices.register')) }}</a> on device and enter following key:</b></p>
+                                        <p><b>Open <a
+                                                    href="{{ url(route('devices.register')) }}">{{ url(route('devices.register')) }}</a>
+                                                on device and enter following key:</b></p>
                                         <b><code>{{ $device->secret }}</code></b>
                                     </div>
                                 @endif
@@ -113,6 +120,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
-    @endsection
+    </div>
+@endsection
