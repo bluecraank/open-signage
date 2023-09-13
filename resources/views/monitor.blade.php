@@ -147,7 +147,8 @@
                 },
                 error: function(data) {
                     console.log("[MISMANAGER] An error occured while checking for updates");
-                }
+                },
+                timeout: 5000
             });
         }, {{ config('app.monitor_check_update_time_seconds') }} * 1000);
     </script>
