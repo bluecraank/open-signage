@@ -46,7 +46,7 @@ RUN npm install && npm run build
 
 
 # Clone source code if not downloaded
-# RUN git clone https://github.com/bluecraank/la-signage.git /var/www/html
+# RUN git clone https://github.com/bluecraank/open-signage.git /var/www/html
 # COPY .env.example /var/www/html/.env
 
 # Copy .env file if source code downloaded
