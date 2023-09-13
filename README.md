@@ -51,6 +51,9 @@ LOADING_BACKGROUND_IMAGE="https://picsum.photos/1920/1080"
 - Build container with ```sudo docker compose up```
 - Exposed port is 8080
 
+## Install with portainer
+- Tell me how to set the LDAP env variables
+
 ## Install native
 ### Requirements
 - php8.2
