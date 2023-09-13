@@ -49,7 +49,7 @@
 
                     <div class="navbar-end">
                         <div class="navbar-item">
-                            {{ Auth::user()->getName() }}
+                            {{ strtolower(Auth::user()->email) }}
                             <form class="pl-3" id="logout-form" action="/logout" method="POST">
                                 @csrf
                                 <a class="has-text-grey-light" onclick="document.getElementById('logout-form').submit()">{{ __('Logout') }}</a>

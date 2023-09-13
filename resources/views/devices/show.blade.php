@@ -11,51 +11,66 @@
         </header>
 
         <div class="card-content">
-            <form action="{{ route('devices.update', $device->id) }}" method="post" enctype="multipart/form-data">
-                @method('PUT')
-                @csrf
+            @can('read devices')
                 <div class="columns">
-                    <div class="column">
-                        <div class="field">
-                            <label for="" class="label">Name</label>
-                            <input class="input" type="text" name="name" value="{{ $device->name }}" />
-                        </div>
+                    <div class="column is-4">
+                        @php
+                            $slides = $device->presentation?->slides;
+                            $currentSlide = $slides?->toArray()[$device->current_slide ?? 0];
+                            $preview = $currentSlide['publicpreviewpath'] ?? '/data/img/placeholder.png';
+                        @endphp
+                        <img width="500" class="monitor-border" src="{{ $preview }}" alt="">
                     </div>
-                    <div class="column">
-                        <div class="field">
-                            <label for="" class="label">{{ __('Description') }}</label>
-                            <input class="input" type="text" name="description" value="{{ $device->description }}" />
+
+                    @cannot('update devices')
+                        <div class="column">
+                            <p><b>Name:</b> {{ $device->name }}</p>
+
+                            <p><b>{{ __('Description') }}:</b> {{ $device->description }}</p>
+
+                            <p><b>{{ __('Assigned template') }}:</b>
+                                {{ $presentation[$device->presentation_id]['name'] ?? __('No template assigned') }}</p>
                         </div>
-                    </div>
+                    @endcannot
+
+                    @can('update devices')
+                        <div class="column">
+                            <form action="{{ route('devices.update', $device->id) }}" method="post" enctype="multipart/form-data">
+                                @method('PUT')
+                                @csrf
+                                <div class="field">
+                                    <label for="" class="label">Name</label>
+                                    <input class="input" type="text" name="name" value="{{ $device->name }}" />
+                                </div>
+                                <div class="field">
+                                    <label for="" class="label">{{ __('Description') }}</label>
+                                    <input class="input" type="text" name="description" value="{{ $device->description }}" />
+                                </div>
+
+                                <div class="field">
+                                    <label for="" class="label">{{ __('Assigned template') }}</label>
+                                    <div class="select">
+                                        <select name="presentation_id">
+                                            <option value="">{{ __('No template assigned') }}</option>
+                                            @foreach ($presentations as $presentation)
+                                                <option @if ($device->presentation_id == $presentation->id) selected @endif
+                                                    value="{{ $presentation->id }}"
+                                                    @if ($presentation->id == $device->presentation_id) selected @endif>{{ $presentation->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <label for="" class="label">&nbsp;</label>
+                                <button type="submit" class="button is-primary">{{ __('Save') }}</button>
+                                <button class="button is-info" type="submit" name="reload"
+                                    value="force_reload">{{ __('Force page reload') }}</a>
+                            </form>
+                        </div>
+                    @endcan
                 </div>
-
-                <div class="columns">
-                    <div class="column">
-                        <div class="field">
-                            <label for="" class="label">{{ __('Assigned template') }}</label>
-                            <div class="select">
-                                <select name="presentation_id">
-                                    <option value="">{{ __('No template assigned') }}</option>
-                                    @foreach ($presentations as $presentation)
-                                        <option @if ($device->presentation_id == $presentation->id) selected @endif
-                                            value="{{ $presentation->id }}"
-                                            @if ($presentation->id == $device->presentation_id) selected @endif>{{ $presentation->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="column">
-                        <label for="" class="label">&nbsp;</label>
-                        <button type="submit" class="button is-primary">{{ __('Save') }}</button>
-                        <button class="button is-info" type="submit" name="reload"
-                            value="force_reload">{{ __('Force page reload') }}</a>
-                    </div>
-                </div>
-            </form>
-
+            @endcan
             <hr>
 
             <div class="pt-5">

@@ -39,16 +39,20 @@ class PresentationController extends Controller
 
         $name = $request->input('name');
         $description = $request->input('description');
-        $author = Auth::user()->getName();
+        $author = Auth::user()->name;
 
         if(!$name || !$description || !$author) {
-            return redirect()->back()->withInput();
+            return redirect()->back()->withInput()->withErrors([
+                'message' => __('All fields are required'),
+            ]);
         }
 
         $file = $request->file('file');
 
         if(!$file) {
-            return redirect()->back()->withInput();
+            return redirect()->back()->withInput()->withErrors([
+                'message' => __('File is required'),
+            ]);
         }
 
         $presentation = Presentation::create([
@@ -65,7 +69,7 @@ class PresentationController extends Controller
 
         proc_open('php ' . base_path('artisan') . ' presentation:process ' . $presentation->id . ' > /dev/null &', [], $pipes);
 
-        return redirect()->route('presentations.show', $presentation->id);
+        return redirect()->route('presentations.show', $presentation->id)->with('success', __('Presentation created'));
     }
 
     /**

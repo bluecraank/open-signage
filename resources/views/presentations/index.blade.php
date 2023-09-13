@@ -10,10 +10,12 @@
             </p>
 
             <div class="card-header-actions">
-                <a href="/presentations/create" class="button is-primary is-small">
-                    <span class="icon"><i class="mdi mdi-plus"></i></span>
-                    <span>{{ __('Create template') }}</span>
-                </a>
+                @can('create presentations')
+                    <a href="/presentations/create" class="button is-primary is-small">
+                        <span class="icon"><i class="mdi mdi-plus"></i></span>
+                        <span>{{ __('Create template') }}</span>
+                    </a>
+                @endcan
             </div>
         </header>
 
@@ -44,11 +46,15 @@
                                     onsubmit="return confirm('{{ __('Are you sure to delete this template?') }}')">
                                     @method('DELETE')
                                     @csrf
-                                    <a class="button is-info is-small"
-                                        href="{{ route('presentations.update', ['id' => $presentation->id]) }}"><i
-                                            class="mdi mdi-pen"></i></a>
-                                    <button class="button is-danger is-small" type="submit"><i
-                                            class="mdi mdi-trash-can"></i></a>
+                                    @can('read presentations')
+                                        <a class="button is-info is-small"
+                                            href="{{ route('presentations.update', ['id' => $presentation->id]) }}"><i
+                                                class="mdi mdi-pen"></i></a>
+                                    @endcan
+                                    @can('delete presentations')
+                                        <button class="button is-danger is-small" type="submit"><i
+                                                class="mdi mdi-trash-can"></i></button>
+                                    @endcan
                                 </form>
                             </td>
                         </tr>

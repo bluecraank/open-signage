@@ -10,10 +10,12 @@
             </p>
 
             <div class="card-header-actions">
-                <a href="/devices/create" class="button is-primary is-small">
-                    <span class="icon"><i class="mdi mdi-plus"></i></span>
-                    <span>{{ __('Create device') }}</span>
-                </a>
+                @can('create devices')
+                    <a href="/devices/create" class="button is-primary is-small">
+                        <span class="icon"><i class="mdi mdi-plus"></i></span>
+                        <span>{{ __('Create device') }}</span>
+                    </a>
+                @endcan
             </div>
         </header>
 
@@ -44,27 +46,44 @@
                             </td>
                             <td>{{ $device->name }}</td>
                             <td>{{ $device->description }}</td>
-                            <td>{{ $presentation[$device->presentation_id]['name'] ?? 'Keine Vorlage zugewiesen' }}</td>
-                            <td>@if($device->last_seen) {{ Carbon::parse($device->last_seen)->diffForHumans() }} @else {{ ($device->registered ? __('Registered') : __('Waiting for registration...')) }} @endif</td>
-                            <td>@if($device->startup_timestamp) {{ Carbon::parse($device->startup_timestamp)->diffForHumans() }} @else N/A @endif</td>
+                            <td>{{ $presentation[$device->presentation_id]['name'] ?? __('No template assigned') }}</td>
+                            <td>
+                                @if ($device->last_seen)
+                                    {{ Carbon::parse($device->last_seen)->diffForHumans() }}
+                                @else
+                                    {{ $device->registered ? __('Registered') : __('Waiting for registration...') }}
+                                @endif
+                            </td>
+                            <td>
+                                @if ($device->startup_timestamp)
+                                    {{ Carbon::parse($device->startup_timestamp)->diffForHumans() }}
+                                @else
+                                    N/A
+                                @endif
+                            </td>
                             <td>
 
                                 <form action="{{ route('devices.destroy', ['id' => $device->id]) }}" method="POST"
                                     onsubmit="return confirm('{{ __('Are you sure to delete this device?') }}')">
                                     @method('DELETE')
                                     @csrf
-                                    <a class="button is-info is-small"
-                                        href="{{ route('devices.update', ['id' => $device->id]) }}"><i
-                                            class="mdi mdi-pen"></i></a>
-                                    <button class="button is-danger is-small" type="submit"><i
-                                            class="mdi mdi-trash-can"></i></a>
+                                    @can('read devices')
+                                        <a class="button is-info is-small"
+                                            href="{{ route('devices.update', ['id' => $device->id]) }}"><i
+                                                class="mdi mdi-pen"></i></a>
+                                    @endcan
+                                    @can('delete devices')
+                                        <button class="button is-danger is-small" type="submit"><i
+                                                class="mdi mdi-trash-can"></i></button>
+                                    @endcan
                                 </form>
                             </td>
                         </tr>
                     @endforeach
-                    @if($devices->count() == 0)
+                    @if ($devices->count() == 0)
                         <tr>
-                            <td colspan="7" class="has-text-centered">{{ __('No devices found, please create one first') }}</td>
+                            <td colspan="7" class="has-text-centered">
+                                {{ __('No devices found, please create one first') }}</td>
                         </tr>
                     @endif
                 </tbody>

@@ -18,8 +18,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/devices/register', function() {
+    return view('devices.register');
+})->name('devices.register');
+Route::post('/devices/register', [DeviceController::class, 'register']);
+Route::get('/monitor/{secret}', [MonitorController::class, 'show'])->name('devices.monitor');
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 
     Route::get('/home', function() {
@@ -30,42 +35,34 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('devices')->group(function () {
         Route::get('/', [HomeController::class, 'index'])->name('devices.index');
 
-        Route::get('/create', [DeviceController::class, 'create'])->name('devices.create');
+        Route::get('/create', [DeviceController::class, 'create'])->middleware('can:create devices')->name('devices.create');
 
-        Route::post('/', [DeviceController::class, 'store'])->name('devices.store');
+        Route::post('/', [DeviceController::class, 'store'])->middleware('can:create devices')->name('devices.store');
 
-        Route::get('/register', function() {
-            return view('devices.register');
-        });
+        Route::get('/{id}', [DeviceController::class, 'show'])->middleware('can:read devices')->name('devices.show');
 
-        Route::post('/register', [DeviceController::class, 'register'])->name('devices.register');
+        Route::put('/{id}', [DeviceController::class, 'update'])->middleware('can:update devices')->name('devices.update');
 
-
-        Route::get('/{id}', [DeviceController::class, 'show'])->name('devices.show');
-        Route::put('/{id}', [DeviceController::class, 'update'])->name('devices.update');
-
-        Route::delete('/{id}', [DeviceController::class, 'destroy'])->name('devices.destroy');
+        Route::delete('/{id}', [DeviceController::class, 'destroy'])->middleware('can:delete devices')->name('devices.destroy');
     });
 
     Route::prefix('presentations')->group(function () {
         Route::get('/', [PresentationController::class, 'index'])->name('presentations.index');
-        Route::get('/create', [PresentationController::class, 'create'])->name('presentations.create');
-        Route::post('/', [PresentationController::class, 'store'])->name('presentations.store');
-        Route::get('/{id}', [PresentationController::class, 'show'])->name('presentations.show');
-        Route::put('/{id}', [PresentationController::class, 'update'])->name('presentations.update');
-        Route::delete('/{id}', [PresentationController::class, 'destroy'])->name('presentations.destroy');
+        Route::get('/create', [PresentationController::class, 'create'])->middleware('can:create presentations')->name('presentations.create');
+        Route::post('/', [PresentationController::class, 'store'])->middleware('can:create presentations')->name('presentations.store');
+        Route::get('/{id}', [PresentationController::class, 'show'])->middleware('can:read presentations')->name('presentations.show');
+        Route::put('/{id}', [PresentationController::class, 'update'])->middleware('can:update presentations')->name('presentations.update');
+        Route::delete('/{id}', [PresentationController::class, 'destroy'])->middleware('can:delete presentations')->name('presentations.destroy');
     });
 
     Route::prefix('slides')->group(function () {
-        Route::get('/create', [SlideController::class, 'create'])->name('slides.create');
-        Route::post('/', [SlideController::class, 'store'])->name('slides.store');
-        Route::get('/{id}', [SlideController::class, 'show'])->name('slides.show');
-        Route::put('/{id}', [SlideController::class, 'update'])->name('slides.update');
-        Route::delete('/{id}', [SlideController::class, 'destroy'])->name('slides.destroy');
+        // Route::get('/create', [SlideController::class, 'create'])->name('slides.create');
+        // Route::post('/', [SlideController::class, 'store'])->name('slides.store');
+        // Route::get('/{id}', [SlideController::class, 'show'])->name('slides.show');
+        // Route::put('/{id}', [SlideController::class, 'update'])->name('slides.update');
+        Route::delete('/{id}', [SlideController::class, 'destroy'])->middleware('can:delete slides')->name('slides.destroy');
     });
 });
-
-Route::get('/monitor/{secret}', [MonitorController::class, 'show'])->name('devices.monitor');
 
 Auth::routes();
 

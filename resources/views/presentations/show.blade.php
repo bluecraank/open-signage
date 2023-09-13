@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="title">{{ __('Template') }} - {{ $presentation->name }}</div>
+    <div class="title">{{ __('Template') }} - {{ $presentation->name }}</div>
     <div class="card">
         <header class="card-header">
             <p class="card-header-title">
@@ -11,65 +11,73 @@
         </header>
 
         <div class="card-content">
-            <form action="{{ route('presentations.update', $presentation->id) }}" method="post" enctype="multipart/form-data">
-                @method('PUT')
-                @csrf
-                <div class="columns">
-                    <div class="column">
-                        <div class="field">
-                            <label for="" class="label">{{ __('Template name') }}</label>
-                            <input class="input" type="text" name="name" value="{{ $presentation->name }}" />
+            <div class="columns">
+                @can('read presentations')
+                    <div class="column is-4">
+                        <img width="500" src="{{ $presentation->slides->first()->publicpreviewpath() }}" alt="">
+                    </div>
+
+                    @cannot('update presentations')
+                        <div class="column">
+                            <p><b>Name:</b> {{ $presentation->name }}</p>
+                            <p><b>{{ __('Description') }}:</b> {{ $presentation->description }}</p>
+                            <p><b>{{ __('Slides') }}:</b> {{ $presentation->slides->count() }}</p>
+                            <p><b>{{ __('Used by') }}:</b> {{ $presentation->devices->count() }}</p>
                         </div>
-                    </div>
-                    <div class="column">
-                        <div class="field">
-                            <label for="" class="label">{{ __('Description') }}</label>
-                            <input class="input" type="text" name="description"
-                                value="{{ $presentation->description }}" />
+                    @endcannot
+                    @can('update presentations')
+                        <div class="column">
+                            <form action="{{ route('presentations.update', $presentation->id) }}" method="post"
+                                enctype="multipart/form-data">
+                                @method('PUT')
+                                @csrf
+                                <div class="field">
+                                    <label for="" class="label">{{ __('Template name') }}</label>
+                                    <input class="input" type="text" name="name" value="{{ $presentation->name }}" />
+                                </div>
+                                <div class="field">
+                                    <label for="" class="label">{{ __('Description') }}</label>
+                                    <input class="input" type="text" name="description"
+                                        value="{{ $presentation->description }}" />
+                                </div>
+
+                                <div class="field">
+                                    <label for="" class="label">{{ __('Upload new pdf') }}</label>
+                                    <div class="file has-name" id="file-upload">
+                                        <label class="file-label">
+                                            <input class="file-input" type="file" name="file" accept=".pdf">
+                                            <span class="file-cta">
+                                                <span class="file-icon">
+                                                    <i class="mdi mdi-upload"></i>
+                                                </span>
+                                                <span class="file-label">
+                                                    {{ __('Select pdf') }}...
+                                                </span>
+                                            </span>
+                                            <span class="file-name">
+                                                {{ __('No file selected') }}
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <script>
+                                        const fileInput = document.querySelector('#file-upload input[type=file]');
+                                        fileInput.onchange = () => {
+                                            if (fileInput.files.length > 0) {
+                                                const fileName = document.querySelector('#file-upload .file-name');
+                                                fileName.textContent = fileInput.files[0].name;
+                                            }
+                                        }
+                                    </script>
+                                </div>
+
+                                <label for="" class="label">&nbsp;</label>
+                                <button type="submit" class="button is-primary">{{ __('Save') }}</button>
+                            </form>
                         </div>
-                    </div>
-                </div>
-
-                <div class="columns">
-                    <div class="column">
-                        <div class="field">
-                            <label for="" class="label">{{ __('Upload new pdf') }}</label>
-                            <div class="file has-name" id="file-upload">
-                                <label class="file-label">
-                                    <input class="file-input" type="file" name="file" accept=".pdf">
-                                    <span class="file-cta">
-                                        <span class="file-icon">
-                                            <i class="mdi mdi-upload"></i>
-                                        </span>
-                                        <span class="file-label">
-                                            {{ __('Select pdf') }}...
-                                        </span>
-                                    </span>
-                                    <span class="file-name">
-                                        {{ __('No file selected') }}
-                                    </span>
-                                </label>
-                            </div>
-
-                            <script>
-                                const fileInput = document.querySelector('#file-upload input[type=file]');
-                                fileInput.onchange = () => {
-                                    if (fileInput.files.length > 0) {
-                                        const fileName = document.querySelector('#file-upload .file-name');
-                                        fileName.textContent = fileInput.files[0].name;
-                                    }
-                                }
-                            </script>
-                        </div>
-                    </div>
-
-                    <div class="column">
-                        <label for="" class="label">&nbsp;</label>
-                        <button type="submit" class="is-pulled-right button is-primary">{{ __('Save') }}</button>
-                    </div>
-                </div>
-            </form>
-
+                    @endcan
+                @endcan
+            </div>
 
             <hr>
 
@@ -78,7 +86,6 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>{{ __('IP Address') }}</th>
                         <th>{{ __('Description') }}</th>
                         <th>{{ __('Last seen') }}</th>
                         <th>{{ __('Actions') }}</th>
@@ -89,7 +96,6 @@
                     @foreach ($presentation->devices as $device)
                         <tr>
                             <td>{{ $device->name }}</td>
-                            <td>{{ $device->ip_address }}</td>
                             <td>{{ $device->description }}</td>
                             <td>{{ $device->last_seen ?? 'N/A' }}</td>
                             <td>
@@ -106,6 +112,12 @@
                             </td>
                         </tr>
                     @endforeach
+
+                    @if ($presentation->devices->count() == 0)
+                        <tr>
+                            <td class="has-text-centered" colspan="4">{{ __('No devices assigned') }}</td>
+                        </tr>
+                    @endif
                 </tbody>
             </table>
 

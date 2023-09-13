@@ -7,6 +7,6 @@ services:
         volumes:
             - app:/var/www/html:rw
         env_file:
-            - stack.env
+            - .env
 volumes:
     app:

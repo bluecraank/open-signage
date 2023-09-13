@@ -49,7 +49,7 @@ class DeviceController extends Controller
             'secret' => $secret,
         ]);
 
-        return redirect()->route('devices.index');
+        return redirect()->route('devices.index')->with('success', __('Device created'));
     }
 
     public function register(Request $request)
@@ -73,7 +73,7 @@ class DeviceController extends Controller
 
         $device->save();
 
-        return redirect()->route('devices.monitor', ['id' => $device->id]);
+        return redirect()->route('devices.monitor', ['secret' => $device->secret]);
     }
 
     /**
@@ -108,7 +108,7 @@ class DeviceController extends Controller
         $device = Device::where('id', $id)->first();
 
         if(!$device) {
-            return redirect()->route('devices.index');
+            return redirect()->back()->withErrors(['message' => __('Device not found')]);
         }
 
         if($request->has('reload')) {
@@ -119,7 +119,6 @@ class DeviceController extends Controller
 
         $name = $request->input('name');
         $description = $request->input('description');
-        // $ip_address = $request->input('ip_address');
         $presentation_id = $request->input('presentation_id');
 
         if($presentation_id == 0) {
@@ -128,7 +127,6 @@ class DeviceController extends Controller
 
         $device->name = $name;
         $device->description = $description;
-        // $device->ip_address = $ip_address;
 
         if($presentation_id != $device->presentation_id) {
             $device->current_slide = 0;
@@ -138,7 +136,7 @@ class DeviceController extends Controller
 
         $device->save();
 
-        return redirect()->route('devices.index');
+        return redirect()->back()->with('success', __('Device updated'));
     }
 
     /**
@@ -149,11 +147,11 @@ class DeviceController extends Controller
         $device = Device::where('id', $id)->first();
 
         if(!$device) {
-            return redirect()->route('devices.index');
+            return redirect()->route('devices.index')->withErrors(['message' => __('Device not found')]);
         }
 
         $device->delete();
 
-        return redirect()->route('devices.index');
+        return redirect()->route('devices.index')->with('success', __('Device deleted'));
     }
 }

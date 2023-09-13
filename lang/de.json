@@ -47,5 +47,14 @@
     "Edit device": "Monitor bearbeiten",
     "Device will reload on next update": "Monitor wird bei nächster Aktualisierung neu geladen",
     "Force page reload": "Erzwinge Monitor Aktualisierung",
-    "This device will reload the page on next connection": "Dieses Monitor wird bei der nächsten Verbindung neu laden"
+    "This device will reload the page on next connection": "Dieses Monitor wird bei der nächsten Verbindung neu laden",
+    "All fields are required": "Alle Felder sind erforderlich",
+    "File is required": "Datei ist erforderlich",
+    "Presentation created": "Präsentation erstellt",
+    "Presentation updated": "Präsentation aktualisiert",
+    "Presentation deleted": "Präsentation gelöscht",
+    "Slide deleted": "Folie gelöscht",
+    "Device created": "Monitor erstellt",
+    "Device updated": "Monitor aktualisiert",
+    "Device deleted": "Monitor gelöscht"
 }
