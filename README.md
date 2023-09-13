@@ -4,6 +4,19 @@
 
 ## This project is still wip and lacks of security / permissions
 
+# How it works
+- Upload PDF Document with n Pages (e.g each Page is one fullwidth image)
+- Background processing starts and generates images from each page
+- Create and register monitor
+- Assign presentation to monitor
+- Display presentation on monitor
+
+# Functions
+- Force reload of monitor
+- Live updating if presentations was changed
+- Reload page after x hours to prevent memory leaks
+- Hides cursor
+
 # Configuration
 ## Configure .env
 - Setup LDAP Connection
