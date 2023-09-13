@@ -63,12 +63,12 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>{{ Carbon::parse($device->last_seen)?->diffForHumans() ?? ($device->registered ? __('Registered') : __('Waiting for registration...')) }}
-                            <td>{{ Carbon::parse($device->startup_timestamp)?->diffForHumans() ?? 'N/A' }}</td>
+                            <td>@if($device->last_seen) {{ Carbon::parse($device->last_seen)->diffForHumans() }} @else {{ ($device->registered ? __('Registered') : __('Waiting for registration...')) }} @endif</td>
+                            <td>@if($device->startup_timestamp) {{ Carbon::parse($device->startup_timestamp)->diffForHumans() }} @else N/A @endif</td>
                             <td>
 
                                 <form action="{{ route('devices.destroy', ['id' => $device->id]) }}" method="POST"
-                                    onsubmit="return confirm('Soll dieses Gerät gelöscht werden?')">
+                                    onsubmit="return confirm('{{ __('Are you sure to delete this device?') }}')">
                                     @method('DELETE')
                                     @csrf
                                     <a class="button is-info is-small"

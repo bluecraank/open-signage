@@ -4,7 +4,6 @@
         <div class="container">
             <div class="columns pt-5">
                 <div class="column is-6 is-offset-3 pt-5">
-                    <div class="title has-text-centered">MIS MANAGER</div>
                     <div class="card">
                         <header class="card-header">
                             <p class="card-header-title">

@@ -19,22 +19,22 @@
 </head>
 
 <body>
-    @auth
-        <div class="container">
-            <nav class="navbar is-spaced is-dark" role="navigation" aria-label="main navigation">
-                <div class="navbar-brand">
-                    <a class="navbar-item" href="/">
-                        <b>{{ config('app.name') }}</b>
-                    </a>
+    <div class="container">
+        <nav class="navbar is-spaced is-dark" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/">
+                    <b>{{ config('app.name') }}</b>
+                </a>
 
-                    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
-                        data-target="navbarBasicExample">
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                    </a>
-                </div>
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+                    data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
 
+            @auth
                 <div id="navbarBasicExample" class="navbar-menu">
                     <div class="navbar-start">
                         <a href="{{ route('devices.index') }}" class="navbar-item">
@@ -57,9 +57,9 @@
                         </div>
                     </div>
                 </div>
-            </nav>
-        </div>
-    @endauth
+            @endauth
+        </nav>
+    </div>
 
     <div id="app">
         <div class="container">
