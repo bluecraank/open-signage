@@ -33,8 +33,8 @@
                         </div>
                     @endcannot
 
-                    @can('update devices')
-                        <div class="column">
+                    <div class="column">
+                        @can('update devices')
                             <form action="{{ route('devices.update', $device->id) }}" method="post" enctype="multipart/form-data">
                                 @method('PUT')
                                 @csrf
@@ -64,11 +64,17 @@
 
                                 <label for="" class="label">&nbsp;</label>
                                 <button type="submit" class="button is-primary">{{ __('Save') }}</button>
-                                <button class="button is-info" type="submit" name="reload"
-                                    value="force_reload">{{ __('Force page reload') }}</a>
                             </form>
-                        </div>
-                    @endcan
+                        @endcan
+                        @can('force reload monitor')
+                            <form method="POST" class="pt-1" action="{{ route('devices.reload', ['id' => $device->id]) }}">
+                                @csrf
+                                @method('PUT')
+                                <button class="button is-info" type="submit" name="reload"
+                                    value="force_reload">{{ __('Force page reload') }}</button>
+                            </form>
+                        @endcan
+                    </div>
                 </div>
             @endcan
             <hr>

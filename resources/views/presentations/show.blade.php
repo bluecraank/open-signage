@@ -103,11 +103,15 @@
                                     onsubmit="return confirm('{{ __('Are you sure to delete this device?') }}')">
                                     @method('DELETE')
                                     @csrf
-                                    <a class="button is-info is-small"
-                                        href="{{ route('devices.update', ['id' => $device->id]) }}"><i
-                                            class="mdi mdi-pen"></i></a>
-                                    <button class="button is-danger is-small" type="submit"><i
-                                            class="mdi mdi-trash-can"></i></a>
+                                    @can('update devices')
+                                        <a class="button is-info is-small"
+                                            href="{{ route('devices.update', ['id' => $device->id]) }}"><i
+                                                class="mdi mdi-pen"></i></a>
+                                    @endcan
+                                    @can('delete devices')
+                                        <button class="button is-danger is-small" type="submit"><i
+                                                class="mdi mdi-trash-can"></i></button>
+                                    @endcan
                                 </form>
                             </td>
                         </tr>
@@ -149,13 +153,15 @@
 
                             </div>
 
-                            <form action="{{ route('slides.destroy', $slide->id) }}" method="POST"
-                                onsubmit="return confirm('{{ __('Are you sure to delete this slide?') }}')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="button is-danger is-smalls"><i
-                                        class="mdi mdi-trash-can"></i></button>
-                            </form>
+                            @can('delete slides')
+                                <form action="{{ route('slides.destroy', $slide->id) }}" method="POST"
+                                    onsubmit="return confirm('{{ __('Are you sure to delete this slide?') }}')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="button is-danger is-smalls"><i
+                                            class="mdi mdi-trash-can"></i></button>
+                                </form>
+                            @endcan
                         </div>
                     </div>
                 @endforeach

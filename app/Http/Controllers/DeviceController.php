@@ -111,12 +111,6 @@ class DeviceController extends Controller
             return redirect()->back()->withErrors(['message' => __('Device not found')]);
         }
 
-        if($request->has('reload')) {
-            $device->force_reload = true;
-            $device->save();
-            return redirect()->back()->with('success', __('Device will reload on next update'));
-        }
-
         $name = $request->input('name');
         $description = $request->input('description');
         $presentation_id = $request->input('presentation_id');
@@ -137,6 +131,20 @@ class DeviceController extends Controller
         $device->save();
 
         return redirect()->back()->with('success', __('Device updated'));
+    }
+
+    public function force_reload(Request $request, string $id)
+    {
+        $device = Device::where('id', $id)->first();
+
+        if(!$device) {
+            return redirect()->back()->withErrors(['message' => __('Device not found')]);
+        }
+
+        $device->force_reload = true;
+        $device->save();
+
+        return redirect()->back()->with('success', __('Device will reload on next update'));
     }
 
     /**

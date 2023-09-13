@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         Permission::create(['name' => 'delete presentations', 'guard_name' => 'sanctum']);
         Permission::create(['name' => 'force reload monitor', 'guard_name' => 'sanctum']);
         Permission::create(['name' => 'assign presentations', 'guard_name' => 'sanctum']);
+        Permission::create(['name' => 'delete slides', 'guard_name' => 'sanctum']);
 
         Role::create(['name' => 'admin', 'guard_name' => 'sanctum'])
             ->givePermissionTo(Permission::all());
@@ -37,6 +38,7 @@ class DatabaseSeeder extends Seeder
                 'delete presentations',
                 'force reload monitor',
                 'assign presentations',
+                'delete slides'
             ]);
     }
 }

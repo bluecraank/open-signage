@@ -43,6 +43,8 @@ Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
 
         Route::put('/{id}', [DeviceController::class, 'update'])->middleware('can:update devices')->name('devices.update');
 
+        Route::put('/{id}/reload', [DeviceController::class, 'force_reload'])->middleware('can:force reload monitor')->name('devices.reload');
+
         Route::delete('/{id}', [DeviceController::class, 'destroy'])->middleware('can:delete devices')->name('devices.destroy');
     });
 
