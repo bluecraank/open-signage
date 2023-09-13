@@ -50,8 +50,6 @@ WORKDIR /var/www/html
 RUN composer install --no-dev --optimize-autoloader
 RUN npm install && npm run build
 
-
-
 # File permissions
 RUN chown -R www-data:www-data /var/www/html/
 RUN touch /var/www/html/storage/logs/laravel.log

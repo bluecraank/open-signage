@@ -1,9 +1,12 @@
 services:
     app:
-        build: .
+        build:
+            context: .
         ports:
             - "8080:80"
         volumes:
             - app:/var/www/html:rw
+        env_file:
+            - stack.env
 volumes:
     app:
