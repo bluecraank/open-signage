@@ -62,3 +62,12 @@ RUN php artisan migrate --force
 USER root
 RUN echo "TLS_REQCERT never" >> /etc/ldap/ldap.conf
 
+# Allow .htaccess
+RUN sed -ri -e 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
+
+# Set max_upload_size
+RUN echo "php_value upload_max_filesize 100M" >> /var/www/html/public/.htaccess
+RUN echo "php_value post_max_size 100M" >> /var/www/html/public/.htaccess
+
+# Allow pdf imaging
+RUN sed -ri -e 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' /etc/ImageMagick-6/policy.xml
