@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
+use LdapRecord\Laravel\Auth\LdapAuthenticatable;
+use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, Notifiable, HasRoles, AuthenticatesWithLdap;
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +23,8 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+
+    protected $guard_name = 'sanctum';
 
     /**
      * The attributes that should be hidden for serialization.

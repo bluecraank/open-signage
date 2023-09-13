@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,11 +13,30 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        Permission::create(['name' => 'create devices', 'guard_name' => 'sanctum']);
+        Permission::create(['name' => 'read devices', 'guard_name' => 'sanctum']);
+        Permission::create(['name' => 'update devices', 'guard_name' => 'sanctum']);
+        Permission::create(['name' => 'delete devices', 'guard_name' => 'sanctum']);
+        Permission::create(['name' => 'create presentations', 'guard_name' => 'sanctum']);
+        Permission::create(['name' => 'read presentations', 'guard_name' => 'sanctum']);
+        Permission::create(['name' => 'update presentations', 'guard_name' => 'sanctum']);
+        Permission::create(['name' => 'delete presentations', 'guard_name' => 'sanctum']);
+        Permission::create(['name' => 'force reload monitor', 'guard_name' => 'sanctum']);
+        Permission::create(['name' => 'assign presentations', 'guard_name' => 'sanctum']);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        Role::create(['name' => 'admin', 'guard_name' => 'sanctum'])
+            ->givePermissionTo(Permission::all());
+
+        Role::create(['name' => 'user', 'guard_name' => 'sanctum'])
+            ->givePermissionTo([
+                'create devices',
+                'read devices',
+                'create presentations',
+                'read presentations',
+                'update presentations',
+                'delete presentations',
+                'force reload monitor',
+                'assign presentations',
+            ]);
     }
 }
