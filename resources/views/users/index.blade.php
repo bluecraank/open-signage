@@ -12,7 +12,7 @@
             </header>
 
             <div class="card-content">
-                <table class="table is-fullwidth">
+                <table class="table is-narrow is-striped is-hoverable is-fullwidth is-fullwidth">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -27,8 +27,8 @@
                             <tr>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email ?? __('This user has no mail') }}</td>
-                                <td>{{ $user->getRoleNames()[0] }}</td>
-                                <td>
+                                <td>{{ $user->getRoleNames()[0] ?? __('No roles') }}</td>
+                                <td class="actions-cell">
 
                                     <form action="{{ route('users.destroy', ['id' => $user->id]) }}" method="POST"
                                         onsubmit="return confirm('{{ __('Are you sure to delete this user?') }}')">

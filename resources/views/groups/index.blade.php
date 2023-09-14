@@ -21,7 +21,7 @@
         </header>
 
         <div class="card-content">
-            <table class="table is-fullwidth">
+            <table class="table is-narrow is-striped is-hoverable is-fullwidth is-fullwidth">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -37,7 +37,7 @@
                             <td>{{ $group->name }}</td>
                             <td>{{ $group->devices->count() }}</td>
                             <td>{{ $group->presentation?->name ?? __('No template assigned') }}</td>
-                            <td>
+                            <td class="actions-cell">
 
                                 <form action="{{ route('groups.destroy', ['id' => $group->id]) }}"
                                     method="POST"
@@ -60,7 +60,7 @@
                     @if ($groups->count() == 0)
                         <tr>
                             <td colspan="5" class="has-text-centered">
-                                {{ __('No groups found, create the first one') }}</td>
+                                {{ __('No groups found') }}</td>
                         </tr>
                     @endif
                 </tbody>

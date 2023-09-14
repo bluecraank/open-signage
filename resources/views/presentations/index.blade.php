@@ -21,7 +21,7 @@
             </header>
 
             <div class="card-content">
-                <table class="table is-fullwidth">
+                <table class="table is-narrow is-striped is-hoverable is-fullwidth is-fullwidth">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -44,7 +44,7 @@
                                 </td>
                                 <td>{{ $presentation->description }}</td>
                                 <td>{{ $presentation->author }}</td>
-                                <td>
+                                <td class="actions-cell">
 
                                     <form action="{{ route('presentations.destroy', ['id' => $presentation->id]) }}"
                                         method="POST"

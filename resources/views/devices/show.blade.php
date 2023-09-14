@@ -17,7 +17,7 @@
                         @php
                             $slides = $device->getPresentation()?->slides;
                             $currentSlide = $slides?->toArray()[$device->current_slide ?? 0];
-                            $preview = $currentSlide['publicpreviewpath'] ?? '/data/img/placeholder.png';
+                            $preview = $currentSlide['publicpreviewpath'] ?? config('app.placeholder_image');
                         @endphp
                         <img width="500" class="monitor-border" src="{{ $preview }}" alt="">
                     </div>

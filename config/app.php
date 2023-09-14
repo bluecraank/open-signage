@@ -16,6 +16,8 @@ return [
     |
     */
 
+    'placeholder_image' => 'https://placehold.co/600x338?text=Assign\nTemplate',
+
     'name' => env('APP_NAME', 'MIS Manager'),
 
     // Custom config

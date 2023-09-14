@@ -21,7 +21,7 @@
         </header>
 
         <div class="card-content">
-            <table class="table is-fullwidth">
+            <table class="table is-narrow is-striped is-hoverable is-fullwidth is-fullwidth">
                 <thead>
                     <tr>
                         <th></th>
@@ -67,7 +67,7 @@
                                     N/A
                                 @endif
                             </td>
-                            <td>
+                            <td class="actions-cell">
 
                                 <form action="{{ route('devices.destroy', ['id' => $device->id]) }}" method="POST"
                                     onsubmit="return confirm('{{ __('Are you sure to delete this device?') }}')">
@@ -88,7 +88,7 @@
                     @endforeach
                     @if ($devices->count() == 0)
                         <tr>
-                            <td colspan="7" class="has-text-centered">
+                            <td colspan="8" class="has-text-centered">
                                 {{ __('No devices found') }}</td>
                         </tr>
                     @endif

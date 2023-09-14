@@ -15,7 +15,7 @@
                 <div class="columns">
                     <div class="column is-4">
                         <img width="500"
-                            src="{{ $presentation->slides?->first()?->publicpreviewpath() ?? 'https://picsum.photos/333/214' }}"
+                            src="{{ $presentation->slides?->first()?->publicpreviewpath() ?? config('app.placeholder_image') }}"
                             alt="">
                     </div>
 
@@ -83,7 +83,7 @@
                 <hr>
 
                 <div class="subtitle pt-5">{{ __('Devices') }}</div>
-                <table class="table is-fullwidth">
+                <table class="table is-narrow is-striped is-hoverable is-fullwidth is-fullwidth">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -112,7 +112,7 @@
                 <hr>
 
                 <div class="subtitle pt-5">{{ __('Groups') }}</div>
-                <table class="table is-fullwidth">
+                <table class="table is-narrow is-striped is-hoverable is-fullwidth is-fullwidth">
                     <thead>
                         <tr>
                             <th>Name</th>

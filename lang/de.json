@@ -101,5 +101,8 @@
     "You are not allowed to perform this action": "Sie dürfen diese Aktion nicht ausführen",
     "You dont have permission to view data": "Sie haben keine Berechtigung, Daten anzuzeigen",
     "Enter secret key": "Geheimen Schlüssel eingeben",
-    "Register device": "Monitor registrieren"
+    "Register device": "Monitor registrieren",
+    "No groups found": "Keine Gruppen gefunden",
+    "No roles": "Keine Rollen zugewiesen",
+    "Select a group": "Gruppe auswählen"
 }

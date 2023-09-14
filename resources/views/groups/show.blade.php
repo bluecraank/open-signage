@@ -28,7 +28,7 @@
                         @php
                             $slides = $group->presentation?->slides;
                             $currentSlide = $slides?->toArray()[$group->current_slide ?? 0];
-                            $preview = $currentSlide['publicpreviewpath'] ?? 'https://picsum.photos/333/214';
+                            $preview = $currentSlide['publicpreviewpath'] ?? config('app.placeholder_image');
                         @endphp
                         <img width="500" class="monitor-border" src="{{ $preview }}" alt="">
                     </div>

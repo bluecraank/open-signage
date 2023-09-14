@@ -1,5 +1,6 @@
-@import 'bulma/css/bulma.css';
+@import 'bulma/bulma.sass';
 @import '@mdi/font/css/materialdesignicons.css';
+@import "bulma-prefers-dark/bulma-prefers-dark.sass";
 
 .is-fullheight {
     height: 100%;
@@ -85,3 +86,18 @@ footer {
       transform: rotate(360deg);
     }
   }
+
+.table thead th:last-child {
+    width: 5%;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.table td {
+    vertical-align: middle;
+}
+.actions-cell {
+    width: 5%;
+    white-space: nowrap;
+    text-align: center;
+}
