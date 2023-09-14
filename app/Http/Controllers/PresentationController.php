@@ -34,7 +34,7 @@ class PresentationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimetypes:application/pdf|max:5000',
+            'file' => 'required|file|mimetypes:application/pdf|max:100000',
         ]);
 
         $name = $request->input('name');

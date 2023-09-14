@@ -1,19 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="title">{{ __('Templates') }}</div>
+    <div class="title">{{ __('Groups') }}</div>
 
     <div class="card has-table">
         <header class="card-header">
             <p class="card-header-title">
-                {{ __('Templates') }}
+                {{ __('Groups') }}
             </p>
 
             <div class="card-header-actions">
-                @can('create presentations')
-                    <a href="{{ route('presentations.create') }}" class="button is-primary is-small">
+                @can('create groups')
+                    <a href="{{ route('groups.create') }}" class="button is-primary is-small">
                         <span class="icon"><i class="mdi mdi-plus"></i></span>
-                        <span>{{ __('Create template') }}</span>
+                        <span>{{ __('Create group') }}</span>
                     </a>
                 @endcan
             </div>
@@ -24,31 +24,28 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>{{ __('Used by') }}</th>
-                        <th>{{ __('Description') }}</th>
-                        <th>{{ __('Created by') }}</th>
+                        <th>{{ __('Devices') }}</th>
+                        <th>{{ __('Assigned template') }}</th>
                         <th>{{ __('Actions') }}</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach ($presentations as $presentation)
+                    @foreach ($groups as $group)
                         <tr>
-                            <td>{{ $presentation->name }}</td>
-                            <td>{{ $presentation->devices->count() }}
-                                {{ trans_choice('Device|Devices', $presentation->devices->count()) }}</td>
-                            <td>{{ $presentation->description }}</td>
-                            <td>{{ $presentation->author }}</td>
+                            <td>{{ $group->name }}</td>
+                            <td>{{ $group->devices->count() }}</td>
+                            <td>{{ $group->presentation?->name ?? __('No template assigned') }}</td>
                             <td>
 
-                                <form action="{{ route('presentations.destroy', ['id' => $presentation->id]) }}"
+                                <form action="{{ route('groups.destroy', ['id' => $group->id]) }}"
                                     method="POST"
-                                    onsubmit="return confirm('{{ __('Are you sure to delete this template?') }}')">
+                                    onsubmit="return confirm('{{ __('Are you sure to delete this group?') }}')">
                                     @method('DELETE')
                                     @csrf
                                     @can('read presentations')
                                         <a class="button is-info is-small"
-                                            href="{{ route('presentations.update', ['id' => $presentation->id]) }}"><i
+                                            href="{{ route('groups.update', ['id' => $group->id]) }}"><i
                                                 class="mdi mdi-pen"></i></a>
                                     @endcan
                                     @can('delete presentations')
@@ -59,10 +56,10 @@
                             </td>
                         </tr>
                     @endforeach
-                    @if ($presentations->count() == 0)
+                    @if ($groups->count() == 0)
                         <tr>
                             <td colspan="5" class="has-text-centered">
-                                {{ __('No templates found, please create one first') }}</td>
+                                {{ __('No groups found, create the first one') }}</td>
                         </tr>
                     @endif
                 </tbody>

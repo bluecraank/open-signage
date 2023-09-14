@@ -30,6 +30,13 @@ class DeviceController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'ip_address' => 'required|ip',
+            'name' => 'required|min:2',
+            'description' => 'required|min:2',
+            'presentation_id' => 'nullable|integer',
+        ]);
+
         $name = $request->input('name');
         $description = $request->input('description');
         $ip_address = $request->input('ip_address');

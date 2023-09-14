@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MonitorController;
 use App\Http\Controllers\PresentationController;
 use App\Http\Controllers\SlideController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +66,24 @@ Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
         // Route::get('/{id}', [SlideController::class, 'show'])->name('slides.show');
         // Route::put('/{id}', [SlideController::class, 'update'])->name('slides.update');
         Route::delete('/{id}', [SlideController::class, 'destroy'])->middleware('can:delete slides')->name('slides.destroy');
+    });
+
+    Route::prefix('groups')->group(function () {
+        Route::get('/', [GroupController::class, 'index'])->name('groups.index');
+        Route::get('/create', [GroupController::class, 'create'])->name('groups.create');
+        Route::post('/', [GroupController::class, 'store'])->name('groups.store');
+        // Route::get('/{id}', [GroupController::class, 'show'])->name('groups.show');
+        Route::put('/{id}', [GroupController::class, 'update'])->name('groups.update');
+        Route::delete('/{id}', [GroupController::class, 'destroy'])->name('groups.destroy');
+    });
+
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('users.index');
+        // Route::get('/create', [UserController::class, 'create'])->name('users.create');
+        // Route::post('/', [UserController::class, 'store'])->name('users.store');
+        Route::get('/{id}', [UserController::class, 'show'])->name('users.show');
+        Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     });
 });
 

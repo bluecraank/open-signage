@@ -1,22 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="title">{{ __('Templates') }}</div>
+    <div class="title">{{ __('Users') }}</div>
 
     <div class="card has-table">
         <header class="card-header">
             <p class="card-header-title">
-                {{ __('Templates') }}
+                {{ __('Users') }}
             </p>
-
-            <div class="card-header-actions">
-                @can('create presentations')
-                    <a href="{{ route('presentations.create') }}" class="button is-primary is-small">
-                        <span class="icon"><i class="mdi mdi-plus"></i></span>
-                        <span>{{ __('Create template') }}</span>
-                    </a>
-                @endcan
-            </div>
         </header>
 
         <div class="card-content">
@@ -24,31 +15,28 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>{{ __('Used by') }}</th>
-                        <th>{{ __('Description') }}</th>
-                        <th>{{ __('Created by') }}</th>
+                        <th>{{ __('Mail') }}</th>
+                        <th>{{ __('Role') }}</th>
                         <th>{{ __('Actions') }}</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach ($presentations as $presentation)
+                    @foreach ($users as $user)
                         <tr>
-                            <td>{{ $presentation->name }}</td>
-                            <td>{{ $presentation->devices->count() }}
-                                {{ trans_choice('Device|Devices', $presentation->devices->count()) }}</td>
-                            <td>{{ $presentation->description }}</td>
-                            <td>{{ $presentation->author }}</td>
+                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->email ?? __('This user has no mail') }}</td>
+                            <td>{{ $user->getRoleNames()[0] }}</td>
                             <td>
 
-                                <form action="{{ route('presentations.destroy', ['id' => $presentation->id]) }}"
+                                <form action="{{ route('users.destroy', ['id' => $user->id]) }}"
                                     method="POST"
-                                    onsubmit="return confirm('{{ __('Are you sure to delete this template?') }}')">
+                                    onsubmit="return confirm('{{ __('Are you sure to delete this user?') }}')">
                                     @method('DELETE')
                                     @csrf
                                     @can('read presentations')
                                         <a class="button is-info is-small"
-                                            href="{{ route('presentations.update', ['id' => $presentation->id]) }}"><i
+                                            href="{{ route('users.update', ['id' => $user->id]) }}"><i
                                                 class="mdi mdi-pen"></i></a>
                                     @endcan
                                     @can('delete presentations')
@@ -59,10 +47,10 @@
                             </td>
                         </tr>
                     @endforeach
-                    @if ($presentations->count() == 0)
+                    @if ($users->count() == 0)
                         <tr>
                             <td colspan="5" class="has-text-centered">
-                                {{ __('No templates found, please create one first') }}</td>
+                                {{ __('No users found, should not be possible :D') }}</td>
                         </tr>
                     @endif
                 </tbody>

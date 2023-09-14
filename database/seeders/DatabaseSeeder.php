@@ -13,22 +13,34 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::create(['name' => 'create devices', 'guard_name' => 'sanctum']);
-        Permission::create(['name' => 'read devices', 'guard_name' => 'sanctum']);
-        Permission::create(['name' => 'update devices', 'guard_name' => 'sanctum']);
-        Permission::create(['name' => 'delete devices', 'guard_name' => 'sanctum']);
-        Permission::create(['name' => 'create presentations', 'guard_name' => 'sanctum']);
-        Permission::create(['name' => 'read presentations', 'guard_name' => 'sanctum']);
-        Permission::create(['name' => 'update presentations', 'guard_name' => 'sanctum']);
-        Permission::create(['name' => 'delete presentations', 'guard_name' => 'sanctum']);
-        Permission::create(['name' => 'force reload monitor', 'guard_name' => 'sanctum']);
-        Permission::create(['name' => 'assign presentations', 'guard_name' => 'sanctum']);
-        Permission::create(['name' => 'delete slides', 'guard_name' => 'sanctum']);
+        Permission::truncate();
+        Role::truncate();
 
-        Role::create(['name' => 'admin', 'guard_name' => 'sanctum'])
+        Permission::updateOrCreate(['name' => 'create devices', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'read devices', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'update devices', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'delete devices', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'create presentations', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'read presentations', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'update presentations', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'delete presentations', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'force reload monitor', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'assign presentations', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'delete slides', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'create users', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'read users', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'update users', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'delete users', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'create groups', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'read groups', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'update groups', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'delete groups', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'assign device to group', 'guard_name' => 'sanctum']);
+
+        Role::updateOrCreate(['name' => 'admin', 'guard_name' => 'sanctum'])
             ->givePermissionTo(Permission::all());
 
-        Role::create(['name' => 'user', 'guard_name' => 'sanctum'])
+        Role::updateOrCreate(['name' => 'editer', 'guard_name' => 'sanctum'])
             ->givePermissionTo([
                 'create devices',
                 'read devices',
@@ -39,6 +51,13 @@ class DatabaseSeeder extends Seeder
                 'force reload monitor',
                 'assign presentations',
                 'delete slides'
+            ]);
+
+        Role::updateOrCreate(['name' => 'user', 'guard_name' => 'sanctum'])
+            ->givePermissionTo([
+                'read devices',
+                'read presentations',
+                'read groups'
             ]);
     }
 }

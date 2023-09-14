@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="title">{{ __('Device') }} - {{ $device->name }}</div>
+    <div class="title">{{ $device->name }}</div>
     <div class="card">
         <header class="card-header">
             <p class="card-header-title">

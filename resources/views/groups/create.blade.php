@@ -1,16 +1,24 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="title">{{ __('Create device') }}</div>
+    <script src="/data/js/jquery-3.7.1.min.js"></script>
+    <script src="/data/js/jquery.multi-select.js"></script>
+    <link rel="stylesheet" href="/data/css/multi-select.css ">
+    <script>
+        $(document).ready(function() {
+            $('#multiselect').multiSelect();
+        });
+    </script>
+    <div class="title">{{ __('Create group') }}</div>
     <div class="card">
         <header class="card-header">
             <p class="card-header-title">
-                {{ __('Create device') }}
+                {{ __('Create group') }}
             </p>
         </header>
 
         <div class="card-content">
-            <form action="{{ route('devices.store') }}" method="POST">
+            <form action="{{ route('groups.store') }}" method="POST">
                 @csrf
 
                 <div class="field">
@@ -19,18 +27,8 @@
                 </div>
 
                 <div class="field">
-                    <label class="label">{{ __('IP Address') }}</label>
-                    <input required type="text" class="input" name="ip_address" placeholder="{{ __('IP Address') }}">
-                </div>
-
-                <div class="field">
-                    <label class="label">{{ __('Description') }}</label>
-                    <input required type="text" class="input" name="description" placeholder="{{ __('Description') }}">
-                </div>
-
-                <div class="field">
                     <label class="label">{{ __('Template') }}</label>
-                    <div class="select">
+                    <div class="select is-fullwidth">
                         <select required name="presentation_id" id="">
                             <option value="0">{{ __('Select a template') }}...</option>
                             @foreach ($presentations as $presentation)
@@ -38,6 +36,15 @@
                             @endforeach
                         </select>
                     </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">{{ __('Devices') }}</label>
+                    <select name="devices[]" id="multiselect" multiple="multiple">
+                        @foreach ($devices as $device)
+                            <option value="{{ $device->id }}">{{ $device->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <button type="submit" class="button is-primary">{{ __('Save') }}</button>

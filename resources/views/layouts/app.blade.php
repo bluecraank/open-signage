@@ -34,13 +34,24 @@
                             {{ __('Devices') }}
                         </a>
 
+                        <a href="{{ route('groups.index') }}" class="navbar-item">
+                            {{ __('Groups') }}
+                        </a>
+
                         <a href="{{ route('presentations.index') }}" class="navbar-item">
                             {{ __('Templates') }}
                         </a>
 
+                        <a href="{{ route('users.index') }}" class="navbar-item">
+                            {{ __('Users') }}
+                        </a>
                     </div>
 
                     <div class="navbar-end">
+                        @
+                        <div class="navbar-item">
+
+                        </div>
                         <div class="navbar-item">
                             {{ strtolower(Auth::user()->email) }}
                             <form class="pl-3" id="logout-form" action="/logout" method="POST">
@@ -74,8 +85,8 @@
                 @yield('content')
 
                 <footer>
-                    Contribute on <a href="https://github.com">GitHub</a> | Build with <a
-                        href="https://laravel.com">Laravel</a> and <i class="mdi mdi-heart"></i>
+                    Contribute on <a href="https://github.com/bluecraank/open-signage">GitHub</a> | Build with <a
+                        href="https://laravel.com">Laravel</a>, <a href="https://bulma.io">Bulma</a> and <i class="mdi mdi-heart"></i>
                 </footer>
             </div>
         </div>

@@ -39,7 +39,7 @@
                                 </span>
                             </span>
                             <span class="file-name">
-                                {{ __('No file selected') }}
+                                {{ __('No file selected ') }} (max: 100 Mb)
                             </span>
                         </label>
                     </div>
@@ -55,8 +55,8 @@
                     </script>
                 </div>
 
-                <button type="submit" class="button is-primary is-small">{{ __('Save') }}</button>
-                <button type="reset" class="button is-danger is-pulled-right is-small">{{ __('Reset') }}</button>
+                <button type="submit" class="button is-primary">{{ __('Save') }}</button>
+                <button type="reset" class="button is-danger is-pulled-right">{{ __('Reset') }}</button>
             </form>
         </div>
     </div>

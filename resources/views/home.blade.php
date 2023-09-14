@@ -11,7 +11,7 @@
 
             <div class="card-header-actions">
                 @can('create devices')
-                    <a href="/devices/create" class="button is-primary is-small">
+                    <a href="{{ route('devices.create') }}" class="button is-primary is-small">
                         <span class="icon"><i class="mdi mdi-plus"></i></span>
                         <span>{{ __('Create device') }}</span>
                     </a>
@@ -23,6 +23,7 @@
             <table class="table is-fullwidth">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>{{ __('Current slide') }}</th>
                         <th>Name</th>
                         <th>{{ __('Description') }}</th>
@@ -36,9 +37,13 @@
                 <tbody>
                     @foreach ($devices as $device)
                         <tr>
+                            <td style="text-align: center;vertical-align:middle;">
+                                {{ $device->isActive() }}
+                            </td>
                             <td>
                                 @php
-                                    $slides = $device->presentation?->slides;
+                                    $device_pres = $device->getPresentation();
+                                    $slides = $device_pres?->slides;
                                     $currentSlide = $slides?->toArray()[$device->current_slide ?? 0];
                                     $preview = $currentSlide['publicpreviewpath'] ?? '/data/img/placeholder.png';
                                 @endphp
@@ -46,7 +51,7 @@
                             </td>
                             <td>{{ $device->name }}</td>
                             <td>{{ $device->description }}</td>
-                            <td>{{ $presentation[$device->presentation_id]['name'] ?? __('No template assigned') }}</td>
+                            <td>{{ $device_pres?->name ?? __('No template assigned') }} @if($device->presentationFromGroup()) <br> <small><i class="mdi mdi-checkbox-marked-circle-outline"></i> {{ __('Inherited by group') }}</small> @endif</td>
                             <td>
                                 @if ($device->last_seen)
                                     {{ Carbon::parse($device->last_seen)->diffForHumans() }}

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="title">{{ __('Template') }} - {{ $presentation->name }}</div>
+    <div class="title">{{ $presentation->name }}</div>
     <div class="card">
         <header class="card-header">
             <p class="card-header-title">
@@ -14,7 +14,7 @@
             <div class="columns">
                 @can('read presentations')
                     <div class="column is-4">
-                        <img width="500" src="{{ $presentation->slides->first()->publicpreviewpath() }}" alt="">
+                        <img width="500" src="{{ $presentation->slides?->first()?->publicpreviewpath() ?? 'https://picsum.photos/333/214' }}" alt="">
                     </div>
 
                     @cannot('update presentations')
@@ -55,7 +55,7 @@
                                                 </span>
                                             </span>
                                             <span class="file-name">
-                                                {{ __('No file selected') }}
+                                                {{ __('No file selected') }} (max: 100 Mb)
                                             </span>
                                         </label>
                                     </div>
