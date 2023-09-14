@@ -36,8 +36,8 @@
                         @foreach ($activeSchedules as $schedule)
                             <tr>
                                 <td>{{ $schedule->name }}</td>
-                                <td>{{ $schedule->start_time }}</td>
-                                <td>{{ $schedule->end_time }}</td>
+                                <td>{{ $schedule->startDate() }}</td>
+                                <td>{{ $schedule->endDate() }}</td>
                                 <td>{{ $schedule->appliesTo() }}</td>
                                 <td class="actions-cell">
                                     <form action="{{ route('schedules.destroy', ['id' => $schedule->id]) }}" method="POST"
@@ -93,8 +93,8 @@
                                 @foreach ($upcomingSchedules as $schedule)
                                     <tr>
                                         <td>{{ $schedule->name }}</td>
-                                        <td>{{ $schedule->start_time }}</td>
-                                        <td>{{ $schedule->end_time }}</td>
+                                        <td>{{ $schedule->startDate() }}</td>
+                                        <td>{{ $schedule->endDate() }}</td>
                                         <td>{{ $schedule->appliesTo() }}</td>
                                         <td class="actions-cell">
                                             <form action="{{ route('schedules.destroy', ['id' => $schedule->id]) }}"
@@ -149,8 +149,8 @@
                                 @foreach ($pastSchedules as $schedule)
                                     <tr>
                                         <td>{{ $schedule->name }}</td>
-                                        <td>{{ $schedule->start_time }}</td>
-                                        <td>{{ $schedule->end_time }}</td>
+                                        <td>{{ $schedule->startDate() }}</td>
+                                        <td>{{ $schedule->endDate() }}</td>
                                         <td></td>
                                     </tr>
                                 @endforeach

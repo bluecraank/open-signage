@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Schedule extends Model
@@ -47,13 +48,21 @@ class Schedule extends Model
         return $devices;
     }
 
-    public function getStartTimeAttribute($value)
-    {
-        return date('Y-m-d\TH:i', strtotime($value));
+    public function startDate() {
+        $locale = config('app.locale');
+        if($locale == 'de') {
+            return Carbon::parse($this->start_time)->format('d.m.Y H:i');
+        }
+
+        return Carbon::parse($this->start_time)->format('Y-m-d H:i');
     }
 
-    public function getEndTimeAttribute($value)
-    {
-        return date('Y-m-d\TH:i', strtotime($value));
+    public function endDate() {
+        $locale = config('app.locale');
+        if($locale == 'de') {
+            return Carbon::parse($this->start_time)->format('d.m.Y H:i');
+        }
+
+        return Carbon::parse($this->end_time)->format('Y-m-d H:i');
     }
 }

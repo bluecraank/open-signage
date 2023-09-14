@@ -29,6 +29,10 @@ class Device extends Model
     }
 
     public function getPresentation() {
+        if($this->activeSchedule()) {
+            return $this->activeSchedule()->presentation;
+        }
+
         if($this->group_id) {
             return $this->group->presentation;
         }
@@ -41,8 +45,20 @@ class Device extends Model
     }
 
     public function getPresentationId() {
+
+        if($this->activeSchedule()) {
+            return $this->activeSchedule()->presentation_id;
+        }
+
         if($this->group_id) {
-            return $this->group->presentation_id;
+            $group = $this->group;
+
+            if(!$group) {
+                $this->group_id = null;
+                $this->save();
+            }
+
+            return $group?->presentation_id;
         }
 
         if($this->presentation_id) {
@@ -54,6 +70,40 @@ class Device extends Model
 
     public function presentationFromGroup() {
         if($this->group?->presentation_id) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function activeSchedule() {
+        $activeSchedule = Schedule::where('start_time', '<', now())->where('end_time', '>', now())->get();
+
+        foreach($activeSchedule as $schedule) {
+            if($schedule->devices) {
+                $devices = $schedule->devices;
+                if(in_array($this->id, $devices)) {
+                    return $schedule;
+                }
+            }
+
+            if($schedule->groups) {
+                $groups = $schedule->groups;
+                if(in_array($this->group_id, $groups)) {
+                    return $schedule;
+                }
+            }
+        }
+
+        if($activeSchedule) {
+            return $activeSchedule;
+        }
+
+        return null;
+    }
+
+    public function presentationFromSchedule() {
+        if($this->activeSchedule()) {
             return true;
         }
 

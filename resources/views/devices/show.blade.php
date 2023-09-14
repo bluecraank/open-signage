@@ -62,6 +62,13 @@
                                             {{ __('Inherited by group') }} - <a
                                                 href="{{ route('groups.show', $device->group->id) }}">{{ __('Go to group') }}</a></small>
                                     </p>
+                                @elseif($device->presentationFromSchedule())
+                                    <p><b>{{ __('Assigned template') }}:</b>
+                                        {{ $device->getPresentation()?->name ?? __('No template assigned') }}
+                                        <br> <small><i class="mdi mdi-checkbox-marked-circle-outline"></i>
+                                            {{ __('Inherited by schedule') }} - <a
+                                                href="{{ route('schedules.show', $device->schedule->id) }}">{{ __('Go to schedule') }}</a></small>
+                                    </p>
                                 @else
                                     <div class="field">
                                         <label class="label">{{ __('Assigned template') }}</label>
