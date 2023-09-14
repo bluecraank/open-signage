@@ -16,6 +16,7 @@
     "dependencies": {
         "@mdi/font": "^7.2.96",
         "bulma": "^0.9.4",
+        "bulma-calendar": "^6.1.19",
         "bulma-prefers-dark": "^0.1.0-beta.1",
         "multiselect": "^0.9.12"
     }

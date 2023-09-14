@@ -7,6 +7,7 @@ use App\Http\Controllers\MonitorController;
 use App\Http\Controllers\PresentationController;
 use App\Http\Controllers\SlideController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -78,6 +79,15 @@ Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
         Route::get('/{id}', [UserController::class, 'show'])->middleware('can:read users')->name('users.show');
         Route::put('/{id}', [UserController::class, 'update'])->middleware('can:update users')->name('users.update');
         Route::delete('/{id}', [UserController::class, 'destroy'])->middleware('can:delete users')->name('users.destroy');
+    });
+
+    Route::prefix('schedules')->group(function () {
+        Route::get('/', [ScheduleController::class, 'index'])->name('schedules.index');
+        Route::get('/create', [ScheduleController::class, 'create'])->middleware('can:create schedules')->name('schedules.create');
+        Route::post('/', [ScheduleController::class, 'store'])->middleware('can:create schedules')->name('schedules.store');
+        Route::get('/{id}', [ScheduleController::class, 'show'])->middleware('can:read schedules')->name('schedules.show');
+        Route::put('/{id}', [ScheduleController::class, 'update'])->middleware('can:update schedules')->name('schedules.update');
+        Route::delete('/{id}', [ScheduleController::class, 'destroy'])->middleware('can:delete schedules')->name('schedules.destroy');
     });
 });
 

@@ -83,7 +83,7 @@
                 <hr>
 
                 <div class="subtitle pt-5">{{ __('Devices') }}</div>
-                <table class="table is-narrow is-striped is-hoverable is-fullwidth is-fullwidth">
+                <table class="table is-narrow is-striped is-hoverable is-fullwidth">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -112,7 +112,7 @@
                 <hr>
 
                 <div class="subtitle pt-5">{{ __('Groups') }}</div>
-                <table class="table is-narrow is-striped is-hoverable is-fullwidth is-fullwidth">
+                <table class="table is-narrow is-striped is-hoverable is-fullwidth">
                     <thead>
                         <tr>
                             <th>Name</th>

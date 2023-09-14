@@ -43,19 +43,21 @@
                             </div>
                         </div>
                     </div>
-                    <div class="column is-6">
-                        <div class="field">
-                            <label class="label">{{ __('Group') }}</label>
-                            <div class="select is-fullwidth">
-                                <select required name="group_id" id="">
-                                    <option value="0">{{ __('Select a group') }}...</option>
-                                    @foreach ($groups as $group)
-                                        <option value="{{ $group->id }}">{{ $group->name }}</option>
-                                    @endforeach
-                                </select>
+                    @can('assign device to group')
+                        <div class="column is-6">
+                            <div class="field">
+                                <label class="label">{{ __('Group') }}</label>
+                                <div class="select is-fullwidth">
+                                    <select required name="group_id" id="">
+                                        <option value="0">{{ __('Select a group') }}...</option>
+                                        @foreach ($groups as $group)
+                                            <option value="{{ $group->id }}">{{ $group->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endcan
                 </div>
 
                 <button type="submit" class="button is-primary">{{ __('Save') }}</button>

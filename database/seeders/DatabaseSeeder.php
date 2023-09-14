@@ -38,12 +38,22 @@ class DatabaseSeeder extends Seeder
         Permission::updateOrCreate(['name' => 'delete groups', 'guard_name' => 'sanctum']);
         Permission::updateOrCreate(['name' => 'assign device to group', 'guard_name' => 'sanctum']);
         Permission::updateOrCreate(['name' => 'register devices', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'create schedules', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'read schedules', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'update schedules', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'delete schedules', 'guard_name' => 'sanctum']);
 
         Role::updateOrCreate(['name' => 'Super Administrator', 'guard_name' => 'sanctum'])
             ->givePermissionTo(Permission::all());
 
         Role::updateOrCreate(['name' => 'Supporter', 'guard_name' => 'sanctum'])
-            ->givePermissionTo(Permission::all());
+            ->givePermissionTo([
+                'read devices',
+                'read presentations',
+                'read groups',
+                'force reload monitor',
+                'register devices'
+            ]);
 
         Role::updateOrCreate(['name' => 'Manager', 'guard_name' => 'sanctum'])
             ->givePermissionTo([
@@ -60,13 +70,18 @@ class DatabaseSeeder extends Seeder
                 'read groups',
                 'update groups',
                 'delete groups',
+                'assign device to group',
+                'create schedules',
+                'read schedules',
+                'update schedules',
+                'delete schedules',
             ]);
 
         Role::updateOrCreate(['name' => 'User', 'guard_name' => 'sanctum'])
             ->givePermissionTo([
                 'read devices',
-                'read presentations',
-                'read groups'
+                // 'read presentations',
+                // 'read groups'
             ]);
 
         $user = User::whereId(1)->first();

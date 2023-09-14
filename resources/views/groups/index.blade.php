@@ -21,7 +21,7 @@
         </header>
 
         <div class="card-content">
-            <table class="table is-narrow is-striped is-hoverable is-fullwidth is-fullwidth">
+            <table class="table is-narrow is-striped is-hoverable is-fullwidth">
                 <thead>
                     <tr>
                         <th>Name</th>

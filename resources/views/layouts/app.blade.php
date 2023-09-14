@@ -48,6 +48,12 @@
                             </a>
                         @endcan
 
+                        @can('read schedules')
+                            <a href="{{ route('schedules.index') }}" class="navbar-item">
+                                {{ __('Schedules') }}
+                            </a>
+                        @endcan
+
                         @can('read users')
                             <a href="{{ route('users.index') }}" class="navbar-item">
                                 {{ __('Users') }}

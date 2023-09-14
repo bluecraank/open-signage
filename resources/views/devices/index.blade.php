@@ -21,7 +21,7 @@
         </header>
 
         <div class="card-content">
-            <table class="table is-narrow is-striped is-hoverable is-fullwidth is-fullwidth">
+            <table class="table is-narrow is-striped is-hoverable is-fullwidth">
                 <thead>
                     <tr>
                         <th></th>
@@ -52,7 +52,7 @@
                             </td>
                             <td>{{ $device->name }}</td>
                             <td>{{ $device->description }}</td>
-                            <td>{{ $device_pres?->name ?? __('No template assigned') }} @if($device->presentationFromGroup()) <br> <small><i class="mdi mdi-checkbox-marked-circle-outline"></i> {{ __('Inherited by group') }}</small> @endif</td>
+                            <td>{{ $device_pres?->name ?? __('No template assigned') }} @if($device->presentationFromGroup()) <br> <small class="has-text-success"><i class="mdi mdi-checkbox-marked-circle-outline"></i> {{ __('Inherited by group') }}</small> @endif</td>
                             <td>
                                 @if ($device->last_seen)
                                     {{ Carbon::parse($device->last_seen)->diffForHumans() }}

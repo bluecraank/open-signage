@@ -65,15 +65,17 @@
                                             </div>
                                         </div>
 
-                                        <div class="field">
-                                            <label class="label">{{ __('Devices') }}</label>
-                                            <select multiple="multiple" name="devices[]" id="multiselect">
-                                                @foreach ($devices as $device)
-                                                    <option @if ($device->group_id == $group->id) selected @endif
-                                                        value="{{ $device->id }}">{{ $device->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                        @can('assign device to group')
+                                            <div class="field">
+                                                <label class="label">{{ __('Devices') }}</label>
+                                                <select multiple="multiple" name="devices[]" id="multiselect">
+                                                    @foreach ($devices as $device)
+                                                        <option @if ($device->group_id == $group->id) selected @endif
+                                                            value="{{ $device->id }}">{{ $device->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        @endcan
 
                                         <label class="label">&nbsp;</label>
                                         <button type="submit" class="button is-primary">{{ __('Save') }}</button>

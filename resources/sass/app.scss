@@ -1,6 +1,8 @@
 @import 'bulma/bulma.sass';
 @import '@mdi/font/css/materialdesignicons.css';
 @import "bulma-prefers-dark/bulma-prefers-dark.sass";
+@import "bulma-calendar/src/sass/index.sass";
+
 
 .is-fullheight {
     height: 100%;
