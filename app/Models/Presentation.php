@@ -23,4 +23,9 @@ class Presentation extends Model
     {
         return $this->hasMany(Slide::class);
     }
+
+    public function groups()
+    {
+        return $this->hasMany(Group::class);
+    }
 }

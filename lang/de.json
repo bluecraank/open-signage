@@ -81,5 +81,16 @@
     "User not found": "Benutzer nicht gefunden",
     "This user has no mail": "Dieser Benutzer hat keine E-Mail",
     "Mail": "E-Mail",
-    "Inherited by group": "Geerbt von Gruppe"
+    "Inherited by group": "Geerbt von Gruppe",
+    "Go to group": "Gehe zu Gruppe",
+    "Assign Role": "Rolle zuweisen",
+    "No devices assigned": "Keine Monitore zugewiesen",
+    "Not registered": "Nicht registriert",
+    "Registered": "Registriert",
+    "Selectable": "Auswählbar",
+    "Selected": "Ausgewählt",
+    "Group|Groups": "Gruppe|Gruppen",
+    "Assigned": "Zugewiesen",
+    "By group": "Über Gruppe",
+    "Directly": "Direkt"
 }

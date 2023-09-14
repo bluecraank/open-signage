@@ -15,7 +15,7 @@
                 <div class="columns">
                     <div class="column is-4">
                         @php
-                            $slides = $device->presentation?->slides;
+                            $slides = $device->getPresentation()?->slides;
                             $currentSlide = $slides?->toArray()[$device->current_slide ?? 0];
                             $preview = $currentSlide['publicpreviewpath'] ?? '/data/img/placeholder.png';
                         @endphp
@@ -28,8 +28,16 @@
 
                             <p><b>{{ __('Description') }}:</b> {{ $device->description }}</p>
 
-                            <p><b>{{ __('Assigned template') }}:</b>
-                                {{ $presentation[$device->presentation_id]['name'] ?? __('No template assigned') }}</p>
+                            @if ($device->presentationFromGroup())
+                                <p><b>{{ __('Assigned template') }}:</b>
+                                    {{ $device->getPresentation()?->name ?? __('No template assigned') }}
+                                    <br> <small><i class="mdi mdi-checkbox-marked-circle-outline"></i>
+                                        {{ __('Inherited by group') }}</small>
+                                </p>
+                            @else
+                                <p><b>{{ __('Assigned template') }}:</b>
+                                    {{ $presentation[$device->getPresentationId()]['name'] ?? __('No template assigned') }}</p>
+                            @endif
                         </div>
                     @endcannot
 
@@ -39,30 +47,37 @@
                                 @method('PUT')
                                 @csrf
                                 <div class="field">
-                                    <label for="" class="label">Name</label>
+                                    <label class="label">Name</label>
                                     <input class="input" type="text" name="name" value="{{ $device->name }}" />
                                 </div>
                                 <div class="field">
-                                    <label for="" class="label">{{ __('Description') }}</label>
+                                    <label class="label">{{ __('Description') }}</label>
                                     <input class="input" type="text" name="description" value="{{ $device->description }}" />
                                 </div>
 
-                                <div class="field">
-                                    <label for="" class="label">{{ __('Assigned template') }}</label>
-                                    <div class="select">
-                                        <select name="presentation_id">
-                                            <option value="">{{ __('No template assigned') }}</option>
-                                            @foreach ($presentations as $presentation)
-                                                <option @if ($device->presentation_id == $presentation->id) selected @endif
-                                                    value="{{ $presentation->id }}"
-                                                    @if ($presentation->id == $device->presentation_id) selected @endif>{{ $presentation->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                @if ($device->presentationFromGroup())
+                                    <p><b>{{ __('Assigned template') }}:</b>
+                                        {{ $device->getPresentation()?->name ?? __('No template assigned') }}
+                                        <br> <small><i class="mdi mdi-checkbox-marked-circle-outline"></i>
+                                            {{ __('Inherited by group') }} - <a href="{{ route('groups.show', $device->group->id) }}">{{ __('Go to group') }}</a></small>
+                                    </p>
+                                @else
+                                    <div class="field">
+                                        <label class="label">{{ __('Assigned template') }}</label>
+                                        <div class="select is-fullwidth">
+                                            <select name="presentation_id">
+                                                <option value="">{{ __('No template assigned') }}</option>
+                                                @foreach ($presentations as $presentation)
+                                                    <option @if ($device->getPresentationId() == $presentation->id) selected @endif
+                                                        value="{{ $presentation->id }}"
+                                                        @if ($presentation->id == $device->getPresentationId()) selected @endif>{{ $presentation->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-
-                                <label for="" class="label">&nbsp;</label>
+                                @endif
+                                <label class="label">&nbsp;</label>
                                 <button type="submit" class="button is-primary">{{ __('Save') }}</button>
                             </form>
                         @endcan
@@ -130,9 +145,7 @@
                                 Status: {{ $device->registered ? __('Successfully registered') : __('Not registered') }}
                                 @if (!$device->registered)
                                     <div>
-                                        <p><b>Open <a
-                                                    href="{{ url(route('devices.register')) }}">{{ url(route('devices.register')) }}</a>
-                                                on device and enter following key:</b></p>
+                                        <p><b>{!! __('Open :url on device and enter following key', ['url' => '<a href="'.url(route('devices.register')).'">'.url(route('devices.register')) .'</a>']) !!}:</b></p>
                                         <b><code>{{ $device->secret }}</code></b>
                                     </div>
                                 @endif

@@ -32,17 +32,17 @@
                                 @method('PUT')
                                 @csrf
                                 <div class="field">
-                                    <label for="" class="label">{{ __('Template name') }}</label>
+                                    <label class="label">{{ __('Template name') }}</label>
                                     <input class="input" type="text" name="name" value="{{ $presentation->name }}" />
                                 </div>
                                 <div class="field">
-                                    <label for="" class="label">{{ __('Description') }}</label>
+                                    <label class="label">{{ __('Description') }}</label>
                                     <input class="input" type="text" name="description"
                                         value="{{ $presentation->description }}" />
                                 </div>
 
                                 <div class="field">
-                                    <label for="" class="label">{{ __('Upload new pdf') }}</label>
+                                    <label class="label">{{ __('Upload new pdf') }}</label>
                                     <div class="file has-name" id="file-upload">
                                         <label class="file-label">
                                             <input class="file-input" type="file" name="file" accept=".pdf">
@@ -71,7 +71,7 @@
                                     </script>
                                 </div>
 
-                                <label for="" class="label">&nbsp;</label>
+                                <label class="label">&nbsp;</label>
                                 <button type="submit" class="button is-primary">{{ __('Save') }}</button>
                             </form>
                         </div>
@@ -87,8 +87,7 @@
                     <tr>
                         <th>Name</th>
                         <th>{{ __('Description') }}</th>
-                        <th>{{ __('Last seen') }}</th>
-                        <th>{{ __('Actions') }}</th>
+                        <th>{{ __('Assigned') }}</th>
                     </tr>
                 </thead>
 
@@ -97,29 +96,40 @@
                         <tr>
                             <td>{{ $device->name }}</td>
                             <td>{{ $device->description }}</td>
-                            <td>{{ $device->last_seen ?? 'N/A' }}</td>
-                            <td>
-                                <form action="{{ route('devices.destroy', ['id' => $device->id]) }}" method="POST"
-                                    onsubmit="return confirm('{{ __('Are you sure to delete this device?') }}')">
-                                    @method('DELETE')
-                                    @csrf
-                                    @can('update devices')
-                                        <a class="button is-info is-small"
-                                            href="{{ route('devices.update', ['id' => $device->id]) }}"><i
-                                                class="mdi mdi-pen"></i></a>
-                                    @endcan
-                                    @can('delete devices')
-                                        <button class="button is-danger is-small" type="submit"><i
-                                                class="mdi mdi-trash-can"></i></button>
-                                    @endcan
-                                </form>
-                            </td>
+                            <td>{{ $device->presentationFromGroup() ? __('By group') : __('Directly') }}</td>
                         </tr>
                     @endforeach
 
                     @if ($presentation->devices->count() == 0)
                         <tr>
-                            <td class="has-text-centered" colspan="4">{{ __('No devices assigned') }}</td>
+                            <td class="has-text-centered" colspan="3">{{ __('No devices assigned') }}</td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+
+            <hr>
+
+            <div class="subtitle pt-5">{{ __('Groups') }}</div>
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>{{ __('Used by') }}</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach ($presentation->groups as $group)
+                        <tr>
+                            <td>{{ $group->name }}</td>
+                            <td>{{ $group->devices->count() }} {{ trans_choice('Device|Devices', $group->devices->count()) }}</td>
+                        </tr>
+                    @endforeach
+
+                    @if ($presentation->groups->count() == 0)
+                        <tr>
+                            <td class="has-text-centered" colspan="2">{{ __('No groups assigned') }}</td>
                         </tr>
                     @endif
                 </tbody>

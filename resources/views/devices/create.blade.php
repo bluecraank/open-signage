@@ -28,15 +28,33 @@
                     <input required type="text" class="input" name="description" placeholder="{{ __('Description') }}">
                 </div>
 
-                <div class="field">
-                    <label class="label">{{ __('Template') }}</label>
-                    <div class="select">
-                        <select required name="presentation_id" id="">
-                            <option value="0">{{ __('Select a template') }}...</option>
-                            @foreach ($presentations as $presentation)
-                                <option value="{{ $presentation->id }}">{{ $presentation->name }}</option>
-                            @endforeach
-                        </select>
+                <div class="columns">
+                    <div class="column is-6">
+
+                        <div class="field">
+                            <label class="label">{{ __('Template') }}</label>
+                            <div class="select is-fullwidth">
+                                <select required name="presentation_id" id="">
+                                    <option value="0">{{ __('Select a template') }}...</option>
+                                    @foreach ($presentations as $presentation)
+                                        <option value="{{ $presentation->id }}">{{ $presentation->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-6">
+                        <div class="field">
+                            <label class="label">{{ __('Group') }}</label>
+                            <div class="select is-fullwidth">
+                                <select required name="group_id" id="">
+                                    <option value="0">{{ __('Select a group') }}...</option>
+                                    @foreach ($groups as $group)
+                                        <option value="{{ $group->id }}">{{ $group->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

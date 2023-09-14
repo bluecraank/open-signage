@@ -28,7 +28,7 @@ Route::post('/devices/register', [DeviceController::class, 'register']);
 Route::get('/monitor/{secret}', [MonitorController::class, 'show'])->name('devices.monitor');
 
 Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
-    Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+    Route::get('/', [App\Http\Controllers\DeviceController::class, 'index']);
 
     Route::get('/home', function() {
         // Redirect to /
@@ -36,7 +36,7 @@ Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
     });
 
     Route::prefix('devices')->group(function () {
-        Route::get('/', [HomeController::class, 'index'])->name('devices.index');
+        Route::get('/', [DeviceController::class, 'index'])->name('devices.index');
 
         Route::get('/create', [DeviceController::class, 'create'])->middleware('can:create devices')->name('devices.create');
 
@@ -72,7 +72,7 @@ Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
         Route::get('/', [GroupController::class, 'index'])->name('groups.index');
         Route::get('/create', [GroupController::class, 'create'])->name('groups.create');
         Route::post('/', [GroupController::class, 'store'])->name('groups.store');
-        // Route::get('/{id}', [GroupController::class, 'show'])->name('groups.show');
+        Route::get('/{id}', [GroupController::class, 'show'])->name('groups.show');
         Route::put('/{id}', [GroupController::class, 'update'])->name('groups.update');
         Route::delete('/{id}', [GroupController::class, 'destroy'])->name('groups.destroy');
     });

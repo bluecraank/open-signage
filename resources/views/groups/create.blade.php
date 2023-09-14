@@ -6,7 +6,10 @@
     <link rel="stylesheet" href="/data/css/multi-select.css ">
     <script>
         $(document).ready(function() {
-            $('#multiselect').multiSelect();
+            $('#multiselect').multiSelect({
+                'selectableHeader': '<div class="has-text-centered has-text-weight-bold">{{ __('Selectable') }}</div>',
+                'selectionHeader': '<div class="has-text-centered has-text-weight-bold">{{ __('Selected') }}</div>'
+            });
         });
     </script>
     <div class="title">{{ __('Create group') }}</div>

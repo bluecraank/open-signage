@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $device->name }} | Monitor: {{ $device->presentation?->name }} | {{ count($slides) }} Slides</title>
+    <title>{{ $device->name }} | Monitor: {{ $device->getPresentation()?->name }} | {{ count($slides) }} Slides</title>
     <script src="/data/js/jquery-3.7.1.min.js"></script>
     @vite(['resources/css/monitor.css'])
 </head>
@@ -120,7 +120,7 @@
                     _token: '{{ csrf_token() }}',
                     last_update: last_update,
                     startup_timestamp: startup_timestamp,
-                    presentation_id: {{ $device->presentation_id }},
+                    presentation_id: {{ $device->getPresentationId() }},
                     currentSlide: currentSlide,
                     secret: '{{ $device->secret }}'
                 },
@@ -133,7 +133,7 @@
                         location.reload();
                     }
 
-                    if (data.presentation_id != {{ $device->presentation_id }}) {
+                    if (data.presentation_id != {{ $device->getPresentationId() }}) {
                         console.log("[MISMANAGER] A new presentation was assigned, reloading page");
 
                         location.reload();

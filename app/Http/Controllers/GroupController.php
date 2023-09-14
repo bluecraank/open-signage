@@ -61,7 +61,10 @@ class GroupController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $group = Group::findOrFail($id);
+        $devices = Device::all();
+        $presentations = Presentation::all();
+        return view('groups.show', compact('group', 'devices', 'presentations'));
     }
 
     /**
@@ -77,7 +80,34 @@ class GroupController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $group = Group::whereId($id)->first();
+
+        if (!$group) {
+            return redirect()->route('groups.index')->with('error', __('Group not found'));
+        }
+
+        $request->validate([
+            'name' => 'required|unique:groups,name,' . $group->id,
+            'presentation_id' => 'required|exists:presentations,id',
+            'devices' => 'nullable|array',
+        ]);
+
+        $group->name = $request->name;
+        $group->presentation_id = $request->presentation_id;
+        $group->save();
+
+        Device::where('group_id', $group->id)->update(['group_id' => null]);
+
+        if ($request->devices) {
+            foreach ($request->devices as $device_id) {
+                $device = Device::find($device_id);
+                if(!$device) continue;
+                $device->group_id = $group->id;
+                $device->save();
+            }
+        }
+
+        return redirect()->back()->with('success', __('Group updated'));
     }
 
     /**

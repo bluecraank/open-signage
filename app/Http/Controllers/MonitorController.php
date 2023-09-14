@@ -20,7 +20,7 @@ class MonitorController extends Controller
             return "<meta http-equiv='refresh' content='1'>".json_encode(['error' => "Device not registered."]);
         }
 
-        $presentation = $device->presentation;
+        $presentation = $device->getPresentation();
 
         if(!$presentation) {
             return "<meta http-equiv='refresh' content='1'>".json_encode(['error' => "No presentation assigned to this device."]);
@@ -67,7 +67,7 @@ class MonitorController extends Controller
             return json_encode(['error' => "Device not found."]);
         }
 
-        $presentation = $device->presentation;
+        $presentation = $device->getPresentation();
 
         if(!$presentation) {
             return json_encode(['error' => "No presentation assigned to this device."]);

@@ -19,7 +19,7 @@
                                 @method('PUT')
                                 @csrf
                                 <div class="field">
-                                    <label for="" class="label">{{ __('Assign Role') }}</label>
+                                    <label class="label">{{ __('Assign Role') }}</label>
                                     <div class="columns">
                                         @foreach ($roles as $role)
                                             <div class="column is-1">
@@ -32,15 +32,15 @@
                                     </div>
                                 </div>
 
-                                <label for="" class="label">&nbsp;</label>
-                                <button type="submit" class="button is-primary">{{ __('Save User') }}</button>
+                                <label class="label">&nbsp;</label>
+                                <button type="submit" class="button is-primary">{{ __('Save') }}</button>
                             </form>
                             @can('delete users')
                                 <form class="pt-2" action="{{ route('users.destroy', $user->id) }}" method="POST"
                                     onsubmit="return confirm('{{ __('Are you sure to delete this user?') }}')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="button is-danger is-smalls">{{ __('Delete User') }}</button>
+                                    <button type="submit" class="button is-danger is-smalls">{{ __('Delete') }}</button>
                                 </form>
                             @endcan
                         </div>

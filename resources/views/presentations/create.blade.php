@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="field">
-                    <label for="" class="label">{{ __('Upload pdf') }}</label>
+                    <label class="label">{{ __('Upload pdf') }}</label>
                     <div class="file has-name" id="file-upload">
                         <label class="file-label">
                             <input class="file-input" type="file" name="file" accept=".pdf">

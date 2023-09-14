@@ -36,7 +36,10 @@
                         <tr>
                             <td>{{ $presentation->name }}</td>
                             <td>{{ $presentation->devices->count() }}
-                                {{ trans_choice('Device|Devices', $presentation->devices->count()) }}</td>
+                                {{ trans_choice('Device|Devices', $presentation->devices->count()) }},
+
+                                {{ $presentation->groups->count() }} {{ trans_choice('Group|Groups', $presentation->groups->count()) }}
+                                </td>
                             <td>{{ $presentation->description }}</td>
                             <td>{{ $presentation->author }}</td>
                             <td>

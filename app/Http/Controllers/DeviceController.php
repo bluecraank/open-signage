@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Device;
+use App\Models\Group;
 use App\Models\Presentation;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,9 @@ class DeviceController extends Controller
      */
     public function index()
     {
-        //
+        $devices = Device::all();
+        $presentation = Presentation::all()->keyBy('id')->toArray();
+        return view('devices.index', ['devices' => $devices, 'presentation' => $presentation]);
     }
 
     /**
@@ -22,7 +25,8 @@ class DeviceController extends Controller
     public function create()
     {
         $presentations = Presentation::all();
-        return view('devices.create', compact('presentations'));
+        $groups = Group::all();
+        return view('devices.create', compact('presentations', 'groups'));
     }
 
     /**
@@ -35,18 +39,24 @@ class DeviceController extends Controller
             'name' => 'required|min:2',
             'description' => 'required|min:2',
             'presentation_id' => 'nullable|integer',
+            'group_id' => 'nullable|integer',
         ]);
 
         $name = $request->input('name');
         $description = $request->input('description');
         $ip_address = $request->input('ip_address');
         $presentation_id = $request->input('presentation_id');
+        $group_id = $request->input('group_id');
 
         if($presentation_id == 0) {
             $presentation_id = null;
         }
 
-        $secret = bin2hex(random_bytes(16));
+        if($group_id == 0) {
+            $group_id = null;
+        }
+
+        $secret = bin2hex(random_bytes(4));
 
         Device::create([
             'name' => $name,
@@ -54,6 +64,7 @@ class DeviceController extends Controller
             'ip_address' => $ip_address,
             'presentation_id' => $presentation_id,
             'secret' => $secret,
+            'group_id' => $group_id,
         ]);
 
         return redirect()->route('devices.index')->with('success', __('Device created'));
@@ -129,7 +140,7 @@ class DeviceController extends Controller
         $device->name = $name;
         $device->description = $description;
 
-        if($presentation_id != $device->presentation_id) {
+        if($presentation_id != $device->getPresentationId()) {
             $device->current_slide = 0;
         }
 

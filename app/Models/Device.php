@@ -13,6 +13,7 @@ class Device extends Model
         'secret',
         'ip_address',
         'presentation_id',
+        'group_id',
         'registered',
         'active',
     ];
@@ -52,7 +53,7 @@ class Device extends Model
     }
 
     public function presentationFromGroup() {
-        if($this->group->presentation_id) {
+        if($this->group?->presentation_id) {
             return true;
         }
 
