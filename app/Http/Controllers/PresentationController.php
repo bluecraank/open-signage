@@ -35,6 +35,8 @@ class PresentationController extends Controller
     {
         $request->validate([
             'file' => 'required|file|mimetypes:application/pdf|max:100000',
+            'name' => 'required|min:2',
+            'description' => 'required|min:2',
         ]);
 
         $name = $request->input('name');

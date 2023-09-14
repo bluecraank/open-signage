@@ -92,5 +92,7 @@
     "Group|Groups": "Gruppe|Gruppen",
     "Assigned": "Zugewiesen",
     "By group": "Über Gruppe",
-    "Directly": "Direkt"
+    "Directly": "Direkt",
+    "Processing": "Verarbeitung",
+    "Waiting for registration...": "Warte auf Registrierung..."
 }
