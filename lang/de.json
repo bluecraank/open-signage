@@ -96,5 +96,10 @@
     "Processing": "Verarbeitung",
     "Waiting for registration...": "Warte auf Registrierung...",
     "You cannot change your own roles": "Sie können Ihre eigenen Rollen nicht ändern",
-    "Delete": "Löschen"
+    "Delete": "Löschen",
+    "If you think this is a mistake, please contact your administrator": "Wenn Sie glauben, dass dies ein Fehler ist, wenden Sie sich bitte an Ihren Administrator",
+    "You are not allowed to perform this action": "Sie dürfen diese Aktion nicht ausführen",
+    "You dont have permission to view data": "Sie haben keine Berechtigung, Daten anzuzeigen",
+    "Enter secret key": "Geheimen Schlüssel eingeben",
+    "Register device": "Monitor registrieren"
 }
