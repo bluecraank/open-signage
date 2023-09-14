@@ -54,7 +54,11 @@ class DatabaseSeeder extends Seeder
                 'delete presentations',
                 'force reload monitor',
                 'assign presentations',
-                'delete slides'
+                'delete slides',
+                'create groups',
+                'read groups',
+                'update groups',
+                'delete groups',
             ]);
 
         Role::updateOrCreate(['name' => 'User', 'guard_name' => 'sanctum'])
