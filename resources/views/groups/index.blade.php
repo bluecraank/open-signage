@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    @can('read groups')
     <div class="title">{{ __('Groups') }}</div>
 
     <div class="card has-table">
@@ -66,4 +67,8 @@
             </table>
         </div>
     </div>
+    @endcan
+    @cannot('read groups')
+        @include('unauthorized')
+    @endcannot
 @endsection

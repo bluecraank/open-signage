@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    @can('read devices')
     <div class="title">{{ __('Devices') }}</div>
 
     <div class="card has-table">
@@ -95,4 +96,9 @@
             </table>
         </div>
     </div>
+    @endcan
+
+    @cannot('read devices')
+        @include('unauthorized')
+    @endcannot
 @endsection
