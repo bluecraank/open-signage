@@ -145,4 +145,14 @@ class PresentationController extends Controller
         Presentation::where('id', $id)->delete();
         return redirect()->back();
     }
+
+    static function getCurrentPresentationInProgress() {
+        $presentation = Presentation::where('processed', false)->first();
+
+        if(!$presentation) {
+            return null;
+        }
+
+        return $presentation;
+    }
 }
