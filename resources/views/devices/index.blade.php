@@ -88,7 +88,7 @@
                     @if ($devices->count() == 0)
                         <tr>
                             <td colspan="7" class="has-text-centered">
-                                {{ __('No devices found, please create one first') }}</td>
+                                {{ __('No devices found') }}</td>
                         </tr>
                     @endif
                 </tbody>

@@ -37,8 +37,8 @@
     "Slides": "Folien",
     "Slide": "Folie",
     "Upload pdf": "PDF hochladen",
-    "No templates found, please create one first": "Keine Vorlagen gefunden, bitte erstellen Sie eine",
-    "No devices found, please create one first": "Keine Monitore gefunden, bitte erstellen Sie eines",
+    "No templates found": "Keine Vorlagen gefunden",
+    "No devices found": "Keine Monitore gefunden",
     "Device|Devices": "Monitor|Monitore",
     "Device": "Monitor",
     "Select a template": "Vorlage auswählen",
@@ -94,5 +94,7 @@
     "By group": "Über Gruppe",
     "Directly": "Direkt",
     "Processing": "Verarbeitung",
-    "Waiting for registration...": "Warte auf Registrierung..."
+    "Waiting for registration...": "Warte auf Registrierung...",
+    "You cannot change your own roles": "Sie können Ihre eigenen Rollen nicht ändern",
+    "Delete": "Löschen"
 }

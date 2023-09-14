@@ -23,7 +23,7 @@ class GroupController extends Controller
      */
     public function create()
     {
-        $presentations = Presentation::all();
+        $presentations = Presentation::where('processed', true)->get();
         $devices = Device::all();
         return view('groups.create', compact('presentations', 'devices'));
     }
@@ -63,17 +63,12 @@ class GroupController extends Controller
     {
         $group = Group::findOrFail($id);
         $devices = Device::all();
-        $presentations = Presentation::all();
+        $presentations = Presentation::where('processed', true)->get();
+
         return view('groups.show', compact('group', 'devices', 'presentations'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -120,6 +115,8 @@ class GroupController extends Controller
         if (!$group) {
             return redirect()->route('groups.index')->with('error', __('Group not found'));
         }
+
+        Device::where('group_id', $group->id)->update(['group_id' => null]);
 
         $group->delete();
 

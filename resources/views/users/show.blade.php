@@ -22,7 +22,7 @@
                                     <label class="label">{{ __('Assign Role') }}</label>
                                     <div class="columns">
                                         @foreach ($roles as $role)
-                                            <div class="column is-1">
+                                            <div class="column is-2">
                                                 <label class="checkbox">
                                                     <input @if(in_array($role->name, $user->getRoleNames()->toArray())) checked @endif type="checkbox" name="roles[]" value="{{ $role->id }}">
                                                     {{ $role->name }}

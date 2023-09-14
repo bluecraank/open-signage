@@ -21,10 +21,10 @@ class CheckForFirstUser
     {
         if(\App\Models\User::count() === 1)
         {
-            if(auth()->user() && auth()->user()->hasRole('admin')) {
+            if(auth()->user() && auth()->user()->hasRole('Super Administrator')) {
                 return $next($request);
-            } elseif(auth()->user() && !auth()->user()->hasRole('admin')) {
-                auth()->user()->assignRole(Role::findByName('admin')->first());
+            } elseif(auth()->user() && !auth()->user()->hasRole('Super Administrator')) {
+                auth()->user()->assignRole(Role::findByName('Super Administrator')->first()->id);
             }
         }
 

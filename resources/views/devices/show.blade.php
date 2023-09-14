@@ -59,7 +59,8 @@
                                     <p><b>{{ __('Assigned template') }}:</b>
                                         {{ $device->getPresentation()?->name ?? __('No template assigned') }}
                                         <br> <small><i class="mdi mdi-checkbox-marked-circle-outline"></i>
-                                            {{ __('Inherited by group') }} - <a href="{{ route('groups.show', $device->group->id) }}">{{ __('Go to group') }}</a></small>
+                                            {{ __('Inherited by group') }} - <a
+                                                href="{{ route('groups.show', $device->group->id) }}">{{ __('Go to group') }}</a></small>
                                     </p>
                                 @else
                                     <div class="field">
@@ -96,63 +97,71 @@
 
             <div class="pt-5">
                 <div class="columns">
-                    <div class="column">
-                        <p><b>{{ __('IP Address') }}:</b> <br> {{ $device->ip_address }}</p>
-                    </div>
+                    @can('read devices')
+                        <div class="column">
+                            <p><b>{{ __('IP Address') }}:</b> <br> {{ $device->ip_address }}</p>
+                        </div>
 
-                    <div class="column">
-                        <p><b>{{ __('Last connection') }}:</b> <br>
-                            {{ Carbon::parse($device->last_seen)->diffForHumans() ?? 'N/A' }}</p>
-                    </div>
+                        <div class="column">
+                            <p><b>{{ __('Last connection') }}:</b> <br>
+                                {{ Carbon::parse($device->last_seen)->diffForHumans() ?? 'N/A' }}</p>
+                        </div>
 
-                    <div class="column">
-                        <p><b>{{ __('Last monitor reload') }}:</b> <br>
-                            {{ Carbon::parse($device->startup_timestamp)->diffForHumans() ?? 'N/A' }}
-                        </p>
-                    </div>
+                        <div class="column">
+                            <p><b>{{ __('Last monitor reload') }}:</b> <br>
+                                {{ Carbon::parse($device->startup_timestamp)->diffForHumans() ?? 'N/A' }}
+                            </p>
+                        </div>
+                    @endcan
                 </div>
 
-                <div class="columns">
-                    <div class="column">
-                        <p><b>{{ __('Secret') }}:</b> <br> {{ $device->secret }}</p>
-                    </div>
-
-                    <div class="column">
-                        <p><b>{{ __('Monitor URL') }}:</b> <br> <a target="_blank"
-                                href="{{ url(route('devices.monitor', $device->secret)) }}">{{ url(route('devices.monitor', $device->secret)) }}</a>
-                        </p>
-                    </div>
-
-                    <div class="column">
-
-                    </div>
-                </div>
-
-                <div class="pt-5">
-                    @if ($device->force_reload)
+                @can('read devices')
+                    @can('register devices')
                         <div class="columns">
                             <div class="column">
-                                <div class="notification is-warning">
-                                    <b>{{ __('Force page reload') }}</b>
-                                    <p>{{ __('This device will reload the page on next connection') }}</p>
+                                <p><b>{{ __('Secret') }}:</b> <br> {{ $device->secret }}</p>
+                            </div>
+
+                            <div class="column">
+                                <p><b>{{ __('Monitor URL') }}:</b> <br> <a target="_blank"
+                                        href="{{ url(route('devices.monitor', $device->secret)) }}">{{ url(route('devices.monitor', $device->secret)) }}</a>
+                                </p>
+                            </div>
+
+                            <div class="column">
+
+                            </div>
+                        </div>
+
+                        <div class="pt-5">
+                            @if ($device->force_reload)
+                                <div class="columns">
+                                    <div class="column">
+                                        <div class="notification is-warning">
+                                            <b>{{ __('Force page reload') }}</b>
+                                            <p>{{ __('This device will reload the page on next connection') }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="notification @if (!$device->registered) is-warning @else is-primary @endif">
+                                        Status: {{ $device->registered ? __('Successfully registered') : __('Not registered') }}
+                                        @if (!$device->registered)
+                                            <div>
+                                                <p><b>{!! __('Open :url on device and enter following key', [
+                                                    'url' => '<a href="' . url(route('devices.register')) . '">' . url(route('devices.register')) . '</a>',
+                                                ]) !!}:</b></p>
+                                                <b><code>{{ $device->secret }}</code></b>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    @endif
-                    <div class="columns">
-                        <div class="column">
-                            <div class="notification @if (!$device->registered) is-warning @else is-primary @endif">
-                                Status: {{ $device->registered ? __('Successfully registered') : __('Not registered') }}
-                                @if (!$device->registered)
-                                    <div>
-                                        <p><b>{!! __('Open :url on device and enter following key', ['url' => '<a href="'.url(route('devices.register')).'">'.url(route('devices.register')) .'</a>']) !!}:</b></p>
-                                        <b><code>{{ $device->secret }}</code></b>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    @endcan
+                @endcan
             </div>
         </div>
     </div>

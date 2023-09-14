@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
+use App\Models\Group;
 use App\Models\Presentation;
 use App\Models\Slide;
 use Illuminate\Http\Request;
@@ -84,13 +86,7 @@ class PresentationController extends Controller
         return view('presentations.show', compact('presentation'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -99,8 +95,14 @@ class PresentationController extends Controller
     {
         $presentation = Presentation::whereId($id)->first();
         if(!$presentation) {
-            return redirect()->back();
+            return redirect()->back()->withErrors(['message' => __('Presentation not found')]);
         }
+
+        $request->validate([
+            'file' => 'nullable|file|mimetypes:application/pdf|max:100000',
+            'name' => 'required|min:2|unique:presentations,name,' . $presentation->id . ',id',
+            'description' => 'required|min:2',
+        ]);
 
         if($request->has('name')) {
             $presentation->name = $request->input('name');
@@ -111,9 +113,6 @@ class PresentationController extends Controller
         }
 
         if($request->has('file')) {
-            $request->validate([
-                'file' => 'nullable|file|mimetypes:application/pdf|max:5000',
-            ]);
 
             $file = $request->file('file');
 
@@ -135,7 +134,7 @@ class PresentationController extends Controller
 
         $presentation->save();
 
-        return redirect()->back();
+        return redirect()->back()->with('success', __('Presentation updated'));
     }
 
     /**
@@ -143,9 +142,27 @@ class PresentationController extends Controller
      */
     public function destroy(string $id)
     {
-        Storage::delete(storage_path('app/public/presentations/'. $id . '/'));
+        $presentation = Presentation::whereId($id)->first();
+
+        if(!$presentation) {
+            return redirect()->back()->withErrors(['message' => __('Presentation not found')]);
+        }
+
+        if($presentation->groups->count() != 0) {
+            return redirect()->back()->withErrors(['message' => __('Presentation is assigned to groups')]);
+        }
+
+        if($presentation->devices->count() != 0) {
+            return redirect()->back()->withErrors(['message' => __('Presentation is assigned to devices')]);
+        }
+
+        Storage::deleteDirectory(public_path('data/presentations/'. $id . '/'));
         Presentation::where('id', $id)->delete();
-        return redirect()->back();
+
+        // Device::where('presentation_id', $id)->update(['presentation_id' => null]);
+        // Group::where('presentation_id', $id)->update(['presentation_id' => null]);
+
+        return redirect()->back()->with('success', __('Presentation deleted'));
     }
 
     static function getCurrentPresentationInProgress() {

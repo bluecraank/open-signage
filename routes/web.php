@@ -61,29 +61,23 @@ Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
     });
 
     Route::prefix('slides')->group(function () {
-        // Route::get('/create', [SlideController::class, 'create'])->name('slides.create');
-        // Route::post('/', [SlideController::class, 'store'])->name('slides.store');
-        // Route::get('/{id}', [SlideController::class, 'show'])->name('slides.show');
-        // Route::put('/{id}', [SlideController::class, 'update'])->name('slides.update');
         Route::delete('/{id}', [SlideController::class, 'destroy'])->middleware('can:delete slides')->name('slides.destroy');
     });
 
     Route::prefix('groups')->group(function () {
         Route::get('/', [GroupController::class, 'index'])->name('groups.index');
-        Route::get('/create', [GroupController::class, 'create'])->name('groups.create');
-        Route::post('/', [GroupController::class, 'store'])->name('groups.store');
-        Route::get('/{id}', [GroupController::class, 'show'])->name('groups.show');
-        Route::put('/{id}', [GroupController::class, 'update'])->name('groups.update');
-        Route::delete('/{id}', [GroupController::class, 'destroy'])->name('groups.destroy');
+        Route::get('/create', [GroupController::class, 'create'])->middleware('can:create groups')->name('groups.create');
+        Route::post('/', [GroupController::class, 'store'])->middleware('can:create groups')->name('groups.store');
+        Route::get('/{id}', [GroupController::class, 'show'])->middleware('can:read groups')->name('groups.show');
+        Route::put('/{id}', [GroupController::class, 'update'])->middleware('can:update groups')->name('groups.update');
+        Route::delete('/{id}', [GroupController::class, 'destroy'])->middleware('can:delete groups')->name('groups.destroy');
     });
 
     Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('users.index');
-        // Route::get('/create', [UserController::class, 'create'])->name('users.create');
-        // Route::post('/', [UserController::class, 'store'])->name('users.store');
-        Route::get('/{id}', [UserController::class, 'show'])->name('users.show');
-        Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
-        Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+        Route::get('/{id}', [UserController::class, 'show'])->middleware('can:read users')->name('users.show');
+        Route::put('/{id}', [UserController::class, 'update'])->middleware('can:update users')->name('users.update');
+        Route::delete('/{id}', [UserController::class, 'destroy'])->middleware('can:delete users')->name('users.destroy');
     });
 });
 

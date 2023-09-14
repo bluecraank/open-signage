@@ -24,7 +24,7 @@ class DeviceController extends Controller
      */
     public function create()
     {
-        $presentations = Presentation::all();
+        $presentations = Presentation::where('processed', true)->get();
         $groups = Group::all();
         return view('devices.create', compact('presentations', 'groups'));
     }
@@ -105,17 +105,9 @@ class DeviceController extends Controller
             return redirect()->route('devices.index');
         }
 
-        $presentations = Presentation::all();
+        $presentations = Presentation::where('processed', true)->get();
 
         return view('devices.show', compact('device', 'presentations'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -129,22 +121,33 @@ class DeviceController extends Controller
             return redirect()->back()->withErrors(['message' => __('Device not found')]);
         }
 
+        $request->validate([
+            'name' => 'required|min:2|unique:devices,name,' . $device->id . ',id',
+            'description' => 'required|min:2',
+            'presentation_id' => 'nullable|integer',
+        ]);
+
         $name = $request->input('name');
         $description = $request->input('description');
-        $presentation_id = $request->input('presentation_id');
 
-        if($presentation_id == 0) {
-            $presentation_id = null;
+        if(!$device->presentationFromGroup()) {
+            $presentation_id = $request->input('presentation_id');
+
+            if($presentation_id == 0 || $presentation_id == null) {
+                $presentation_id = null;
+            }
+
+            if($presentation_id != $device->getPresentationId()) {
+                $device->current_slide = 0;
+            }
+
+            $device->presentation_id = $presentation_id;
         }
 
         $device->name = $name;
         $device->description = $description;
 
-        if($presentation_id != $device->getPresentationId()) {
-            $device->current_slide = 0;
-        }
 
-        $device->presentation_id = $presentation_id;
 
         $device->save();
 

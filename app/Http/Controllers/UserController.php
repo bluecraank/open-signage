@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -43,13 +44,7 @@ class UserController extends Controller
         return view('users.show', compact('user', 'roles'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -58,8 +53,16 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
+        $request->validate([
+            'roles' => 'nullable|array',
+        ]);
+
         if(!$request->has('roles') || count($request->roles) == 0) {
             return redirect()->route('users.show', $user->id)->withErrors(['message' =>'You must select at least one role']);
+        }
+
+        if($user->id == Auth::user()->id) {
+            return redirect()->route('users.show', $user->id)->withErrors(['message' => 'You cannot change your own roles']);
         }
 
         // Remove every role

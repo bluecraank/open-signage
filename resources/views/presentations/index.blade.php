@@ -65,7 +65,7 @@
                     @if ($presentations->count() == 0)
                         <tr>
                             <td colspan="5" class="has-text-centered">
-                                {{ __('No templates found, please create one first') }}</td>
+                                {{ __('No templates found') }}</td>
                         </tr>
                     @endif
                 </tbody>

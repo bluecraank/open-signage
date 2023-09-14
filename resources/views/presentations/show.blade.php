@@ -11,10 +11,12 @@
         </header>
 
         <div class="card-content">
-            <div class="columns">
-                @can('read presentations')
+            @can('read presentations')
+                <div class="columns">
                     <div class="column is-4">
-                        <img width="500" src="{{ $presentation->slides?->first()?->publicpreviewpath() ?? 'https://picsum.photos/333/214' }}" alt="">
+                        <img width="500"
+                            src="{{ $presentation->slides?->first()?->publicpreviewpath() ?? 'https://picsum.photos/333/214' }}"
+                            alt="">
                     </div>
 
                     @cannot('update presentations')
@@ -76,106 +78,107 @@
                             </form>
                         </div>
                     @endcan
-                @endcan
-            </div>
+                </div>
 
-            <hr>
+                <hr>
 
-            <div class="subtitle pt-5">{{ __('Devices') }}</div>
-            <table class="table is-fullwidth">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>{{ __('Description') }}</th>
-                        <th>{{ __('Assigned') }}</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @foreach ($presentation->devices as $device)
+                <div class="subtitle pt-5">{{ __('Devices') }}</div>
+                <table class="table is-fullwidth">
+                    <thead>
                         <tr>
-                            <td>{{ $device->name }}</td>
-                            <td>{{ $device->description }}</td>
-                            <td>{{ $device->presentationFromGroup() ? __('By group') : __('Directly') }}</td>
+                            <th>Name</th>
+                            <th>{{ __('Description') }}</th>
+                            <th>{{ __('Assigned') }}</th>
                         </tr>
-                    @endforeach
+                    </thead>
 
-                    @if ($presentation->devices->count() == 0)
+                    <tbody>
+                        @foreach ($presentation->devices as $device)
+                            <tr>
+                                <td>{{ $device->name }}</td>
+                                <td>{{ $device->description }}</td>
+                                <td>{{ $device->presentationFromGroup() ? __('By group') : __('Directly') }}</td>
+                            </tr>
+                        @endforeach
+
+                        @if ($presentation->devices->count() == 0)
+                            <tr>
+                                <td class="has-text-centered" colspan="3">{{ __('No devices assigned') }}</td>
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
+
+                <hr>
+
+                <div class="subtitle pt-5">{{ __('Groups') }}</div>
+                <table class="table is-fullwidth">
+                    <thead>
                         <tr>
-                            <td class="has-text-centered" colspan="3">{{ __('No devices assigned') }}</td>
+                            <th>Name</th>
+                            <th>{{ __('Used by') }}</th>
                         </tr>
-                    @endif
-                </tbody>
-            </table>
+                    </thead>
 
-            <hr>
+                    <tbody>
+                        @foreach ($presentation->groups as $group)
+                            <tr>
+                                <td>{{ $group->name }}</td>
+                                <td>{{ $group->devices->count() }}
+                                    {{ trans_choice('Device|Devices', $group->devices->count()) }}</td>
+                            </tr>
+                        @endforeach
 
-            <div class="subtitle pt-5">{{ __('Groups') }}</div>
-            <table class="table is-fullwidth">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>{{ __('Used by') }}</th>
-                    </tr>
-                </thead>
+                        @if ($presentation->groups->count() == 0)
+                            <tr>
+                                <td class="has-text-centered" colspan="2">{{ __('No groups assigned') }}</td>
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
 
-                <tbody>
-                    @foreach ($presentation->groups as $group)
-                        <tr>
-                            <td>{{ $group->name }}</td>
-                            <td>{{ $group->devices->count() }} {{ trans_choice('Device|Devices', $group->devices->count()) }}</td>
-                        </tr>
-                    @endforeach
+                <hr>
 
-                    @if ($presentation->groups->count() == 0)
-                        <tr>
-                            <td class="has-text-centered" colspan="2">{{ __('No groups assigned') }}</td>
-                        </tr>
-                    @endif
-                </tbody>
-            </table>
-
-            <hr>
-
-            <div class="slides pt-5">
-                <div class="subtitle">{{ __('Slides') }}</div>
-                @if (!$presentation->processed)
-                    <div class="box" style="display:flex">
-                        <button style="justify-content:center" class="button is-loading has-background-white pr-4"></button>
-                        <span style="justify-content: center"
-                            class="pl-4">{{ __('Slides are being processed, please wait...') }}</span>
-                    </div>
-                @endif
-                @foreach ($presentation->slides as $slide)
-                    <div class="slide box">
-                        <div class="columns gapless">
-                            <img src="{{ $slide->publicpreviewpath() }}">
-                            <div class="column">
-                                <div>Name: {{ $slide->name }}</div>
-                                <div>{{ __('Filename') }}: {{ $slide->name_on_disk }} </div>
-                                <div>{{ __('Order') }}: {{ $slide->order }}</div>
-                                <div>{{ __('Created') }}: {{ $slide->created_at }}</div>
-                                <div>&nbsp;</div>
-                                <div><a target="_blank" href="{{ $slide->publicpath() }}">{{ __('Preview') }}</a></div>
-                            </div>
-
-                            <div class="column">
-
-                            </div>
-
-                            @can('delete slides')
-                                <form action="{{ route('slides.destroy', $slide->id) }}" method="POST"
-                                    onsubmit="return confirm('{{ __('Are you sure to delete this slide?') }}')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="button is-danger is-smalls"><i
-                                            class="mdi mdi-trash-can"></i></button>
-                                </form>
-                            @endcan
+                <div class="slides pt-5">
+                    <div class="subtitle">{{ __('Slides') }}</div>
+                    @if (!$presentation->processed)
+                        <div class="box" style="display:flex">
+                            <button style="justify-content:center" class="button is-loading has-background-white pr-4"></button>
+                            <span style="justify-content: center"
+                                class="pl-4">{{ __('Slides are being processed, please wait...') }}</span>
                         </div>
-                    </div>
-                @endforeach
-            </div>
+                    @endif
+                    @foreach ($presentation->slides as $slide)
+                        <div class="slide box">
+                            <div class="columns gapless">
+                                <img src="{{ $slide->publicpreviewpath() }}">
+                                <div class="column">
+                                    <div>Name: {{ $slide->name }}</div>
+                                    <div>{{ __('Filename') }}: {{ $slide->name_on_disk }} </div>
+                                    <div>{{ __('Order') }}: {{ $slide->order }}</div>
+                                    <div>{{ __('Created') }}: {{ $slide->created_at }}</div>
+                                    <div>&nbsp;</div>
+                                    <div><a target="_blank" href="{{ $slide->publicpath() }}">{{ __('Preview') }}</a></div>
+                                </div>
+
+                                <div class="column">
+
+                                </div>
+
+                                @can('delete slides')
+                                    <form action="{{ route('slides.destroy', $slide->id) }}" method="POST"
+                                        onsubmit="return confirm('{{ __('Are you sure to delete this slide?') }}')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="button is-danger is-smalls"><i
+                                                class="mdi mdi-trash-can"></i></button>
+                                    </form>
+                                @endcan
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endcan
         </div>
 
     </div>

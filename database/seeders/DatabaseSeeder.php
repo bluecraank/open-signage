@@ -36,13 +36,17 @@ class DatabaseSeeder extends Seeder
         Permission::updateOrCreate(['name' => 'update groups', 'guard_name' => 'sanctum']);
         Permission::updateOrCreate(['name' => 'delete groups', 'guard_name' => 'sanctum']);
         Permission::updateOrCreate(['name' => 'assign device to group', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'register devices', 'guard_name' => 'sanctum']);
 
-        Role::updateOrCreate(['name' => 'admin', 'guard_name' => 'sanctum'])
+        Role::updateOrCreate(['name' => 'Super Administrator', 'guard_name' => 'sanctum'])
             ->givePermissionTo(Permission::all());
 
-        Role::updateOrCreate(['name' => 'editer', 'guard_name' => 'sanctum'])
+        Role::updateOrCreate(['name' => 'Supporter', 'guard_name' => 'sanctum'])
+            ->givePermissionTo(Permission::all());
+
+        Role::updateOrCreate(['name' => 'Manager', 'guard_name' => 'sanctum'])
             ->givePermissionTo([
-                'create devices',
+                'update devices',
                 'read devices',
                 'create presentations',
                 'read presentations',
@@ -53,7 +57,7 @@ class DatabaseSeeder extends Seeder
                 'delete slides'
             ]);
 
-        Role::updateOrCreate(['name' => 'user', 'guard_name' => 'sanctum'])
+        Role::updateOrCreate(['name' => 'User', 'guard_name' => 'sanctum'])
             ->givePermissionTo([
                 'read devices',
                 'read presentations',
