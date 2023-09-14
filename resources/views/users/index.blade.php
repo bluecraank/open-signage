@@ -34,12 +34,12 @@
                                     onsubmit="return confirm('{{ __('Are you sure to delete this user?') }}')">
                                     @method('DELETE')
                                     @csrf
-                                    @can('read presentations')
+                                    @can('update users')
                                         <a class="button is-info is-small"
                                             href="{{ route('users.update', ['id' => $user->id]) }}"><i
                                                 class="mdi mdi-pen"></i></a>
                                     @endcan
-                                    @can('delete presentations')
+                                    @can('delete users')
                                         <button class="button is-danger is-small" type="submit"><i
                                                 class="mdi mdi-trash-can"></i></button>
                                     @endcan

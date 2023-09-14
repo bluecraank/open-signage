@@ -74,7 +74,7 @@ Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
     });
 
     Route::prefix('users')->group(function () {
-        Route::get('/', [UserController::class, 'index'])->name('users.index');
+        Route::get('/', [UserController::class, 'index'])->middleware('can:read users')->name('users.index');
         Route::get('/{id}', [UserController::class, 'show'])->middleware('can:read users')->name('users.show');
         Route::put('/{id}', [UserController::class, 'update'])->middleware('can:update users')->name('users.update');
         Route::delete('/{id}', [UserController::class, 'destroy'])->middleware('can:delete users')->name('users.destroy');

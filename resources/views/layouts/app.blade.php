@@ -30,40 +30,41 @@
             @auth
                 <div id="navbar-main" class="navbar-menu">
                     <div class="navbar-start">
-                        <a href="{{ route('devices.index') }}" class="navbar-item">
-                            {{ __('Devices') }}
-                        </a>
+                        @can('read devices')
+                            <a href="{{ route('devices.index') }}" class="navbar-item">
+                                {{ __('Devices') }}
+                            </a>
+                        @endcan
 
-                        <a href="{{ route('groups.index') }}" class="navbar-item">
-                            {{ __('Groups') }}
-                        </a>
+                        @can('read groups')
+                            <a href="{{ route('groups.index') }}" class="navbar-item">
+                                {{ __('Groups') }}
+                            </a>
+                        @endcan
 
-                        <a href="{{ route('presentations.index') }}" class="navbar-item">
-                            {{ __('Templates') }}
-                        </a>
+                        @can('read presentations')
+                            <a href="{{ route('presentations.index') }}" class="navbar-item">
+                                {{ __('Templates') }}
+                            </a>
+                        @endcan
 
-                        <a href="{{ route('users.index') }}" class="navbar-item">
-                            {{ __('Users') }}
-                        </a>
+                        @can('read users')
+                            <a href="{{ route('users.index') }}" class="navbar-item">
+                                {{ __('Users') }}
+                            </a>
+                        @endcan
                     </div>
 
                     <div class="navbar-end">
-                        {{-- @php $currentPresentation = App\Http\Controllers\PresentationController::getCurrentPresentationInProgress() @endphp --}}
-                        {{-- @if($currentPresentation)
-                            <span class="processing_info is-flex is-align-content-center">
-                                <span class="loader"></span>
-                                <span class="ml-2 is-">{{ __('Processing') }} {{ $currentPresentation->name }}</span>
-                            </span>
-                        @endif --}}
-                        @livewire('poll-presentation-process')
                         <div class="navbar-item">
-
+                            @livewire('poll-presentation-process')
                         </div>
                         <div class="navbar-item">
                             {{ strtolower(Auth::user()->email) }}
                             <form class="pl-3" id="logout-form" action="/logout" method="POST">
                                 @csrf
-                                <a class="has-text-grey-light" onclick="document.getElementById('logout-form').submit()">{{ __('Logout') }}</a>
+                                <a class="has-text-grey-light"
+                                    onclick="document.getElementById('logout-form').submit()">{{ __('Logout') }}</a>
                             </form>
                         </div>
                     </div>
@@ -93,7 +94,8 @@
 
                 <footer>
                     Contribute on <a href="https://github.com/bluecraank/open-signage">GitHub</a> | Build with <a
-                        href="https://laravel.com">Laravel</a>, <a href="https://bulma.io">Bulma</a> and <i class="mdi mdi-heart"></i>
+                        href="https://laravel.com">Laravel</a>, <a href="https://bulma.io">Bulma</a> and <i
+                        class="mdi mdi-heart"></i>
                 </footer>
             </div>
         </div>
