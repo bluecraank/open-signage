@@ -42,8 +42,11 @@ class LoginController extends Controller
 
     protected function credentials(Request $request)
     {
+        // Remove everything within @ and after
+        $username = explode('@', $request->username)[0] ?? $request->username;
+
         return [
-            'samaccountname' => $request->username,
+            'samaccountname' => $username,
             'password' => $request->password,
         ];
     }
