@@ -60,7 +60,7 @@ class Schedule extends Model
     public function endDate() {
         $locale = config('app.locale');
         if($locale == 'de') {
-            return Carbon::parse($this->start_time)->format('d.m.Y H:i');
+            return Carbon::parse($this->end_time)->format('d.m.Y H:i');
         }
 
         return Carbon::parse($this->end_time)->format('Y-m-d H:i');

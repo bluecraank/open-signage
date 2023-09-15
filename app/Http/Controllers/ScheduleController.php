@@ -75,7 +75,17 @@ class ScheduleController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $schedule = Schedule::whereId($id)->first();
+
+        if(!$schedule) {
+            return redirect()->route('schedules.index')->withErrors(['message' => __('Schedule not found')]);
+        }
+
+        $presentations = Presentation::all();
+        $groups = Group::all();
+        $devices = Device::all();
+
+        return view('schedules.show', compact('schedule', 'presentations', 'groups', 'devices'));
     }
 
     /**

@@ -18,7 +18,6 @@ if (slideout) {
 // Initialize all input of type date
 let options = {
     type: 'datetime',
-    // dateFormat: 'dd.MM.yyyy',
     showFooter: true,
     startDate: new Date(),
 };
