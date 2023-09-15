@@ -140,7 +140,7 @@
                 <hr>
 
                 <div class="slides pt-5">
-                    <div class="subtitle">{{ __('Slides') }}</div>
+                    <div class="subtitle">{{ $presentation->slides->count() }} {{ __('Slides') }}</div>
                     @if (!$presentation->processed)
                         <div class="box" style="display:flex">
                             <button style="justify-content:center" class="button is-loading has-background-white pr-4"></button>
