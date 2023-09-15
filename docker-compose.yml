@@ -7,6 +7,9 @@ services:
         volumes:
             - app:/var/www/html:rw
         env_file:
-            - .env
+            - stack.env
 volumes:
     app:
+networks:
+    int_proxy:
+        external: true

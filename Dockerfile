@@ -30,13 +30,9 @@ RUN chmod +x /usr/local/bin/install-php-extensions && \
     install-php-extensions zip zip bcmath ldap
 RUN install-php-extensions imagick
 
-# Copy source code
-# COPY . /var/www/html
-# COPY .env /var/www/html/.env
-
 # Clone source code if not downloaded
 RUN rm -rf /var/www/html
-RUN git clone https://github.com/bluecraank/open-signage.git /var/www/html
+RUN git clone --branch docker https://github.com/bluecraank/open-signage.git /var/www/html
 COPY .env.example /var/www/html/.env
 
 # Apache configuration
@@ -45,22 +41,22 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
+RUN touch /var/www/html/storage/logs/laravel.log
+RUN chown -R www-data:www-data /var/www/html/storage/logs/laravel.log
+RUN chown -R www-data:www-data /var/www/html/
+
 # Install dependencies
 WORKDIR /var/www/html
 RUN composer install --no-dev --optimize-autoloader
 RUN npm install && npm run build
 
-# File permissions
-RUN chown -R www-data:www-data /var/www/html/
-RUN touch /var/www/html/storage/logs/laravel.log
-RUN chown -R www-data:www-data /var/www/html/storage/logs/laravel.log
-
 # Artisan commands
 USER www-data
 WORKDIR /var/www/html
+RUN php artisan config:cache
+RUN php artisan config:clear
+RUN php artisan cache:clear
 RUN php artisan key:generate
-RUN php artisan migrate --force
-RUN php artisan optimize
 
 # LDAP without certificate
 USER root
@@ -75,3 +71,9 @@ RUN echo "php_value post_max_size 100M" >> /var/www/html/public/.htaccess
 
 # Allow pdf imaging
 RUN sed -ri -e 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' /etc/ImageMagick-6/policy.xml
+
+USER www-data
+RUN php artisan migrate --force --seed
+
+USER root
+RUN chown -R www-data:www-data /var/www/html/
