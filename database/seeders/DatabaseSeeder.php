@@ -85,6 +85,8 @@ class DatabaseSeeder extends Seeder
             ]);
 
         $user = User::whereId(1)->first();
-        $user->assignRole('Super Administrator');
+        if($user) {
+            $user->assignRole('Super Administrator');
+        }
     }
 }
