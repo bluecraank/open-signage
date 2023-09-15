@@ -95,10 +95,6 @@ class Device extends Model
             }
         }
 
-        if($activeSchedule) {
-            return $activeSchedule;
-        }
-
         return null;
     }
 
