@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
-use Livewire\Attributes\Url;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
         if (env("PROXY_URL")) {
             $proxyUrl = str(env("PROXY_URL"));
             URL::forceScheme($proxyUrl->lower()->startsWith('https') ? 'https' : 'http');
-            Url::forceRootUrl(env("PROXY_URL"));
+            URL::forceRootUrl(env("PROXY_URL"));
         }
     }
 }
