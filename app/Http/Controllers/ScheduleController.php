@@ -41,8 +41,8 @@ class ScheduleController extends Controller
 
         $request->validate([
             'name' => 'required|string|min:2',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'start_date' => 'required|date|before:end_date',
+            'end_date' => 'required|date|after:start_date',
             'devices' => 'nullable|array',
             'groups' => 'nullable|array',
             'presentation_id' => 'required|integer|exists:presentations,id',
@@ -55,8 +55,6 @@ class ScheduleController extends Controller
         // Date to timestamp
         $start_date = strtotime($request->start_date);
         $end_date = strtotime($request->end_date);
-
-        // dd($start_date, $end_date);
 
         $schedule = Schedule::create([
             'name' => $request->name,
@@ -93,7 +91,40 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $schedule = Schedule::whereId($id)->first();
+
+        if(!$schedule) {
+            return redirect()->route('schedules.index')->withErrors(['message' => __('Schedule not found')]);
+        }
+
+        $request->validate([
+            'name' => 'required|string|min:2',
+            'start_date' => 'required|date|before:end_date',
+            'end_date' => 'required|date|after:start_date',
+            'devices' => 'nullable|array',
+            'groups' => 'nullable|array',
+            'presentation_id' => 'required|integer|exists:presentations,id',
+        ]);
+
+        if(empty($request->devices) && empty($request->groups)) {
+            return redirect()->back()->withErrors(['message' => __('You must select at least one device or group')]);
+        }
+
+        // Date to timestamp
+        $start_date = strtotime($request->start_date);
+        $end_date = strtotime($request->end_date);
+
+        $schedule->update(
+        [
+            'name' => $request->name,
+            'start_time' => $start_date,
+            'end_time' => $end_date,
+            'devices' => $request->devices ?? [],
+            'groups' => $request->groups ?? [],
+            'presentation_id' => $request->presentation_id,
+        ]);
+
+        return redirect()->route('schedules.index')->with('success', __('Schedule updated'));
     }
 
     /**
@@ -101,6 +132,14 @@ class ScheduleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $schedule = Schedule::whereId($id)->first();
+
+        if(!$schedule) {
+            return redirect()->route('schedules.index')->withErrors(['message' => __('Schedule not found')]);
+        }
+
+        $schedule->delete();
+
+        return redirect()->route('schedules.index')->with('success', __('Schedule deleted'));
     }
 }

@@ -12,6 +12,28 @@
                     'selectionHeader': '<div class="has-text-centered has-text-weight-bold">{{ __('Selected') }}</div>'
                 });
             });
+
+            function validate() {
+                var start_date = document.getElementsByName('start_date')[0].value;
+                var end_date = document.getElementsByName('end_date')[0].value;
+
+                // Check if dates are correct
+                if (start_date >= end_date) {
+                    alert('{{ __('Start date must be before end date') }}');
+                    return false;
+                }
+
+                // Check if at least one device or group is selected
+                var devices = document.getElementsByName('devices[]')[0].selectedOptions.length;
+                var groups = document.getElementsByName('groups[]')[0].selectedOptions.length;
+
+                if (devices == 0 && groups == 0) {
+                    alert('{{ __('You must select at least one device or group') }}');
+                    return false;
+                }
+
+                return true;
+            }
         </script>
         <div class="title">{{ __('Create schedule') }}</div>
 
@@ -23,7 +45,7 @@
             </header>
 
             <div class="card-content">
-                <form action="{{ route('schedules.store') }}" method="POST">
+                <form action="{{ route('schedules.store') }}" method="POST" onsubmit="return validate()">
                     @csrf
                     <div class="columns">
                         <div class="column is-4">
@@ -69,8 +91,8 @@
                         </div>
                     </div>
 
-                    <button class="button is-success">{{ __('Create & enable') }}</button>
-                    <button class="button is-primary">{{ __('Save') }}</button>
+                    <button type="submit" class="button is-success">{{ __('Save & enable') }}</button>
+                    <button type="submit" class="button is-primary">{{ __('Save') }}</button>
                 </form>
             </div>
         </div>

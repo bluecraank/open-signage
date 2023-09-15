@@ -124,10 +124,11 @@
     "Starts": "Startet",
     "Ends": "Endet",
     "Applies to": "Gilt für",
-    "Create & enable": "Erstellen & aktivieren",
+    "Save & enable": "Speichern & aktivieren",
     "Start Date": "Startdatum",
     "End Date": "Enddatum",
     "You must select at least one device or group": "Sie müssen mindestens einen Monitor oder eine Gruppe auswählen",
     "Inherited by schedule": "Geerbt von Zeitplan",
-    "Location": "Standort"
+    "Location": "Standort",
+    "Start date must be before end date": "Startdatum muss vor Enddatum liegen"
 }
