@@ -45,7 +45,7 @@ class PresentationController extends Controller
         $description = $request->input('description');
         $author = Auth::user()->name;
 
-        if(!$name || !$description || !$author) {
+        if(!$name    || !$author) {
             return redirect()->back()->withInput()->withErrors([
                 'message' => __('All fields are required'),
             ]);
@@ -156,7 +156,10 @@ class PresentationController extends Controller
             return redirect()->back()->withErrors(['message' => __('Presentation is assigned to devices')]);
         }
 
-        Storage::deleteDirectory(public_path('data/presentations/'. $id . '/'));
+        // Delete all files
+        File::cleanDirectory(public_path('data/presentations/'. $id));
+        File::deleteDirectory(public_path('data/presentations/'. $id));
+
         Presentation::where('id', $id)->delete();
 
         // Device::where('presentation_id', $id)->update(['presentation_id' => null]);
