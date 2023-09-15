@@ -24,7 +24,7 @@
                 </div>
 
                 <div class="field">
-                    <label class="label">{{ __('Description') }}</label>
+                    <label class="label">{{ __('Location') }}</label>
                     <input required type="text" class="input" name="description" placeholder="{{ __('Description') }}">
                 </div>
 

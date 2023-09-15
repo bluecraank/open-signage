@@ -128,5 +128,6 @@
     "Start Date": "Startdatum",
     "End Date": "Enddatum",
     "You must select at least one device or group": "Sie müssen mindestens einen Monitor oder eine Gruppe auswählen",
-    "Inherited by schedule": "Geerbt von Zeitplan"
+    "Inherited by schedule": "Geerbt von Zeitplan",
+    "Location": "Standort"
 }

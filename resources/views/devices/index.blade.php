@@ -27,7 +27,7 @@
                         <th></th>
                         <th>{{ __('Current slide') }}</th>
                         <th>Name</th>
-                        <th>{{ __('Description') }}</th>
+                        <th>{{ __('Location') }}</th>
                         <th>{{ __('Presentation') }}</th>
                         <th>{{ __('Last connection') }}</th>
                         <th>{{ __('Last monitor reload') }}</th>

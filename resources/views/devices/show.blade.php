@@ -51,7 +51,7 @@
                                     <input class="input" type="text" name="name" value="{{ $device->name }}" />
                                 </div>
                                 <div class="field">
-                                    <label class="label">{{ __('Description') }}</label>
+                                    <label class="label">{{ __('Location') }}</label>
                                     <input class="input" type="text" name="description" value="{{ $device->description }}" />
                                 </div>
 
@@ -67,7 +67,7 @@
                                         {{ $device->getPresentation()?->name ?? __('No template assigned') }}
                                         <br> <small><i class="mdi mdi-checkbox-marked-circle-outline"></i>
                                             {{ __('Inherited by schedule') }} - <a
-                                                href="{{ route('schedules.show', $device->schedule->id) }}">{{ __('Go to schedule') }}</a></small>
+                                                href="{{ route('schedules.show', $device->getPresentationId()) }}">{{ __('Go to schedule') }}</a></small>
                                     </p>
                                 @else
                                     <div class="field">
