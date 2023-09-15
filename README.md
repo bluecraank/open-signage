@@ -48,7 +48,11 @@ LOADING_BACKGROUND_IMAGE="https://picsum.photos/1920/1080"
 ```
 # Installation
 ## Docker installation
-- Use docker branch
+- Create stack.env and set necessary variables
+- sudo docker compose up
+## Updating
+- sudo docker builder prune
+- sudo docker compose up --force-recreate --build
 
 ## Install native
 ### Requirements
