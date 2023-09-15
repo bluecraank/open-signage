@@ -5,11 +5,13 @@ services:
         ports:
             - "8080:80"
         volumes:
-            - app:/var/www/html:rw
+            - public:/var/www/html/public:rw
+            - database:/var/www/html/database:rw
         env_file:
             - stack.env
 volumes:
-    app:
+    public:
+    database:
 networks:
     int_proxy:
         external: true

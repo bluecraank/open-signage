@@ -32,7 +32,7 @@ RUN install-php-extensions imagick
 
 # Clone source code if not downloaded
 RUN rm -rf /var/www/html
-RUN git clone --branch docker https://github.com/bluecraank/open-signage.git /var/www/html
+RUN git clone https://github.com/bluecraank/open-signage.git /var/www/html
 COPY .env.example /var/www/html/.env
 
 # Apache configuration
