@@ -134,6 +134,8 @@
     "Devices assigned": "Monitore zugewiesen",
     "Monitorsettings": "Monitoreinstellungen",
     "Configure monitor preferences": "Monitor-Einstellungen konfigurieren",
-    "Saving the settings forces a reload of all active monitors": "Das Speichern der Einstellungen erzwingt ein Neuladen aller aktiven Monitore"
+    "Saving the settings forces a reload of all active monitors": "Das Speichern der Einstellungen erzwingt ein Neuladen aller aktiven Monitore",
+    "Global": "Globale",
+    "Settings": "Einstellungen"
 
 }
