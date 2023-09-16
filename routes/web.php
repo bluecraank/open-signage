@@ -2,12 +2,12 @@
 
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\GroupController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MonitorController;
 use App\Http\Controllers\PresentationController;
 use App\Http\Controllers\SlideController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -88,6 +88,11 @@ Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
         Route::get('/{id}', [ScheduleController::class, 'show'])->middleware('can:read schedules')->name('schedules.show');
         Route::put('/{id}', [ScheduleController::class, 'update'])->middleware('can:update schedules')->name('schedules.update');
         Route::delete('/{id}', [ScheduleController::class, 'destroy'])->middleware('can:delete schedules')->name('schedules.destroy');
+    });
+
+    Route::prefix('settings')->middleware('can:manage settings')->group(function () {
+        Route::get('/', [SettingsController::class, 'index'])->name('settings.index');
+        Route::put('/', [SettingsController::class, 'update'])->name('settings.update');
     });
 });
 
