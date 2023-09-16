@@ -61,7 +61,7 @@ class PresentationController extends Controller
 
         $presentation = Presentation::create([
             'name' => $name,
-            'description' => $description,
+            'description' => "null",
             'author' => $author,
             'processed' => false,
         ]);
@@ -108,9 +108,7 @@ class PresentationController extends Controller
             $presentation->name = $request->input('name');
         }
 
-        if($request->has('description')) {
-            $presentation->description = $request->input('description');
-        }
+        $presentation->description = "null";
 
         if($request->has('file')) {
 
@@ -160,6 +158,7 @@ class PresentationController extends Controller
         File::cleanDirectory(public_path('data/presentations/'. $id));
         File::deleteDirectory(public_path('data/presentations/'. $id));
 
+        $presentation->slides()->delete();
         Presentation::where('id', $id)->delete();
 
         // Device::where('presentation_id', $id)->update(['presentation_id' => null]);
