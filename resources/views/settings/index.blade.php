@@ -2,7 +2,7 @@
 
 @section('content')
     @can('manage settings')
-        <div class="title">{{ __('Monitorsettings') }}</div>
+        <div class="title">{{ __('Global') }} {{ __('Monitorsettings') }}</div>
 
         <div class="card">
             <header class="card-header">
@@ -44,7 +44,7 @@
                         <div class="column is-8 is-flex is-align-content-center is-flex-wrap-wrap">
                             <div class="field is-fullwidth">
                                 <label class="label">&nbsp;</label>
-                                <p>Interval background http request to server to check for updates. Value in seconds | Default: 30</p>
+                                <p>Interval request to server to check for updates. Value in seconds | Default: 30</p>
                             </div>
                         </div>
                     </div>
@@ -156,7 +156,7 @@
                         <div class="column is-8 is-flex is-align-content-center is-flex-wrap-wrap">
                             <div class="field is-fullwidth">
                                 <label class="label">&nbsp;</label>
-                                <p>URL of background image of loading screen | Default: https://picsum.photos/1920/1080</p>
+                                <p>URL of background image of loading screen. This setting only applies if TYPE is "image" | Default: https://picsum.photos/1920/1080</p>
                             </div>
                         </div>
                     </div>
@@ -166,7 +166,7 @@
                             <button type="submit" class="button is-fullwidth is-primary">{{ __('Save') }}</button>
                         </div>
                         <div class="column is-8 is-flex is-align-content-center is-flex-wrap-wrap">
-                            <span>{{ __('Saving the settings forces a reload of all active monitors') }}</span>
+                            <span><i class="mdi mdi-information-slab-circle-outline has-text-danger mr-1"></i>{{ __('Saving the settings forces a reload of all active monitors') }}</span>
                         </div>
                     </div>
 
