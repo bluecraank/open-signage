@@ -69,6 +69,10 @@ LDAP_ALLOWED_GROUP="CN=MIS,OU=Groups,DC=ldap,DC=server"
 - Serve with ```php artisan serve```
 - Or use apache/nginx/caddy and configure root directory to ./public
 
+## Word about reverse proxy
+- If you use a reverse proxy to serve this app, set PROXY_URL in env file
+```PROXY_URL="https://open-signage.company.com```
+
 # Contribution
 - Feel free to contribute and help to improve it
 
