@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('author');
-            $table->string('description')->nullable();
+            $table->string('description');
             $table->boolean('processed')->default(false);
             $table->timestamps();
         });
