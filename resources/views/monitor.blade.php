@@ -11,10 +11,10 @@
 </head>
 
 <body>
-    @if (config('app.loading_background_type') == 'color')
+    @if (\App\Models\Setting::get('LOADING_BACKGROUND_TYPE') == 'color')
         <style>
             .loading {
-                background-color: {{ config('app.loading_background_color') }};
+                background-color: {{ \App\Models\Setting::get('LOADING_BACKGROUND_COLOR') }};
             }
         </style>
     @else
@@ -23,7 +23,7 @@
                 background-color: white;
                 background-size: cover;
                 background-repeat: no-repeat;
-                background-image: url('{{ config('app.loading_background_image') }}');
+                background-image: url('{{ \App\Models\Setting::get('LOADING_BACKGROUND_IMAGE') }}');
             }
         </style>
     @endif
@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="text">
-                    {{ config('app.loading_background_text') }}
+                    {{ \App\Models\Setting::get('LOADING_BACKGROUND_TEXT') }}
                 </div>
             </div>
         </div>
@@ -69,14 +69,14 @@
             // Set trigger for page reload
             setTimeout(function() {
                 reload_page()
-            }, {{ config('app.monitor_refresh_time_seconds') }} * 1000)
+            }, {{ \App\Models\Setting::get('MONITOR_REFRESH_TIME_SECONDS') }} * 1000)
 
             // Hide cursor
             $("body").css("cursor", "none");
 
             // Sliding effect
 
-            let interval = {{ config('app.interval_next_slide_ms') }};
+            let interval = {{ \App\Models\Setting::get('INTERVAL_NEXT_SLIDE_MS') }};
 
             var slides = document.querySelectorAll('.slide');
 
@@ -99,11 +99,11 @@
                 if (document.hasFocus()) {
                     $(slides[currentSlide]).animate({
                         'opacity': '0'
-                    }, {{ config('app.slide_out_time') }});
+                    }, {{ \App\Models\Setting::get('SLIDE_OUT_TIME_MS') }});
                     currentSlide = (currentSlide + 1) % slides.length;
                     $(slides[currentSlide]).animate({
                         'opacity': '1'
-                    }, {{ config('app.slide_out_time') }});
+                    }, {{ \App\Models\Setting::get('SLIDE_IN_TIME_MS') }});
                 }
             }
         });
@@ -150,7 +150,7 @@
                 },
                 timeout: 5000
             });
-        }, {{ config('app.monitor_check_update_time_seconds') }} * 1000);
+        }, {{ \App\Models\Setting::get('MONITOR_CHECK_UPDATE_TIME_SECONDS') }} * 1000);
     </script>
 
 </body>

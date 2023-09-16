@@ -115,7 +115,7 @@ class Device extends Model
         }
 
         $diff = $now->diff($lastSeen);
-        $refresh_interval = config('app.monitor_check_update_time_seconds');
+        $refresh_interval = Setting::get('MONITOR_CHECK_UPDATE_TIME_SECONDS');
         $daysInSecs = $diff->format('%r%a') * 24 * 60 * 60;
         $hoursInSecs = $diff->h * 60 * 60;
         $minsInSecs = $diff->i * 60;
