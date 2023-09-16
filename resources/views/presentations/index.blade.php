@@ -24,9 +24,8 @@
                 <table class="table is-narrow is-striped is-hoverable is-fullwidth">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>{{ __('Used by') }}</th>
                             <th>{{ __('Description') }}</th>
+                            <th>{{ __('Used by') }}</th>
                             <th>{{ __('Created by') }}</th>
                             <th>{{ __('Actions') }}</th>
                         </tr>
@@ -42,8 +41,7 @@
                                     {{ $presentation->groups->count() }}
                                     {{ trans_choice('Group|Groups', $presentation->groups->count()) }}
                                 </td>
-                                <td>{{ $presentation->description }}</td>
-                                <td>{{ $presentation->author }}</td>
+                                <td>{{ $presentation->author }}</td>8
                                 <td class="actions-cell">
 
                                     <form action="{{ route('presentations.destroy', ['id' => $presentation->id]) }}"

@@ -16,14 +16,14 @@
                 @csrf
 
                 <div class="field">
-                    <label class="label">{{ __('Template name') }}</label>
-                    <input required type="text" class="input" name="name" placeholder="{{ __('Template name') }}">
+                    <label class="label">{{ __('Description') }}</label>
+                    <input required type="text" class="input" name="name" placeholder="{{ __('Description') }}">
                 </div>
-
+{{--
                 <div class="field">
                     <label class="label">{{ __('Description') }}</label>
                     <input type="text" class="input" name="description" placeholder="{{ __('Description') }}">
-                </div>
+                </div> --}}
 
                 <div class="field">
                     <label class="label">{{ __('Upload pdf') }}</label>

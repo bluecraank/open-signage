@@ -34,14 +34,14 @@
                                 @method('PUT')
                                 @csrf
                                 <div class="field">
-                                    <label class="label">{{ __('Template name') }}</label>
+                                    <label class="label">{{ __('Description') }}</label>
                                     <input class="input" type="text" name="name" value="{{ $presentation->name }}" />
                                 </div>
-                                <div class="field">
+                                {{-- <div class="field">
                                     <label class="label">{{ __('Description') }}</label>
                                     <input class="input" type="text" name="description"
                                         value="{{ $presentation->description }}" />
-                                </div>
+                                </div> --}}
 
                                 <div class="field">
                                     <label class="label">{{ __('Upload new pdf') }}</label>
