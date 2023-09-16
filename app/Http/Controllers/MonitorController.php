@@ -23,7 +23,7 @@ class MonitorController extends Controller
         $presentation = $device->getPresentation();
 
         if(!$presentation) {
-            return "<meta http-equiv='refresh' content='1'>".json_encode(['error' => "No presentation assigned to this device."]);
+            return view('unassigned');
         }
 
         $slides = $presentation->slides()->orderBy('order')->get();
