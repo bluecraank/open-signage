@@ -2,6 +2,10 @@
 
 <p id="description">Very easy way to create signage for digital content based on web browser built with Laravel</p>
 
+# This app is usable on any system, on any browser
+- Your monitor only need a webbrowser
+- Use Raspberry, Windows, FireTV, SmartTV or anything which has a browser with javascript
+
 # Usage
 - Export PowerPoint as PDF and upload document
 - Background processing starts and generates images from each page
