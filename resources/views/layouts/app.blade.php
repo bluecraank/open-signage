@@ -56,7 +56,7 @@
 
                         <div class="navbar-item has-dropdown is-hoverable">
                             <a class="navbar-link">
-                                More
+                                {{ __('Settings') }}
                             </a>
 
                             <div class="navbar-dropdown">
