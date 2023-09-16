@@ -10,12 +10,15 @@
 - Create and register monitor
 - Assign presentation to monitor
 - Display presentation on monitor
+- Create schedule or group to easily assign mutliple devices a presentation
 
 # Functions
+- Create schedules and groups
 - Force reload of monitor
-- Live updating if presentations was changed
+- Live updating if presentation gets changed
 - Reload page after x hours to prevent memory leaks
 - Hides cursor
+
 
 # Configuration
 ## Configure .env
