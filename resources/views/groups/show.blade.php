@@ -31,6 +31,15 @@
                             $preview = $currentSlide['publicpreviewpath'] ?? config('app.placeholder_image');
                         @endphp
                         <img width="500" class="monitor-border" src="{{ $preview }}" alt="">
+
+                        @can('delete groups')
+                            <form class="pt-2" action="{{ route('groups.destroy', $group->id) }}" method="POST"
+                                onsubmit="return confirm('{{ __('Are you sure to delete this group?') }}')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="button is-danger is-smalls">{{ __('Delete group') }}</button>
+                            </form>
+                        @endcan
                     </div>
                     <div class="column">
                         <div class="columns">
@@ -48,12 +57,13 @@
                                         @method('PUT')
                                         @csrf
                                         <div class="field">
-                                            <label class="label">Name</label>
+                                            <label class="label">Name<span class="has-text-danger">*</span></label>
                                             <input class="input" type="text" name="name" value="{{ $group->name }}" />
                                         </div>
 
                                         <div class="field">
-                                            <label class="label">{{ __('Assigned template') }}</label>
+                                            <label class="label">{{ __('Assigned template') }}<span
+                                                    class="has-text-danger">*</span></label>
                                             <div class="select is-fullwidth">
                                                 <select name="presentation_id" id="">
                                                     <option value="0">{{ __('Select a template') }}...</option>
@@ -67,7 +77,7 @@
 
                                         @can('assign device to group')
                                             <div class="field">
-                                                <label class="label">{{ __('Devices') }}</label>
+                                                <label class="label">{{ __('Devices') }}<span class="has-text-danger">*</span></label>
                                                 <select multiple="multiple" name="devices[]" id="multiselect">
                                                     @foreach ($devices as $device)
                                                         <option @if ($device->group_id == $group->id) selected @endif
@@ -80,14 +90,7 @@
                                         <label class="label">&nbsp;</label>
                                         <button type="submit" class="button is-primary">{{ __('Save') }}</button>
                                     </form>
-                                    @can('delete groups')
-                                        <form class="pt-2" action="{{ route('groups.destroy', $group->id) }}" method="POST"
-                                            onsubmit="return confirm('{{ __('Are you sure to delete this group?') }}')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="button is-danger is-smalls">{{ __('Delete') }}</button>
-                                        </form>
-                                    @endcan
+
                                 </div>
                             @endcan
                         </div>

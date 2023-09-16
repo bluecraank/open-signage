@@ -25,12 +25,12 @@
                 @csrf
 
                 <div class="field">
-                    <label class="label">Name</label>
+                    <label class="label">Name<span class="has-text-danger">*</span></label>
                     <input required type="text" class="input" name="name" placeholder="Name">
                 </div>
 
                 <div class="field">
-                    <label class="label">{{ __('Template') }}</label>
+                    <label class="label">{{ __('Template') }}<span class="has-text-danger">*</span></label>
                     <div class="select is-fullwidth">
                         <select required name="presentation_id" id="">
                             <option value="0">{{ __('Select a template') }}...</option>
@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="field">
-                    <label class="label">{{ __('Devices') }}</label>
+                    <label class="label">{{ __('Devices') }}<span class="has-text-danger">*</span></label>
                     <select name="devices[]" id="multiselect" multiple="multiple">
                         @foreach ($devices as $device)
                             <option value="{{ $device->id }}">{{ $device->name }}</option>

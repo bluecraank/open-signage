@@ -37,8 +37,8 @@ class PresentationController extends Controller
     {
         $request->validate([
             'file' => 'required|file|mimetypes:application/pdf|max:100000',
-            'name' => 'required|min:2',
-            'description' => 'nullable|min:2',
+            'name' => 'required|min:2|max:255',
+            'description' => 'nullable|min:2|max:255',
         ]);
 
         $name = $request->input('name');
@@ -100,8 +100,8 @@ class PresentationController extends Controller
 
         $request->validate([
             'file' => 'nullable|file|mimetypes:application/pdf|max:100000',
-            'name' => 'required|min:2|unique:presentations,name,' . $presentation->id . ',id',
-            'description' => 'nullable|min:2',
+            'name' => 'required|min:2|max:255|unique:presentations,name,' . $presentation->id . ',id',
+            'description' => 'nullable|min:2|max:255',
         ]);
 
         if($request->has('name')) {

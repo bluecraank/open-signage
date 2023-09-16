@@ -41,7 +41,7 @@
                                     {{ $presentation->groups->count() }}
                                     {{ trans_choice('Group|Groups', $presentation->groups->count()) }}
                                 </td>
-                                <td>{{ $presentation->author }}</td>8
+                                <td>{{ $presentation->author }}</td>
                                 <td class="actions-cell">
 
                                     <form action="{{ route('presentations.destroy', ['id' => $presentation->id]) }}"

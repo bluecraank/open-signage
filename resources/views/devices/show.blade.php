@@ -20,6 +20,24 @@
                             $preview = $currentSlide['publicpreviewpath'] ?? config('app.placeholder_image');
                         @endphp
                         <img width="500" class="monitor-border" src="{{ $preview }}" alt="">
+
+                        @can('force reload monitor')
+                            <form method="POST" class="pt-1" action="{{ route('devices.reload', ['id' => $device->id]) }}">
+                                @csrf
+                                @method('PUT')
+                                <button class="button is-info" type="submit" name="reload"
+                                    value="force_reload">{{ __('Force page reload') }}</button>
+                            </form>
+                        @endcan
+
+                        @can('delete devices')
+                            <form method="POST" class="pt-1" action="{{ route('devices.destroy', ['id' => $device->id]) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button class="button is-danger" type="submit"
+                                    onclick="return confirm('{{ __('Are you sure?') }}')">{{ __('Delete device') }}</button>
+                            </form>
+                        @endcan
                     </div>
 
                     @cannot('update devices')
@@ -47,7 +65,7 @@
                                 @method('PUT')
                                 @csrf
                                 <div class="field">
-                                    <label class="label">Name</label>
+                                    <label class="label">Name<span class="has-text-danger">*</span></label>
                                     <input class="input" type="text" name="name" value="{{ $device->name }}" />
                                 </div>
                                 <div class="field">
@@ -87,14 +105,6 @@
                                 @endif
                                 <label class="label">&nbsp;</label>
                                 <button type="submit" class="button is-primary">{{ __('Save') }}</button>
-                            </form>
-                        @endcan
-                        @can('force reload monitor')
-                            <form method="POST" class="pt-1" action="{{ route('devices.reload', ['id' => $device->id]) }}">
-                                @csrf
-                                @method('PUT')
-                                <button class="button is-info" type="submit" name="reload"
-                                    value="force_reload">{{ __('Force page reload') }}</button>
                             </form>
                         @endcan
                     </div>

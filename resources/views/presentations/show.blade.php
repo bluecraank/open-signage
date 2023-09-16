@@ -17,6 +17,15 @@
                         <img width="500"
                             src="{{ $presentation->slides?->first()?->publicpreviewpath() ?? config('app.placeholder_image') }}"
                             alt="">
+
+                        @can('delete presentations')
+                            <form action="{{ route('presentations.destroy', $presentation->id) }}" method="POST"
+                                onsubmit="return confirm('{{ __('Are you sure to delete this presentation?') }}')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="button is-danger is-smalls">{{ __('Delete template') }}</button>
+                            </form>
+                        @endcan
                     </div>
 
                     @cannot('update presentations')
@@ -34,14 +43,9 @@
                                 @method('PUT')
                                 @csrf
                                 <div class="field">
-                                    <label class="label">{{ __('Description') }}</label>
+                                    <label class="label">{{ __('Description') }}<span class="has-text-danger">*</span></label>
                                     <input class="input" type="text" name="name" value="{{ $presentation->name }}" />
                                 </div>
-                                {{-- <div class="field">
-                                    <label class="label">{{ __('Description') }}</label>
-                                    <input class="input" type="text" name="description"
-                                        value="{{ $presentation->description }}" />
-                                </div> --}}
 
                                 <div class="field">
                                     <label class="label">{{ __('Upload new pdf') }}</label>
@@ -87,7 +91,7 @@
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>{{ __('Description') }}</th>
+                            <th>{{ __('Location') }}</th>
                             <th>{{ __('Assigned') }}</th>
                         </tr>
                     </thead>

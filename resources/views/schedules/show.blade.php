@@ -45,56 +45,67 @@
             </header>
 
             <div class="card-content">
-                <form action="{{ route('schedules.update', ['id' => $schedule->id]) }}" method="POST" onsubmit="return validate()">
+                <form action="{{ route('schedules.update', ['id' => $schedule->id]) }}" method="POST"
+                    onsubmit="return validate()">
                     @csrf
                     @method('PUT')
                     <div class="columns">
                         <div class="column is-4">
                             <div class="field">
-                                <label class="label">Name</label>
+                                <label class="label">Name<span class="has-text-danger">*</span></label>
                                 <input required class="input" type="text" name="name" value="{{ $schedule->name }}" />
                             </div>
                             <div class="field">
-                                <label class="label">{{ __('Assigned template') }}</label>
+                                <label class="label">{{ __('Assigned template') }}<span
+                                        class="has-text-danger">*</span></label>
                                 <div class="select is-fullwidth">
                                     <select required name="presentation_id" id="">
                                         <option value="">{{ __('Select a template') }}...</option>
                                         @foreach ($presentations as $presentation)
-                                            <option @if($schedule->presentation_id == $presentation->id) selected @endif value="{{ $presentation->id }}">{{ $presentation->name }}</option>
+                                            <option @if ($schedule->presentation_id == $presentation->id) selected @endif
+                                                value="{{ $presentation->id }}">{{ $presentation->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                             <div class="field">
-                                <label class="label">{{ __('Start Date') }}</label>
-                                <input required data-date-format="dd.MM.yyyy" data-time-format="HH:mm" type="date" name="start_date" data-start-date="{{ Carbon::parse($schedule->startDate())->toDateString() }}" data-start-time="{{ Carbon::parse($schedule->startDate())->format('H:i') }}">
+                                <label class="label">{{ __('Start Date') }}<span class="has-text-danger">*</span></label>
+                                <input required data-date-format="dd.MM.yyyy" data-time-format="HH:mm" type="date"
+                                    name="start_date"
+                                    data-start-date="{{ Carbon::parse($schedule->startDate())->toDateString() }}"
+                                    data-start-time="{{ Carbon::parse($schedule->startDate())->format('H:i') }}">
                             </div>
                             <div class="field">
-                                <label class="label">{{ __('End Date') }}</label>
-                                <input required data-date-format="dd.MM.yyyy" data-time-format="hh:mm" type="date" name="end_date" data-start-date="{{ Carbon::parse($schedule->endDate())->toDateString() }}" data-start-time="{{ Carbon::parse($schedule->endDate())->format('H:i') }}">
+                                <label class="label">{{ __('End Date') }}<span class="has-text-danger">*</span></label>
+                                <input required data-date-format="dd.MM.yyyy" data-time-format="hh:mm" type="date"
+                                    name="end_date" data-start-date="{{ Carbon::parse($schedule->endDate())->toDateString() }}"
+                                    data-start-time="{{ Carbon::parse($schedule->endDate())->format('H:i') }}">
                             </div>
                         </div>
                         <div class="column is-4">
                             <label class="label">{{ __('Devices') }}</label>
                             <select multiple="multiple" name="devices[]" class="multiselect">
                                 @foreach ($devices as $device)
-                                    <option @if(in_array($device->id, $schedule->devices)) selected @endif value="{{ $device->id }}">{{ $device->name }}</option>
+                                    <option @if (in_array($device->id, $schedule->devices)) selected @endif value="{{ $device->id }}">
+                                        {{ $device->name }}</option>
                                 @endforeach
                             </select>
 
                             <div class="column">
                                 <div class="field">
-                                    <label class="label">{{ __('Enabled') }}</label>
-                                    <input id="enabled-switch" type="checkbox" name="enabled" class="switch" @if($schedule->enabled) checked="checked" @endif>
-                                    <label for="enabled-switch">{{ __('Schedule') }}</label>
-                                  </div>
+                                    <label class="label">{{ __('Activate schedule') }}</label>
+                                    <input id="enabled-switch" type="checkbox" name="enabled" class="switch"
+                                        @if ($schedule->enabled) checked="checked" @endif>
+                                    <label for="enabled-switch">&nbsp;</label>
+                                </div>
                             </div>
                         </div>
                         <div class="column is-4">
                             <label class="label">{{ __('Groups') }}</label>
                             <select multiple="multiple" name="groups[]" class="multiselect">
                                 @foreach ($groups as $group)
-                                    <option @if(in_array($group->id, $schedule->groups)) selected @endif value="{{ $group->id }}">{{ $group->name }}</option>
+                                    <option @if (in_array($group->id, $schedule->groups)) selected @endif value="{{ $group->id }}">
+                                        {{ $group->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -102,6 +113,14 @@
 
                     <button type="submit" class="button is-primary">{{ __('Save') }}</button>
                 </form>
+
+                @can('delete schedules')
+                    <form action="{{ route('schedules.destroy', ['id' => $schedule->id]) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="button is-danger is-pulled-right">{{ __('Delete') }}</button>
+                    </form>
+                @endcan
             </div>
         </div>
     @endcan

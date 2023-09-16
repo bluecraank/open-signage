@@ -50,11 +50,11 @@
                     <div class="columns">
                         <div class="column is-4">
                             <div class="field">
-                                <label class="label">Name</label>
+                                <label class="label">Name<span class="has-text-danger">*</span></label>
                                 <input required class="input" type="text" name="name" />
                             </div>
                             <div class="field">
-                                <label class="label">{{ __('Assigned template') }}</label>
+                                <label class="label">{{ __('Assigned template') }}<span class="has-text-danger">*</span></label>
                                 <div class="select is-fullwidth">
                                     <select required name="presentation_id" id="">
                                         <option value="">{{ __('Select a template') }}...</option>
@@ -65,11 +65,11 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <label class="label">{{ __('Start Date') }}</label>
+                                <label class="label">{{ __('Start Date') }}<span class="has-text-danger">*</span></label>
                                 <input required data-date-format="dd.MM.yyyy" type="date" name="start_date" value="{{ now() }}">
                             </div>
                             <div class="field">
-                                <label class="label">{{ __('End Date') }}</label>
+                                <label class="label">{{ __('End Date') }}<span class="has-text-danger">*</span></label>
                                 <input required data-date-format="dd.MM.yyyy" type="date" name="end_date" value="{{ now() }}">
                             </div>
                         </div>

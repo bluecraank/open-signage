@@ -16,17 +16,12 @@
                 @csrf
 
                 <div class="field">
-                    <label class="label">{{ __('Description') }}</label>
+                    <label class="label">{{ __('Description') }}<span class="has-text-danger">*</span></label>
                     <input required type="text" class="input" name="name" placeholder="{{ __('Description') }}">
                 </div>
-{{--
-                <div class="field">
-                    <label class="label">{{ __('Description') }}</label>
-                    <input type="text" class="input" name="description" placeholder="{{ __('Description') }}">
-                </div> --}}
 
                 <div class="field">
-                    <label class="label">{{ __('Upload pdf') }}</label>
+                    <label class="label">{{ __('Upload pdf') }}<span class="has-text-danger">*</span></label>
                     <div class="file has-name" id="file-upload">
                         <label class="file-label">
                             <input class="file-input" type="file" name="file" accept=".pdf">
@@ -39,7 +34,7 @@
                                 </span>
                             </span>
                             <span class="file-name">
-                                {{ __('No file selected ') }} (max: 100 Mb)
+                                {{ __('No file selected') }} (max: 100 Mb)
                             </span>
                         </label>
                     </div>

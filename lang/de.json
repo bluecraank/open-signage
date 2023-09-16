@@ -139,6 +139,12 @@
     "Settings": "Einstellungen",
     "Enabled": "Aktiviert",
     "ENABLED": "AKTIVIERT",
-    "DISABLED": "DEAKTIVIERT"
+    "DISABLED": "DEAKTIVIERT",
+    "Delete group": "Gruppe löschen",
+    "Delete device": "Monitor löschen",
+    "Delete template": "Präsentation löschen",
+    "Delete schedule": "Zeitplan löschen",
+    "Activate schedule": "Zeitplan aktivieren",
+    "Update schedule": "Zeitplan aktualisieren"
 
 }

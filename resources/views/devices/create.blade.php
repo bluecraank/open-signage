@@ -14,12 +14,12 @@
                 @csrf
 
                 <div class="field">
-                    <label class="label">Name</label>
+                    <label class="label">Name<span class="has-text-danger">*</span></label>
                     <input required type="text" class="input" name="name" placeholder="Name">
                 </div>
 
                 <div class="field">
-                    <label class="label">{{ __('IP Address') }}</label>
+                    <label class="label">{{ __('IP Address') }}<span class="has-text-danger">*</span></label>
                     <input required type="text" class="input" name="ip_address" placeholder="{{ __('IP Address') }}">
                 </div>
 

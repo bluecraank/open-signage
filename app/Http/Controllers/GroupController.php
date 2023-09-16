@@ -34,7 +34,7 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:groups',
+            'name' => 'required|unique:groups|min:2|max:255',
             'presentation_id' => 'required|exists:presentations,id',
             'devices' => 'nullable|array',
         ]);
@@ -82,7 +82,7 @@ class GroupController extends Controller
         }
 
         $request->validate([
-            'name' => 'required|unique:groups,name,' . $group->id,
+            'name' => 'required|min:2|max:255|unique:groups,name,' . $group->id,
             'presentation_id' => 'required|exists:presentations,id',
             'devices' => 'nullable|array',
         ]);

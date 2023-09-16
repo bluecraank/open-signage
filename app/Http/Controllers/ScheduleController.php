@@ -39,7 +39,7 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|min:2',
+            'name' => 'required|string|min:2|max:255',
             'start_date' => 'required|date|before:end_date',
             'end_date' => 'required|date|after:start_date',
             'devices' => 'nullable|array',
@@ -103,7 +103,7 @@ class ScheduleController extends Controller
         }
 
         $request->validate([
-            'name' => 'required|string|min:2',
+            'name' => 'required|string|min:2|max:255',
             'start_date' => 'required|date|before:end_date',
             'end_date' => 'required|date|after:start_date',
             'devices' => 'nullable|array',
