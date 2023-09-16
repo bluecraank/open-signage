@@ -25,7 +25,7 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>{{ __('Devices') }}</th>
+                        <th>{{ __('Devices assigned') }}</th>
                         <th>{{ __('Assigned template') }}</th>
                         <th>{{ __('Actions') }}</th>
                     </tr>

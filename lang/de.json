@@ -130,5 +130,10 @@
     "You must select at least one device or group": "Sie müssen mindestens einen Monitor oder eine Gruppe auswählen",
     "Inherited by schedule": "Geerbt von Zeitplan",
     "Location": "Standort",
-    "Start date must be before end date": "Startdatum muss vor Enddatum liegen"
+    "Start date must be before end date": "Startdatum muss vor Enddatum liegen",
+    "Devices assigned": "Monitore zugewiesen",
+    "Monitorsettings": "Monitoreinstellungen",
+    "Configure monitor preferences": "Monitor-Einstellungen konfigurieren",
+    "Saving the settings forces a reload of all active monitors": "Das Speichern der Einstellungen erzwingt ein Neuladen aller aktiven Monitore"
+
 }
