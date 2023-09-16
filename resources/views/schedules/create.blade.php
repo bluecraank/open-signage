@@ -91,8 +91,8 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="button is-success">{{ __('Save & enable') }}</button>
-                    <button type="submit" class="button is-primary">{{ __('Save') }}</button>
+                    <button type="submit" name="submit_with_enable" class="button is-success">{{ __('Save & enable') }}</button>
+                    <button type="submit" name="submit_without_enable" class="button is-primary">{{ __('Save') }}</button>
                 </form>
             </div>
         </div>

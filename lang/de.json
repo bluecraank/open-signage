@@ -136,6 +136,9 @@
     "Configure monitor preferences": "Monitor-Einstellungen konfigurieren",
     "Saving the settings forces a reload of all active monitors": "Das Speichern der Einstellungen erzwingt ein Neuladen aller aktiven Monitore",
     "Global": "Globale",
-    "Settings": "Einstellungen"
+    "Settings": "Einstellungen",
+    "Enabled": "Aktiviert",
+    "ENABLED": "AKTIVIERT",
+    "DISABLED": "DEAKTIVIERT"
 
 }

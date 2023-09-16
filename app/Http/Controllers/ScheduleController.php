@@ -38,7 +38,6 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'name' => 'required|string|min:2',
             'start_date' => 'required|date|before:end_date',
@@ -52,6 +51,11 @@ class ScheduleController extends Controller
             return redirect()->back()->withErrors(['message' => __('You must select at least one device or group')]);
         }
 
+        $enabled = true;
+        if($request->has('submit_without_enable')) {
+            $enabled = false;
+        }
+
         // Date to timestamp
         $start_date = strtotime($request->start_date);
         $end_date = strtotime($request->end_date);
@@ -63,6 +67,7 @@ class ScheduleController extends Controller
             'devices' => $request->devices ?? [],
             'groups' => $request->groups ?? [],
             'presentation_id' => $request->presentation_id,
+            'enabled' => $enabled,
         ]);
 
         return redirect()->route('schedules.index')->with('success', __('Schedule created'));
@@ -110,6 +115,11 @@ class ScheduleController extends Controller
             return redirect()->back()->withErrors(['message' => __('You must select at least one device or group')]);
         }
 
+        $enabled = false;
+        if($request->has('enabled') && $request->enabled == 'on') {
+            $enabled = true;
+        }
+
         // Date to timestamp
         $start_date = strtotime($request->start_date);
         $end_date = strtotime($request->end_date);
@@ -122,6 +132,7 @@ class ScheduleController extends Controller
             'devices' => $request->devices ?? [],
             'groups' => $request->groups ?? [],
             'presentation_id' => $request->presentation_id,
+            'enabled' => $enabled,
         ]);
 
         return redirect()->route('schedules.index')->with('success', __('Schedule updated'));

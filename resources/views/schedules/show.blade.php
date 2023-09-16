@@ -81,6 +81,14 @@
                                     <option @if(in_array($device->id, $schedule->devices)) selected @endif value="{{ $device->id }}">{{ $device->name }}</option>
                                 @endforeach
                             </select>
+
+                            <div class="column">
+                                <div class="field">
+                                    <label class="label">{{ __('Enabled') }}</label>
+                                    <input id="enabled-switch" type="checkbox" name="enabled" class="switch" @if($schedule->enabled) checked="checked" @endif>
+                                    <label for="enabled-switch">{{ __('Schedule') }}</label>
+                                  </div>
+                            </div>
                         </div>
                         <div class="column is-4">
                             <label class="label">{{ __('Groups') }}</label>
@@ -92,8 +100,7 @@
                         </div>
                     </div>
 
-                    <button class="button is-success">{{ __('Update & enable') }}</button>
-                    <button class="button is-primary">{{ __('Save') }}</button>
+                    <button type="submit" class="button is-primary">{{ __('Save') }}</button>
                 </form>
             </div>
         </div>
