@@ -145,6 +145,7 @@
     "Delete template": "Präsentation löschen",
     "Delete schedule": "Zeitplan löschen",
     "Activate schedule": "Zeitplan aktivieren",
-    "Update schedule": "Zeitplan aktualisieren"
+    "Update schedule": "Zeitplan aktualisieren",
+    "No presentation assigned": "Keine Präsentation zugewiesen"
 
 }
