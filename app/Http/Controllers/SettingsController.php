@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 
@@ -30,13 +31,23 @@ class SettingsController extends Controller
         $settings = Setting::all()->keyBy('key')->toArray();
 
         foreach ($request->all() as $key => $value) {
-            if (isset($settings[$key])) {
+            if (isset($settings[$key]) && $settings[$key]['value'] != $value) {
                 $settings[$key]['value'] = $value;
             }
         }
 
+        $forceReload = false;
         foreach ($settings as $key => $value) {
             Setting::where('key', $key)->update(['value' => $value['value']]);
+
+            $forceReload = true;
+        }
+
+        if($forceReload) {
+            Device::all()->each(function ($device) {
+                $device->force_reload = true;
+                $device->save();
+            });
         }
 
         return redirect()->route('settings.index')->with('success', 'Settings updated successfully');
