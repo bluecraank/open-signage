@@ -2,8 +2,8 @@
 
 <p id="description">Very easy way to create signage for digital content based on web browser built with Laravel</p>
 
-# How it works
-- Upload PDF Document with n Pages (e.g each Page is one fullwidth image)
+# Usage
+- Export PowerPoint as PDF and upload document
 - Background processing starts and generates images from each page
 - Create and register monitor
 - Assign presentation to monitor
@@ -11,11 +11,18 @@
 - Create schedule or group to easily assign mutliple devices one presentation
 
 # Functions
-- Create schedules and groups
-- Force reload of monitor
-- Live updating if presentation gets changed
-- Reload page after x hours to prevent memory leaks
-- Hides cursor
+- Create, manage, delete schedules
+- Create, manage, delete groups
+- Create, manage, delete presentations
+- Create, manage, delete devices
+- Assign roles to users
+
+# Clientside browser functions
+- Hide cursor
+- Force monitor reload on request
+- Force monitor reload after x hours to prevent memory leak
+- Select and set loading screen
+- Configure animation times and more
 
 
 # Configuration
@@ -52,6 +59,9 @@ LDAP_ALLOWED_GROUP="CN=MIS,OU=Groups,DC=ldap,DC=server"
 - ghostscript
 ### Installation
 - ```git clone https://github.com/bluecraank/open-signage```
+- ```cd open-signage```
+- ```php artisan migrate --force```
+- ```php artisan db:seed```
 - Serve with ```php artisan serve```
 - Or use apache/nginx/caddy and configure root directory to ./public
 
