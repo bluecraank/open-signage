@@ -2,15 +2,13 @@
 
 <p id="description">Very easy way to create signage for digital content based on web browser built with Laravel</p>
 
-## This project is still wip and lacks of security / permissions
-
 # How it works
 - Upload PDF Document with n Pages (e.g each Page is one fullwidth image)
 - Background processing starts and generates images from each page
 - Create and register monitor
 - Assign presentation to monitor
 - Display presentation on monitor
-- Create schedule or group to easily assign mutliple devices a presentation
+- Create schedule or group to easily assign mutliple devices one presentation
 
 # Functions
 - Create schedules and groups
@@ -37,18 +35,7 @@ LDAP_TLS=false
 LDAP_SASL=false
 LDAP_ALLOWED_GROUP="CN=MIS,OU=Groups,DC=ldap,DC=server"
 ```
-- Configure behaviour e.g refresh interval, loading background and more...
-```
-MONITOR_REFRESH_TIME_SECONDS=43200
-MONITOR_CHECK_UPDATE_TIME_SECONDS=30
-SLIDE_IN_TIME_MS=1100
-SLIDE_OUT_TIME_MS=1500
-INTERVAL_NEXT_SLIDE_MS=20000
-LOADING_BACKGROUND_TEXT=""
-LOADING_BACKGROUND_TYPE="image"
-LOADING_BACKGROUND_COLOR="#000000"
-LOADING_BACKGROUND_IMAGE="https://picsum.photos/1920/1080"
-```
+
 # Installation
 ## Docker installation
 - Create stack.env and set necessary variables
@@ -69,11 +56,7 @@ LOADING_BACKGROUND_IMAGE="https://picsum.photos/1920/1080"
 - Or use apache/nginx/caddy and configure root directory to ./public
 
 # Contribution
-- Feel free to contribute
-```
-- Permissions / Roles are missing (spatie/permissions?)
-- Monitor Authentication is missing
-```
+- Feel free to contribute and help to improve it
 
 # License
 The MIT License (MIT). Please see License File for more information.
