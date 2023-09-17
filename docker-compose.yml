@@ -6,12 +6,33 @@ services:
             - "8080:80"
         volumes:
             - public:/var/www/html/public:rw
-            - database:/var/www/html/database:rw
         env_file:
             - stack.env
+        networks:
+            - open-signage
+            - int_proxy
+        depends_on:
+            - db
+    db:
+        image: mysql:5.7.22
+        container_name: db
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_DATABASE: open-signage
+            MYSQL_ROOT_PASSWORD: laravel_open-signage
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        networks:
+            - open-signage
+        volumes:
+            - dbdata:/var/lib/mysql
 volumes:
     public:
-    database:
+    dbdata:
 networks:
+    open-signage:
     int_proxy:
         external: true

@@ -50,7 +50,10 @@ LDAP_ALLOWED_GROUP="CN=MIS,OU=Groups,DC=ldap,DC=server"
 # Installation
 ## Docker installation
 - Create stack.env and set necessary variables
-- sudo docker compose up
+- ```sudo docker compose up```
+- ```sudo docker ps``` and grab container id for open-signage-app
+- ```sudo docker exec ID php artisan migrate```
+- ```sudo docker exec ID php artisan db:seed```
 ## Updating
 - sudo docker builder prune
 - sudo docker compose up --force-recreate --build

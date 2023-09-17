@@ -72,9 +72,5 @@ RUN echo "php_value post_max_size 100M" >> /var/www/html/public/.htaccess
 # Allow pdf imaging
 RUN sed -ri -e 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' /etc/ImageMagick-6/policy.xml
 
-USER www-data
-RUN php artisan migrate --force
-RUN php artisan db:seed
-
 USER root
 RUN chown -R www-data:www-data /var/www/html/
