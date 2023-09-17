@@ -16,7 +16,7 @@ class PresentationProcess extends Command
      *
      * @var string
      */
-    protected $signature = 'presentation:process {id}';
+    protected $signature = 'presentation:process {id} {type}';
 
     /**
      * The console command description.
@@ -32,7 +32,16 @@ class PresentationProcess extends Command
     {
         $id = $this->argument('id');
         $presentation = Presentation::where('id', $id)->firstOrFail();
+        $type = $this->argument('type');
 
+        if($type == 'pdf') {
+            $this->processPdf($presentation);
+        } else if($type == 'video') {
+            $this->processVideo($presentation);
+        }
+    }
+
+    public function processPdf($presentation) {
         $pdf = new \Spatie\PdfToImage\Pdf(storage_path('app/public/presentations/'. $presentation->id . '/' . $presentation->id) . '.pdf');
 
         $pages = $pdf->getNumberOfPages();
@@ -46,10 +55,9 @@ class PresentationProcess extends Command
 
             Slide::updateOrCreate([
                 'presentation_id' => $presentation->id,
-                'number' => $i,
+                'order' => $i,
             ], [
                 'presentation_id' => $presentation->id,
-                'order' => $i,
                 'name_on_disk' => $imagename,
                 'name' => $random,
             ]);
@@ -58,6 +66,31 @@ class PresentationProcess extends Command
         $presentation->processed = true;
 
         Storage::delete(storage_path('app/public/presentations/'. $presentation->id . '/' . $presentation->id) . '.pdf');
+
+        $presentation->save();
+    }
+
+    public function processVideo($presentation) {
+        $path = storage_path('app/public/presentations/'. $presentation->id . '/' . $presentation->id) . '.mp4';
+        $video = new \FFMpeg\FFMpeg();
+        $video = $video->open($path);
+
+        // Get first frame as screenshot
+        $frame = $video->frame(1);
+        $frame->save(public_path('data/presentations/'. $presentation->id . '/video-preview.jpg'));
+        $video->close();
+
+        // Save video to public
+        $video = new \FFMpeg\FFMpeg();
+        $video->open(storage_path('app/public/presentations/'. $presentation->id . '/' . $presentation->id) . '.mp4')
+            ->export()
+            ->toDisk('public')
+            ->inFormat(new \FFMpeg\Format\Video\X264('libmp3lame', 'libx264'))
+            ->save('data/presentations/'. $presentation->id . '/video.mp4');
+
+        $presentation->processed = true;
+
+        Storage::delete(storage_path('app/public/presentations/'. $presentation->id . '/' . $presentation->id) . '.mp4');
 
         $presentation->save();
     }

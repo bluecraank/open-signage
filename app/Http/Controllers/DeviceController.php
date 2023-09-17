@@ -38,8 +38,8 @@ class DeviceController extends Controller
             'ip_address' => 'required|ip',
             'name' => 'required|min:2|max:255',
             'description' => 'required|min:2|max:255',
-            'presentation_id' => 'nullable|integer|exists:presentations,id',
-            'group_id' => 'nullable|integer|exists:groups,id',
+            'presentation_id' => 'nullable|integer',
+            'group_id' => 'nullable|integer',
         ]);
 
         $name = $request->input('name');
@@ -124,7 +124,7 @@ class DeviceController extends Controller
         $request->validate([
             'name' => 'required|min:2|max:255|unique:devices,name,' . $device->id . ',id',
             'description' => 'required|min:2|max:255',
-            'presentation_id' => 'nullable|integer|exists:presentations,id',
+            'presentation_id' => 'nullable|integer',
         ]);
 
         $name = $request->input('name');
