@@ -14,9 +14,6 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::truncate();
-        Role::truncate();
-
         Permission::updateOrCreate(['name' => 'create devices', 'guard_name' => 'sanctum']);
         Permission::updateOrCreate(['name' => 'read devices', 'guard_name' => 'sanctum']);
         Permission::updateOrCreate(['name' => 'update devices', 'guard_name' => 'sanctum']);
