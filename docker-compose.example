@@ -1,0 +1,55 @@
+services:
+    app:
+        image: xxx/open-signage:latest
+        container_name: open-signage
+        volumes:
+            - public:/var/www/html/public:rw
+        networks:
+            - open-signage
+            - int_proxy
+        depends_on:
+            - db
+        environment:
+            APP_LOCALE: en
+            DB_CONNECTION: mysql
+            DB_HOST: db
+            DB_PORT: 3306
+            DB_USERNAME: root
+            DB_PASSWORD: random_root_password
+            DB_DATABASE: open-signage
+            LDAP_LOGGING: true
+            LDAP_CONNECTION: default
+            LDAP_HOST: some.dc.server
+            LDAP_USERNAME: "CN=ro_system,CN=Users,DC=dc,DC=server"
+            LDAP_PASSWORD: 123456
+            LDAP_PORT: 636
+            LDAP_BASE_DN: "dc=dc,dc=server"
+            LDAP_TIMEOUT: 15
+            LDAP_SSL: true
+            LDAP_TLS: false
+            LDAP_SASL: false
+            LDAP_ALLOWED_GROUP: "CN=ALLOWED,OU=Groups,DC=dc,DC=server"
+    db:
+        image: mysql:8.0.34
+        container_name: open-signage-db
+        restart: unless-stopped
+        tty: true
+        ports:
+            - ':3306'
+        environment:
+            TZ: 'Europe/Berlin'
+            MYSQL_DATABASE: open-signage
+            MYSQL_ROOT_PASSWORD: random_root_password
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        networks:
+            - open-signage
+        volumes:
+            - dbdata:/var/lib/mysql
+volumes:
+    public:
+    dbdata:
+networks:
+    open-signage:
+    int_proxy:
+        external: true
