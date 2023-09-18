@@ -146,6 +146,7 @@
     "Delete schedule": "Zeitplan löschen",
     "Activate schedule": "Zeitplan aktivieren",
     "Update schedule": "Zeitplan aktualisieren",
-    "No presentation assigned": "Keine Präsentation zugewiesen"
+    "No presentation assigned": "Keine Präsentation zugewiesen",
+    "Uploading new file will delete all slides!": "Das Hochladen einer neuen Datei löscht alle Folien!"
 
 }

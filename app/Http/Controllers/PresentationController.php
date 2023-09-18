@@ -103,7 +103,7 @@ class PresentationController extends Controller
         }
 
         $request->validate([
-            'file' => 'nullable|file|mimetypes:application/pdf|max:100000',
+            'file' => 'nullable|file|mimetypes:application/pdf,video/mp4|max:100000',
             'name' => 'required|min:2|max:255|unique:presentations,name,' . $presentation->id . ',id',
             'description' => 'nullable|min:2|max:255',
         ]);
@@ -118,19 +118,25 @@ class PresentationController extends Controller
 
             $file = $request->file('file');
 
+            $file_extension = "pdf";
+            $type = "pdf";
+            if($file->getMimeType() == "video/mp4") {
+                $file_extension = "mp4";
+                $type = "video";
+            }
+
             File::deleteDirectory(public_path('data/presentations/'. $presentation->id));
-            File::delete(storage_path('app/public/presentations/'. $presentation->id . '/' . $presentation->id . '.pdf'));
 
             Slide::where('presentation_id', $presentation->id)->delete();
 
             File::makeDirectory(storage_path('app/public/presentations/'. $presentation->id), 0755, true, true);
-            File::put(storage_path('app/public/presentations/'. $presentation->id . '/' . $presentation->id . '.pdf'), file_get_contents($file));
+            File::put(storage_path('app/public/presentations/'. $presentation->id . '/' . $presentation->id . '.' . $file_extension), file_get_contents($file));
 
             File::makeDirectory(public_path('data/presentations/'. $presentation->id), 0755, true, true);
 
             $presentation->processed = false;
 
-            proc_open('php ' . base_path('artisan') . ' presentation:process ' . $presentation->id . ' > /dev/null &', [], $pipes);
+            proc_open('php ' . base_path('artisan') . ' presentation:process ' . $presentation->id . ' ' . $type .' > /dev/null &', [], $pipes);
 
         }
 
@@ -165,10 +171,7 @@ class PresentationController extends Controller
         $presentation->slides()->delete();
         Presentation::where('id', $id)->delete();
 
-        // Device::where('presentation_id', $id)->update(['presentation_id' => null]);
-        // Group::where('presentation_id', $id)->update(['presentation_id' => null]);
-
-        return redirect()->back()->with('success', __('Presentation deleted'));
+        return redirect()->route('presentations.index', $presentation->id)->with('success', __('Presentation deleted'));
     }
 
     static function getCurrentPresentationInProgress() {
