@@ -29,6 +29,7 @@ services:
             LDAP_TLS: false
             LDAP_SASL: false
             LDAP_ALLOWED_GROUP: "CN=ALLOWED,OU=Groups,DC=dc,DC=server"
+            PROXY_URL: "https://mis.dc.server"
     db:
         image: mysql:8.0.34
         container_name: open-signage-db
