@@ -76,6 +76,11 @@ LDAP_ALLOWED_GROUP="CN=MIS,OU=Groups,DC=ldap,DC=server"
 - If you use a reverse proxy to serve this app, set PROXY_URL in env file
 ```PROXY_URL="https://open-signage.company.com```
 
+## Deploy
+- Example debian + chromium
+```chromium --enable-logging --log-level=2 --v=0 --kiosk --touch-events=enabled --disable-pinch --noerrdialogs --simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT' --disable-session-crashed-bubble --disable-component-update --overscroll-history-navigation=0 --disable-features=Translate --autoplay-policy=no-user-gesture-required --app=https://mis.dc.server/*```
+- or use FullPageOS
+
 # Contribution
 - Feel free to contribute and help to improve it
 
