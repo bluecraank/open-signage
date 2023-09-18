@@ -5,18 +5,23 @@ ARG NODE_VERSION=20
 
 RUN apt-get update && \
     apt-get install -y \
-    libfreetype6-dev \
-    libwebp-dev \
     libjpeg62-turbo-dev \
     libpng-dev \
     libzip-dev \
     ghostscript \
-    git
+    git \
+    ca-certificates \
+    curl \
+    gnupg \
+    ffmpeg
 
-# Install Node.js & NPM
-RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_VERSION.x | bash - &&\
-    apt-get install -y nodejs
-RUN npm install -g npm
+RUN mkdir -p /etc/apt/keyrings
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_VERSION.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+
+RUN apt-get update && \
+    apt-get install -y \
+    nodejs
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -25,7 +30,7 @@ RUN composer self-update
 # Install PHP extensions
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions && \
-    install-php-extensions pdo_mysql zip bcmath ldap imagick
+    install-php-extensions pdo_mysql zip bcmath mbstring ldap imagick
 
 # Clone source code if not downloaded
 RUN rm -rf /var/www/html
