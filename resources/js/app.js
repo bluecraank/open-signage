@@ -8,13 +8,6 @@ for (let i = 0; i < secrets.length; i++) {
     });
 }
 
-let slideout = document.querySelector('.slideout');
-if (slideout) {
-    setTimeout(function () {
-        slideout.classList.add('slideout_hide');
-    }, 4000);
-}
-
 // Initialize all input of type date
 let options = {
     type: 'datetime',
