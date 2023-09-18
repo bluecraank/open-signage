@@ -77,6 +77,9 @@ class MonitorController extends Controller
             return json_encode(['error' => "No presentation assigned to this device."]);
         }
 
+        $datetime = $request->input('startup_timestamp');
+        $datetime = date('Y-m-d H:i:s', $datetime);
+
         $device->current_slide = $request->input('currentSlide');
         $device->startup_timestamp = $request->input('startup_timestamp');
         $device->touch('last_seen');
