@@ -79,14 +79,15 @@ class PermissionSeeder extends Seeder
         Role::updateOrCreate(['name' => 'User', 'guard_name' => 'sanctum'])
             ->givePermissionTo([
                 'read devices',
-                // 'read presentations',
-                // 'read groups'
             ]);
 
 
+        // Assign Super Administrator role to user with ID 1
         $user = User::whereId(1)->first();
         if($user) {
-            $user->assignRole('Super Administrator');
+            if(count($user->getRoleNames()) == 0) {
+                $user->assignRole('Super Administrator');
+            }
         }
     }
 }

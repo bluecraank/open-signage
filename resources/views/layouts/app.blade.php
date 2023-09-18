@@ -54,22 +54,24 @@
                             </a>
                         @endcan
 
-                        <div class="navbar-item has-dropdown is-hoverable">
-                            <a class="navbar-link">
-                                {{ __('Settings') }}
-                            </a>
-
-                            <div class="navbar-dropdown">
-                                @can('read users')
-                                    <a href="{{ route('users.index') }}" class="navbar-item">
-                                        {{ __('Users') }}
-                                    </a>
-                                @endcan
-                                <a href="{{ route('settings.index') }}" class="navbar-item">
-                                    {{ __('Monitorsettings') }}
+                        @can('manage settings')
+                            <div class="navbar-item has-dropdown is-hoverable">
+                                <a class="navbar-link">
+                                    {{ __('Settings') }}
                                 </a>
+
+                                <div class="navbar-dropdown">
+                                    @can('read users')
+                                        <a href="{{ route('users.index') }}" class="navbar-item">
+                                            {{ __('Users') }}
+                                        </a>
+                                    @endcan
+                                    <a href="{{ route('settings.index') }}" class="navbar-item">
+                                        {{ __('Monitorsettings') }}
+                                    </a>
+                                </div>
                             </div>
-                        </div>
+                        @endcan
                     </div>
 
                     <div class="navbar-end">
