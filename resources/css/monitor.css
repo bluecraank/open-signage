@@ -44,7 +44,7 @@ html {
 
 .lds-ripple div {
     position: absolute;
-    border: 4px solid #fff;
+    border: 4.5px solid #efefef;
     opacity: 1;
     border-radius: 50%;
     animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
@@ -107,9 +107,10 @@ html {
     position: absolute;
     text-transform: uppercase;
     font-weight: bold;
-    font-size: 1.5em;
+    font-size: 2em;
     font-family: Arial;
-    color:white;
+    color:#efefef;
     left: 50%;
+    padding-top: 20px;
     transform: translateX(-50%);
 }

@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="text">
-                    {{ \App\Models\Setting::get('LOADING_BACKGROUND_TEXT') }}
+                    {{ \App\Models\Setting::getLoadingText($device) }}
                 </div>
             </div>
         </div>
@@ -71,14 +71,30 @@
     </div>
 
     <script>
+        var currentSlide = 0;
+
         // Refresh page to prevent memory leaks
         function reload_page() {
             location.reload();
         }
 
-        var currentSlide = 0;
+        // Launch full screen
+        function launchFullscreen(element) {
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.mozRequestFullScreen) {
+                element.mozRequestFullScreen();
+            } else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen();
+            } else if (element.msRequestFullscreen) {
+                element.msRequestFullscreen();
+            }
+        }
+
+        launchFullscreen(document.documentElement);
 
         $(document).ready(function() {
+
             // Set trigger for page reload
             setTimeout(function() {
                 reload_page()
@@ -115,7 +131,8 @@
                 if (slides.length == 1) {
 
                     // If video is ended, restart
-                    if (slides[currentSlide].querySelector('video') && slides[currentSlide].querySelector('video').ended) {
+                    if (slides[currentSlide].querySelector('video') && slides[currentSlide].querySelector('video')
+                        .ended) {
                         console.log("[MISMANAGER] Video is ended, restarting");
                         let video = slides[currentSlide].querySelector('video');
                         video.pause();

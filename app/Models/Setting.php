@@ -21,4 +21,13 @@ class Setting extends Model
 
         return null;
     }
+
+    static function getLoadingText($device) {
+        $text = Setting::get('LOADING_BACKGROUND_TEXT');
+
+        $text = str_replace("{hostname}", $device->name, $text);
+        $text = str_replace("{location}", $device->description, $text);
+
+        return $text;
+    }
 }
