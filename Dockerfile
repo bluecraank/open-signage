@@ -27,8 +27,7 @@ RUN composer self-update
 # Install PHP extensions
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions && \
-    install-php-extensions zip zip bcmath ldap
-RUN install-php-extensions imagick
+    install-php-extensions pdo_mysql zip bcmath ldap imagick
 
 # Clone source code if not downloaded
 RUN rm -rf /var/www/html
