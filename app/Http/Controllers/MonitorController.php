@@ -81,7 +81,7 @@ class MonitorController extends Controller
         $datetime = date('Y-m-d H:i:s', $datetime);
 
         $device->current_slide = $request->input('currentSlide');
-        $device->startup_timestamp = $request->input('startup_timestamp');
+        $device->startup_timestamp = $datetime;
         $device->touch('last_seen');
 
         $force_reload = $device->force_reload;
