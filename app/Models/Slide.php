@@ -12,6 +12,7 @@ class Slide extends Model
         'name_on_disk',
         'presentation_id',
         'order',
+        'type'
     ];
 
     protected $appends = ['publicpreviewpath', 'publicpath'];
@@ -26,7 +27,11 @@ class Slide extends Model
     }
 
     public function publicpreviewpath() {
-        return asset('data/presentations/' . $this->presentation_id . '/preview-' . $this->name_on_disk);
+        // Replace file extension
+        $name = pathinfo($this->name_on_disk, PATHINFO_FILENAME);
+        $extension = pathinfo($this->name_on_disk, PATHINFO_EXTENSION);
+        $name = $name . '.jpg';
+        return asset('data/presentations/' . $this->presentation_id . '/preview-' . $name);
     }
 
     public function getPublicpathAttribute() {

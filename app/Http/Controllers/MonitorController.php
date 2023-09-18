@@ -33,8 +33,12 @@ class MonitorController extends Controller
         }
 
         $images = [];
+
         foreach($slides as $slide) {
-            $images[] = $slide->publicpath();
+            $images[] = [
+                'type' => $slide->type,
+                'url' => $slide->publicpath(),
+            ];
         }
 
         $slides = $images;

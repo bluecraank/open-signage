@@ -155,7 +155,7 @@
                     @foreach ($presentation->slides as $slide)
                         <div class="slide box">
                             <div class="columns gapless">
-                                <img src="{{ $slide->publicpreviewpath() }}">
+                                <img width="300" src="{{ $slide->publicpreviewpath() }}">
                                 <div class="column">
                                     <div>Name: {{ $slide->name }}</div>
                                     <div>{{ __('Filename') }}: {{ $slide->name_on_disk }} </div>

@@ -24,13 +24,13 @@
                     <label class="label">{{ __('Upload pdf') }}<span class="has-text-danger">*</span></label>
                     <div class="file has-name" id="file-upload">
                         <label class="file-label">
-                            <input class="file-input" type="file" name="file" accept=".pdf">
+                            <input class="file-input" type="file" name="file" accept="application/pdf,video/mp4">
                             <span class="file-cta">
                                 <span class="file-icon">
                                     <i class="mdi mdi-upload"></i>
                                 </span>
                                 <span class="file-label">
-                                    {{ __('Select pdf') }}…
+                                    {{ __('Select file') }}…
                                 </span>
                             </span>
                             <span class="file-name">

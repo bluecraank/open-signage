@@ -46,14 +46,27 @@
     <div class="slides">
         @php $firstSlide = true @endphp
         @foreach ($slides as $slide)
-            <div class="slide"
-                style="
+            @if ($slide['type'] == 'image')
+                <div class="slide"
+                    style="
                     opacity:    @if ($firstSlide) @php $firstSlide = false; @endphp
                                     1
                                 @else
                                     0 @endif;
-                    background-image: url('{{ $slide }}')">
-            </div>
+                    background-image: url('{{ $slide['url'] }}')">
+                </div>
+            @elseif ($slide['type'] == 'video')
+                <div class="slide"
+                    style="
+                    opacity:    @if ($firstSlide) @php $firstSlide = false; @endphp
+                                    1
+                                @else
+                                    0 @endif;">
+                    <video autoplay muted>
+                        <source src="{{ $slide['url'] }}" type="video/mp4">
+                    </video>
+                </div>
+            @endif
         @endforeach
     </div>
 
@@ -91,8 +104,29 @@
                     $(".loading").remove();
                 }
 
+                // Only go to next slide if video is finished
+                if (slides[currentSlide].querySelector('video') && !slides[currentSlide].querySelector('video')
+                    .ended) {
+                    console.log("Slide has video, but video is not finished")
+                    return;
+                }
+
                 // Prevent slide change if there is only one slide
-                if (slides.length == 1) return;
+                if (slides.length == 1) {
+
+                    // If video is ended, restart
+                    if (slides[currentSlide].querySelector('video') && slides[currentSlide].querySelector('video').ended) {
+                        console.log("[MISMANAGER] Video is ended, restarting");
+                        let video = slides[currentSlide].querySelector('video');
+                        video.pause();
+                        video.currentTime = 0;
+                        video.play();
+                    }
+
+                    console.log("[MISMANAGER] There is only one slide, not changing")
+                    return;
+                }
+
 
                 console.log('[MISMANAGER] Triggering next slide');
 
@@ -100,10 +134,23 @@
                     $(slides[currentSlide]).animate({
                         'opacity': '0'
                     }, {{ \App\Models\Setting::get('SLIDE_OUT_TIME_MS') }});
+
+                    if (slides[currentSlide].querySelector('video')) {
+                        let video = slides[currentSlide].querySelector('video');
+                        video.pause();
+                        video.currentTime = 0;
+                    }
+
                     currentSlide = (currentSlide + 1) % slides.length;
                     $(slides[currentSlide]).animate({
                         'opacity': '1'
                     }, {{ \App\Models\Setting::get('SLIDE_IN_TIME_MS') }});
+
+                    // Play video
+                    if (slides[currentSlide].querySelector('video')) {
+                        let video = slides[currentSlide].querySelector('video');
+                        video.play();
+                    }
                 }
             }
         });
@@ -127,21 +174,17 @@
                 success: function(data) {
                     data = JSON.parse(data);
                     if (data.last_update != last_update) {
-
                         console.log("[MISMANAGER] A new update is available, reloading page");
-
                         location.reload();
                     }
 
                     if (data.presentation_id != {{ $device->getPresentationId() }}) {
                         console.log("[MISMANAGER] A new presentation was assigned, reloading page");
-
                         location.reload();
                     }
 
                     if (data.force_reload) {
                         console.log("[MISMANAGER] A force reload was requested, reloading page");
-
                         location.reload();
                     }
                 },

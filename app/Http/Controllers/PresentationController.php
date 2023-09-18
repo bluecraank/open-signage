@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Device;
-use App\Models\Group;
 use App\Models\Presentation;
 use App\Models\Slide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 
 class PresentationController extends Controller
 {
@@ -36,7 +33,7 @@ class PresentationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimetypes:application/pdf|max:100000',
+            'file' => 'required|file|mimetypes:application/pdf,video/mp4|max:100000',
             'name' => 'required|min:2|max:255',
             'description' => 'nullable|min:2|max:255',
         ]);
@@ -66,12 +63,19 @@ class PresentationController extends Controller
             'processed' => false,
         ]);
 
+        $file_extension = "pdf";
+        $type = "pdf";
+        if($file->getMimeType() == "video/mp4") {
+            $file_extension = "mp4";
+            $type = "video";
+        }
+
         File::makeDirectory(storage_path('app/public/presentations/'. $presentation->id), 0755, true, true);
-        File::put(storage_path('app/public/presentations/'. $presentation->id . '/' . $presentation->id . '.pdf'), file_get_contents($file));
+        File::put(storage_path('app/public/presentations/'. $presentation->id . '/' . $presentation->id . '.' . $file_extension), file_get_contents($file));
 
         File::makeDirectory(public_path('data/presentations/'. $presentation->id), 0755, true, true);
 
-        proc_open('php ' . base_path('artisan') . ' presentation:process ' . $presentation->id . ' > /dev/null &', [], $pipes);
+        proc_open('php ' . base_path('artisan') . ' presentation:process ' . $presentation->id . ' ' . $type . ' > /dev/null &', [], $pipes);
 
         return redirect()->route('presentations.show', $presentation->id)->with('success', __('Presentation created'));
     }

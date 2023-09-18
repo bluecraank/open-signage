@@ -29,6 +29,12 @@ html {
     height: inherit;
 }
 
+.slide video {
+    width: 100%;
+    height: inherit;
+    object-fit: cover;
+}
+
 .lds-ripple {
     display: inline-block;
     position: relative;
