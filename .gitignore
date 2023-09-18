@@ -19,3 +19,4 @@ yarn-error.log
 /.vscode
 /public/data/presentations
 stack.env
+docker-compose.yml
