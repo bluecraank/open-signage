@@ -20,7 +20,7 @@
 
                         @can('delete presentations')
                             <form action="{{ route('presentations.destroy', $presentation->id) }}" method="POST"
-                                onsubmit="return confirm('{{ __('Are you sure to delete this presentation?') }}')">
+                                onsubmit="return confirm('{{ __('Are you sure to delete this template?') }}')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="button is-danger is-smalls">{{ __('Delete template') }}</button>
@@ -48,23 +48,25 @@
                                 </div>
 
                                 <div class="field">
-                                    <label class="label">{{ __('Upload new pdf') }}</label>
+                                    <label class="label">{{ __('Upload new file') }}</label>
                                     <div class="file has-name" id="file-upload">
                                         <label class="file-label">
-                                            <input class="file-input" type="file" name="file" accept=".pdf">
+                                            <input class="file-input" type="file" name="file" accept="application/pdf,video/mp4">
                                             <span class="file-cta">
                                                 <span class="file-icon">
                                                     <i class="mdi mdi-upload"></i>
                                                 </span>
                                                 <span class="file-label">
-                                                    {{ __('Select pdf') }}...
+                                                    {{ __('Select file') }}...
                                                 </span>
                                             </span>
                                             <span class="file-name">
                                                 {{ __('No file selected') }} (max: 100 Mb)
                                             </span>
                                         </label>
+
                                     </div>
+                                        <span class="help is-danger">{{ __('Uploading new file will delete all slides!') }}</span>
 
                                     <script>
                                         const fileInput = document.querySelector('#file-upload input[type=file]');
