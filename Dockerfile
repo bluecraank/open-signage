@@ -16,8 +16,6 @@ RUN apt-get update && \
 # Install Node.js & NPM
 RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_VERSION.x | bash - &&\
     apt-get install -y nodejs
-RUN npm install cross-env
-RUN npm install -g yarn
 RUN npm install -g npm
 
 # Install Composer
