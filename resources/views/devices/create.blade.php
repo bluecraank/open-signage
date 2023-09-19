@@ -18,10 +18,10 @@
                     <input required type="text" class="input" name="name" placeholder="Name">
                 </div>
 
-                <div class="field">
+                {{-- <div class="field">
                     <label class="label">{{ __('IP Address') }}<span class="has-text-danger">*</span></label>
                     <input required type="text" class="input" name="ip_address" placeholder="{{ __('IP Address') }}">
-                </div>
+                </div> --}}
 
                 <div class="field">
                     <label class="label">{{ __('Location') }}</label>

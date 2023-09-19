@@ -1,4 +1,4 @@
-<div wire:poll>
+<div wire:poll.10s>
     @if ($currentPresentation)
         <span class="processing_info is-flex is-align-content-center">
             <span class="loader"></span>
