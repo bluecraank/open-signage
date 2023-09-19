@@ -62,7 +62,7 @@
                                     1
                                 @else
                                     0 @endif;">
-                    <video autoplay muted>
+                    <video autoplay>
                         <source src="{{ $slide['url'] }}" type="video/mp4">
                     </video>
                 </div>
