@@ -13,17 +13,17 @@ class MonitorController extends Controller
         $device = Device::where('secret', $secret)->first();
 
         if(!$device) {
-            return json_encode(['error' => "Device not found."]);
+            return view('unassigned', ['error' => "no_device"]);
         }
 
         if(!$device->registered) {
-            return "<meta http-equiv='refresh' content='1'>".json_encode(['error' => "Device not registered."]);
+            return view('unassigned', ['error' => "not_registered"]);
         }
 
         $presentation = $device->getPresentation();
 
         if(!$presentation) {
-            return view('unassigned');
+            return view('unassigned', ['error' => "no_pres_assigned"]);
         }
 
         $slides = $presentation->slides()->orderBy('order')->get();
@@ -83,6 +83,8 @@ class MonitorController extends Controller
         $device->current_slide = $request->input('currentSlide');
         $device->startup_timestamp = $datetime;
         $device->touch('last_seen');
+
+        $device->ip_address = $request->ip();
 
         $force_reload = $device->force_reload;
         if($device->force_reload) {
