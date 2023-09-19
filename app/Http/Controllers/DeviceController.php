@@ -35,16 +35,15 @@ class DeviceController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'ip_address' => 'required|ip',
             'name' => 'required|min:2|max:255',
             'description' => 'required|min:2|max:255',
             'presentation_id' => 'nullable|integer',
             'group_id' => 'nullable|integer',
         ]);
 
+        $ip_address = "127.0.0.1";
         $name = $request->input('name');
         $description = $request->input('description');
-        $ip_address = $request->input('ip_address');
         $presentation_id = $request->input('presentation_id');
         $group_id = $request->input('group_id');
 
@@ -74,16 +73,10 @@ class DeviceController extends Controller
     {
         $secret = $request->input('secret');
 
-        $device = Device::where('secret', $secret)->first();
+        $device = Device::where('registered', false)->where('secret', $secret)->first();
 
         if(!$device) {
            abort(404);
-        }
-
-        if(!config('app.debug')) {
-            if($device->ip_address != $request->ip()) {
-                abort(403);
-            }
         }
 
         $device->active = true;
