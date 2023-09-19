@@ -147,6 +147,7 @@
     "Activate schedule": "Zeitplan aktivieren",
     "Update schedule": "Zeitplan aktualisieren",
     "No presentation assigned": "Keine Präsentation zugewiesen",
-    "Uploading new file will delete all slides!": "Das Hochladen einer neuen Datei löscht alle Folien!"
-
+    "Uploading new file will delete all slides!": "Das Hochladen einer neuen Datei löscht alle Folien!",
+    "Device not registered": "Monitor nicht registriert",
+    "Device not found": "Monitor nicht gefunden"
 }
