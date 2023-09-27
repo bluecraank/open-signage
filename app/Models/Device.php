@@ -117,11 +117,16 @@ class Device extends Model
         $diff = $now->diff($lastSeen);
         $refresh_interval = Setting::get('MONITOR_CHECK_UPDATE_TIME_SECONDS');
         $daysInSecs = $diff->format('%r%a') * 24 * 60 * 60;
+
+        // Days to positive
+        if($daysInSecs < 0) {
+            $daysInSecs = $daysInSecs * -1;
+        }
+
         $hoursInSecs = $diff->h * 60 * 60;
         $minsInSecs = $diff->i * 60;
 
         $seconds = $daysInSecs + $hoursInSecs + $minsInSecs + $diff->s;
-
         if ($seconds > $refresh_interval*2.5) {
             return '🔴';
         }
