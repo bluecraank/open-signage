@@ -32,6 +32,17 @@
     <div id="app">
         <div class="container">
             <div class="box main-box">
+
+                @if($errors->any())
+                    <div class="notification is-warning">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <form action="{{ route('devices.register') }}" method="POST">
                     @csrf
                     <div class="field">

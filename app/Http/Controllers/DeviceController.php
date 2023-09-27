@@ -176,4 +176,16 @@ class DeviceController extends Controller
 
         return redirect()->route('devices.index')->with('success', __('Device deleted'));
     }
+
+    public function discover(Request $request) {
+        $ip = request()->ip();
+
+        $device = Device::where('ip_address', $ip)->first();
+
+        if($device) {
+            return redirect()->route('devices.monitor', ['secret' => $device->secret]);
+        }
+
+        return redirect()->route('devices.register')->withErrors(['message' => __('Monitor ip address could not be found on any registered monitor')]);
+    }
 }

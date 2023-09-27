@@ -20,6 +20,7 @@
 - Create, manage, delete presentations
 - Create, manage, delete devices
 - Assign roles to users
+- Discover url for easy mass deployment
 
 # Clientside browser functions
 - Hide cursor
@@ -78,8 +79,8 @@ LDAP_ALLOWED_GROUP="CN=MIS,OU=Groups,DC=ldap,DC=server"
 
 ## Deploy
 - Example debian + chromium
-```chromium --enable-logging --log-level=2 --v=0 --kiosk --touch-events=enabled --disable-pinch --noerrdialogs --simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT' --disable-session-crashed-bubble --disable-component-update --overscroll-history-navigation=0 --disable-features=Translate --autoplay-policy=no-user-gesture-required --app=https://mis.dc.server/*```
-- or use FullPageOS
+```chromium --enable-logging --log-level=2 --v=0 --kiosk --touch-events=enabled --disable-pinch --noerrdialogs --simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT' --disable-session-crashed-bubble --disable-component-update --overscroll-history-navigation=0 --disable-features=Translate --autoplay-policy=no-user-gesture-required --app=https://mis.dc.local/discover```
+- or use FullPageOS <a href="https://github.com/guysoft/FullPageOS">https://github.com/guysoft/FullPageOS</a>
 
 # Contribution
 - Feel free to contribute and help to improve it

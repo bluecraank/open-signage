@@ -149,5 +149,6 @@
     "No presentation assigned": "Keine Präsentation zugewiesen",
     "Uploading new file will delete all slides!": "Das Hochladen einer neuen Datei löscht alle Folien!",
     "Device not registered": "Monitor nicht registriert",
-    "Device not found": "Monitor nicht gefunden"
+    "Device not found": "Monitor nicht gefunden",
+    "Monitor ip address could not be found on any registered monitor": "Monitor IP-Adresse konnte nicht bei keinem registriertem Monitor gefunden werden"
 }
