@@ -39,7 +39,7 @@
                             @php
                                 $device_pres = $device->getPresentation();
                                 $slides = $device_pres?->slides;
-                                $currentSlide = $slides?->toArray()[$device->current_slide ?? 0];
+                                $currentSlide = array_key_exists($device->current_slide ?? 0, $slides?->toArray()) ? $slides?->toArray()[$device->current_slide ?? 0] : $slides?->toArray()[0];
                                 $preview = $currentSlide['publicpreviewpath'] ?? '/data/img/placeholder.png';
                             @endphp
                             <img width="150" src="{{ $preview }}" alt="">
