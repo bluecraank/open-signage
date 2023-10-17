@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="field">
-                    <label class="label">{{ __('Upload pdf') }}<span class="has-text-danger">*</span></label>
+                    <label class="label">{{ __('Upload file') }}<span class="has-text-danger">*</span></label>
                     <div class="file has-name" id="file-upload">
                         <label class="file-label">
                             <input class="file-input" type="file" name="file" accept="application/pdf,video/mp4">
