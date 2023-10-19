@@ -16,7 +16,7 @@
                     <div class="column is-4">
                         @php
                             $slides = $device->getPresentation()?->slides;
-                            $currentSlide = $slides?->toArray()[$device->current_slide ?? 0];
+                            $currentSlide = array_key_exists($device->current_slide ?? 0, $slides?->toArray()) ? $slides?->toArray()[$device->current_slide ?? 0] : $slides?->toArray()[0];
                             $preview = $currentSlide['publicpreviewpath'] ?? config('app.placeholder_image');
                         @endphp
                         <img width="500" class="monitor-border" src="{{ $preview }}" alt="">
@@ -51,6 +51,13 @@
                                     {{ $device->getPresentation()?->name ?? __('No template assigned') }}
                                     <br> <small><i class="mdi mdi-checkbox-marked-circle-outline"></i>
                                         {{ __('Inherited by group') }}</small>
+                                </p>
+                            @elseif($device->presentationFromSchedule())
+                                <p><b>{{ __('Assigned template') }}:</b>
+                                    {{ $device->getPresentation()?->name ?? __('No template assigned') }}
+                                    <br> <small><i class="mdi mdi-checkbox-marked-circle-outline"></i>
+                                        {{ __('Inherited by schedule') }} - <a
+                                            href="{{ route('schedules.show', $device->getPresentationId()) }}">{{ __('Go to schedule') }}</a></small>
                                 </p>
                             @else
                                 <p><b>{{ __('Assigned template') }}:</b>
