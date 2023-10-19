@@ -38,10 +38,17 @@ RUN git clone https://github.com/bluecraank/open-signage.git /var/www/html
 COPY .env.example /var/www/html/.env
 
 # Apache configuration
-RUN a2enmod rewrite
+RUN a2enmod rewrite headers remoteip
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+# Get real remote ip over proxy
+RUN echo "<IfModule remoteip_module>" >> /etc/apache2/conf-available/remoteip.conf
+RUN echo "RemoteIPHeader X-Forwarded-For" >> /etc/apache2/conf-available/remoteip.conf
+RUN echo "RemoteIPInternalProxy 172.18.0.0/16" >> /etc/apache2/conf-available/remoteip.conf
+RUN echo "</IfModule>" >> /etc/apache2/conf-available/remoteip.conf
+RUN a2enconf remoteip
 
 RUN touch /var/www/html/storage/logs/laravel.log
 RUN chown -R www-data:www-data /var/www/html/storage/logs/laravel.log
