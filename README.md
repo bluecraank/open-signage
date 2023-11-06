@@ -31,7 +31,10 @@
 
 
 # Configuration
-## Configure .env
+## Docker
+- Edit docker-compose.yml to your needs
+## Native
+- Move env.example to .env
 - Setup LDAP Connection
 ```
 LDAP_LOGGING=true
@@ -47,10 +50,13 @@ LDAP_TLS=false
 LDAP_SASL=false
 LDAP_ALLOWED_GROUP="CN=MIS,OU=Groups,DC=ldap,DC=server"
 ```
+- Setup Database connection (Default: sqlite)
 
 # Installation
-## Docker installation
-- Create stack.env and set necessary variables
+## Docker-compose installation
+- Build image with ```docker build -t open-signage/open-signage:latest```
+- Edit "image" in docker-compose to your tagged image name 
+- Edit "environment" in docker-compose to your need
 - ```sudo docker compose up```
 - ```sudo docker ps``` and grab container id for open-signage-app
 - ```sudo docker exec ID php artisan migrate```
@@ -70,17 +76,20 @@ LDAP_ALLOWED_GROUP="CN=MIS,OU=Groups,DC=ldap,DC=server"
 - ```cd open-signage```
 - ```php artisan migrate --force```
 - ```php artisan db:seed```
-- Serve with ```php artisan serve```
-- Or use apache/nginx/caddy and configure root directory to ./public
+- Serve with ```php artisan serve``` (Not recommended)
+- Use apache/nginx/caddy and configure root directory to ./public
 
-## Word about reverse proxy
+## Words about reverse proxy
 - If you use a reverse proxy to serve this app, set PROXY_URL in env file
 ```PROXY_URL="https://open-signage.company.com```
+- Make sure your proxy expose real ip-address of client, so open-signage can recognize monitors and redirect them to correct presentation
 
 ## Deploy
-- Example debian + chromium
+- Example chromium
 ```chromium --enable-logging --log-level=2 --v=0 --kiosk --touch-events=enabled --disable-pinch --noerrdialogs --simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT' --disable-session-crashed-bubble --disable-component-update --overscroll-history-navigation=0 --disable-features=Translate --autoplay-policy=no-user-gesture-required --app=https://mis.dc.local/discover```
 - or use FullPageOS <a href="https://github.com/guysoft/FullPageOS">https://github.com/guysoft/FullPageOS</a>
+### SSL Errors
+- Add --ignore-certificate-errors to chromium flags
 
 # Contribution
 - Feel free to contribute and help to improve it
