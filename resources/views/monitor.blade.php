@@ -147,27 +147,25 @@
 
                 console.log('[MISMANAGER] Triggering next slide');
 
-                if (document.hasFocus()) {
-                    $(slides[currentSlide]).animate({
-                        'opacity': '0'
-                    }, {{ \App\Models\Setting::get('SLIDE_OUT_TIME_MS') }});
+                $(slides[currentSlide]).animate({
+                    'opacity': '0'
+                }, {{ \App\Models\Setting::get('SLIDE_OUT_TIME_MS') }});
 
-                    if (slides[currentSlide].querySelector('video')) {
-                        let video = slides[currentSlide].querySelector('video');
-                        video.pause();
-                        video.currentTime = 0;
-                    }
+                if (slides[currentSlide].querySelector('video')) {
+                    let video = slides[currentSlide].querySelector('video');
+                    video.pause();
+                    video.currentTime = 0;
+                }
 
-                    currentSlide = (currentSlide + 1) % slides.length;
-                    $(slides[currentSlide]).animate({
-                        'opacity': '1'
-                    }, {{ \App\Models\Setting::get('SLIDE_IN_TIME_MS') }});
+                currentSlide = (currentSlide + 1) % slides.length;
+                $(slides[currentSlide]).animate({
+                    'opacity': '1'
+                }, {{ \App\Models\Setting::get('SLIDE_IN_TIME_MS') }});
 
-                    // Play video
-                    if (slides[currentSlide].querySelector('video')) {
-                        let video = slides[currentSlide].querySelector('video');
-                        video.play();
-                    }
+                // Play video
+                if (slides[currentSlide].querySelector('video')) {
+                    let video = slides[currentSlide].querySelector('video');
+                    video.play();
                 }
             }
         });
