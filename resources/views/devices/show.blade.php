@@ -16,8 +16,12 @@
                     <div class="column is-4">
                         @php
                             $slides = $device->getPresentation()?->slides;
-                            $currentSlide = array_key_exists($device->current_slide ?? 0, $slides?->toArray()) ? $slides?->toArray()[$device->current_slide ?? 0] : $slides?->toArray()[0];
-                            $preview = $currentSlide['publicpreviewpath'] ?? config('app.placeholder_image');
+                            if($slides?->toArray() != null) {
+                                $currentSlide = array_key_exists($device->current_slide ?? 0, $slides?->toArray()) ? $slides?->toArray()[$device->current_slide ?? 0] : $slides?->toArray()[0];
+                                $preview = $currentSlide['publicpreviewpath'] ?? config('app.placeholder_image');
+                            } else {
+                                $preview = config('app.placeholder_image');
+                            }
                         @endphp
                         <img width="500" class="monitor-border" src="{{ $preview }}" alt="">
 
