@@ -140,6 +140,9 @@ class PresentationController extends Controller
 
         }
 
+        // Fix white screen bug
+        $presentation->timestamps = false;
+
         $presentation->save();
 
         return redirect()->back()->with('success', __('Presentation updated'));
