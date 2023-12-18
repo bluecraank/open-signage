@@ -18,7 +18,7 @@ class SettingsController extends Controller
     {
         $request->validate([
             'MONITOR_REFRESH_TIME_SECONDS' => 'required|numeric|min:1',
-            'MONITOR_CHECK_UPDATE_TIME_SECONDS' => 'required|numeric|min:1',
+            // 'MONITOR_CHECK_UPDATE_TIME_SECONDS' => 'required|numeric|min:1',
             'SLIDE_IN_TIME_MS' => 'required|numeric|min:100',
             'SLIDE_OUT_TIME_MS' => 'required|numeric|min:100',
             'INTERVAL_NEXT_SLIDE_MS' => 'required|numeric|min:1000',
