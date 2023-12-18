@@ -93,6 +93,46 @@
 
         launchFullscreen(document.documentElement);
 
+        // Check for updates
+        var last_update = {{ $last_update }};
+        var startup_timestamp = {{ time() }};
+
+        function giveServerUpdate() {
+            $.ajax({
+                url: '/api/devices/monitor/update',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    last_update: last_update,
+                    startup_timestamp: startup_timestamp,
+                    presentation_id: {{ $device->getPresentationId() }},
+                    currentSlide: currentSlide,
+                    secret: '{{ $device->secret }}'
+                },
+                success: function(data) {
+                    data = JSON.parse(data);
+                    if (data.last_update != last_update) {
+                        console.log("[MISMANAGER] A new update is available, reloading page");
+                        location.reload();
+                    }
+
+                    if (data.presentation_id != {{ $device->getPresentationId() }}) {
+                        console.log("[MISMANAGER] A new presentation was assigned, reloading page");
+                        location.reload();
+                    }
+
+                    if (data.force_reload) {
+                        console.log("[MISMANAGER] A force reload was requested, reloading page");
+                        location.reload();
+                    }
+                },
+                error: function(data) {
+                    console.log("[MISMANAGER] An error occured while checking for updates");
+                },
+                timeout: 5000
+            });
+        }
+
         $(document).ready(function() {
 
             // Set trigger for page reload
@@ -158,6 +198,10 @@
                 }
 
                 currentSlide = (currentSlide + 1) % slides.length;
+
+                // Update informations
+                giveServerUpdate();
+
                 $(slides[currentSlide]).animate({
                     'opacity': '1'
                 }, {{ \App\Models\Setting::get('SLIDE_IN_TIME_MS') }});
@@ -169,46 +213,6 @@
                 }
             }
         });
-
-        // Check for updates
-        let last_update = {{ $last_update }};
-        let startup_timestamp = {{ time() }};
-
-        let checkUpdate = setInterval(function() {
-            $.ajax({
-                url: '/api/devices/monitor/update',
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    last_update: last_update,
-                    startup_timestamp: startup_timestamp,
-                    presentation_id: {{ $device->getPresentationId() }},
-                    currentSlide: currentSlide,
-                    secret: '{{ $device->secret }}'
-                },
-                success: function(data) {
-                    data = JSON.parse(data);
-                    if (data.last_update != last_update) {
-                        console.log("[MISMANAGER] A new update is available, reloading page");
-                        location.reload();
-                    }
-
-                    if (data.presentation_id != {{ $device->getPresentationId() }}) {
-                        console.log("[MISMANAGER] A new presentation was assigned, reloading page");
-                        location.reload();
-                    }
-
-                    if (data.force_reload) {
-                        console.log("[MISMANAGER] A force reload was requested, reloading page");
-                        location.reload();
-                    }
-                },
-                error: function(data) {
-                    console.log("[MISMANAGER] An error occured while checking for updates");
-                },
-                timeout: 5000
-            });
-        }, {{ \App\Models\Setting::get('MONITOR_CHECK_UPDATE_TIME_SECONDS') }} * 1000);
     </script>
 
 </body>

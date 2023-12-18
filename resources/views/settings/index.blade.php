@@ -33,7 +33,7 @@
                         </div>
                     </div>
 
-                    <div class="columns">
+                    {{-- <div class="columns">
                         <div class="column is-4 is-flex is-align-content-center is-flex-wrap-wrap">
                             <div class="field is-fullwidth">
                                 <label class="label">MONITOR_CHECK_UPDATE_TIME_SECONDS</label>
@@ -47,7 +47,7 @@
                                 <p>Interval request to server to check for updates. Value in seconds | Default: 30</p>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="columns">
                         <div class="column is-4 is-flex is-align-content-center is-flex-wrap-wrap">
