@@ -79,12 +79,12 @@
                             @livewire('poll-presentation-process')
                         </div>
                         <div class="navbar-item">
-                            {{ strtolower(Auth::user()->email) }}
-                            <form class="pl-3" id="logout-form" action="/logout" method="POST">
+                            {{ __('Logged in as') }} {{ Auth::user()->name }}
+                            {{-- <form class="pl-3" id="logout-form" action="/logout" method="POST">
                                 @csrf
                                 <a class="has-text-grey-light"
                                     onclick="document.getElementById('logout-form').submit()">{{ __('Logout') }}</a>
-                            </form>
+                            </form> --}}
                         </div>
                     </div>
                 </div>
