@@ -22,6 +22,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        WindowsAuthenticate::serverKey('X-Authentik-Username');
+        WindowsAuthenticate::serverKey('HTTP_X_AUTHENTIK_USERNAME');
+        WindowsAuthenticate::bypassDomainVerification();
     }
 }
