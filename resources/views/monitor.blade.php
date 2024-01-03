@@ -11,6 +11,10 @@
 </head>
 
 <body>
+    <div class="no-connection">
+        {{ __('No connection to server') }}
+    </div>
+
     @if (\App\Models\Setting::get('LOADING_BACKGROUND_TYPE') == 'color')
         <style>
             .loading {
@@ -110,6 +114,7 @@
                     secret: '{{ $device->secret }}'
                 },
                 success: function(data) {
+                    $(".no-connection").fadeOut(200);
                     data = JSON.parse(data);
                     if (data.last_update != last_update) {
                         console.log("[MISMANAGER] A new update is available, reloading page");
@@ -128,6 +133,7 @@
                 },
                 error: function(data) {
                     console.log("[MISMANAGER] An error occured while checking for updates");
+                    $(".no-connection").fadeIn(200);
                 },
                 timeout: 5000
             });

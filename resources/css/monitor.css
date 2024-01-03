@@ -114,3 +114,20 @@ html {
     padding-top: 20px;
     transform: translateX(-50%);
 }
+
+.no-connection {
+    background-color: #ef4242;
+    color: #fff;
+    padding: 10px;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    z-index: 999;
+    width: fit-content;
+    font-size: 11px;
+    border-radius: 5px;
+    font-family: Arial;
+    text-transform: uppercase;
+    text-align: center;
+    display: none;
+}
