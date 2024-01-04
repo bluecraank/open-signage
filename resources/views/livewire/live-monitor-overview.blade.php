@@ -1,4 +1,4 @@
-<div class="card has-table" wire:poll.5s>
+<div class="card has-table" wire:poll.10s>
     <header class="card-header">
         <p class="card-header-title">
             {{ __('Devices') }}
