@@ -86,7 +86,7 @@
                                     <a class="has-text-grey-light"
                                         onclick="document.getElementById('logout-form').submit()">{{ __('Logout') }}</a>
                                 </form>
-                            @else
+                            @endif
                         </div>
                     </div>
                 </div>
