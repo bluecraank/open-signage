@@ -34,7 +34,7 @@ RUN chmod +x /usr/local/bin/install-php-extensions && \
 
 # Clone source code if not downloaded
 RUN rm -rf /var/www/html
-RUN git clone -b authentik-sso https://github.com/bluecraank/open-signage.git /var/www/html
+RUN git clone https://github.com/bluecraank/open-signage.git /var/www/html
 COPY .env.example /var/www/html/.env
 
 # Apache configuration
