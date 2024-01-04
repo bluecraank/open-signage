@@ -80,11 +80,13 @@
                         </div>
                         <div class="navbar-item">
                             {{ __('Logged in as') }} {{ Auth::user()->name }}
-                            {{-- <form class="pl-3" id="logout-form" action="/logout" method="POST">
-                                @csrf
-                                <a class="has-text-grey-light"
-                                    onclick="document.getElementById('logout-form').submit()">{{ __('Logout') }}</a>
-                            </form> --}}
+                            @if (!config('app.sso_enabled') || !isset($_SERVER[config('app.sso_http_header_user_key')]))
+                                <form class="pl-3" id="logout-form" action="/logout" method="POST">
+                                    @csrf
+                                    <a class="has-text-grey-light"
+                                        onclick="document.getElementById('logout-form').submit()">{{ __('Logout') }}</a>
+                                </form>
+                            @else
                         </div>
                     </div>
                 </div>
