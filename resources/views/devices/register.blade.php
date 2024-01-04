@@ -46,7 +46,7 @@
                 <form action="{{ route('devices.register') }}" method="POST">
                     @csrf
                     <div class="field">
-                        <label class="label">{{ __('Enter secret key') }}:</label>
+                        <label class="label">{{ __('Enter identification key') }}:</label>
                         <input class="input" type="text" name="secret"  placeholder="Secret Key">
                     </div>
 
