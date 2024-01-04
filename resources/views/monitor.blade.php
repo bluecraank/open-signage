@@ -140,10 +140,27 @@
         }
 
         $(document).ready(function() {
-
-            // Set trigger for page reload
-            setTimeout(function() {
-                reload_page()
+                // Set trigger for page reload
+                setTimeout(function() {
+                    $.ajax({
+                    url: '/api/devices/monitor/update',
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        last_update: last_update,
+                        startup_timestamp: startup_timestamp,
+                        presentation_id: {{ $device->getPresentationId() }},
+                        currentSlide: currentSlide,
+                        secret: '{{ $device->secret }}'
+                    },
+                    success: function(data) {
+                        reload_page();
+                    },
+                    error: function(data) {
+                        console.log("[MISMANAGER] An error occured while checking for updates");
+                    },
+                    timeout: 5000
+                });
             }, {{ \App\Models\Setting::get('MONITOR_REFRESH_TIME_SECONDS') }} * 1000)
 
             // Hide cursor
