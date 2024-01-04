@@ -21,7 +21,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        WindowsAuthenticate::serverKey(config('app.sso_http_header_user_key'));
+        if(config('app.sso_enabled')) {
+            WindowsAuthenticate::serverKey(config('app.sso_http_header_user_key'));
+        }
 
         if(config('app.sso_bypass_domain_verification')) {
             WindowsAuthenticate::bypassDomainVerification();
