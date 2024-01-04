@@ -73,7 +73,7 @@ class DeviceController extends Controller
     {
         $secret = $request->input('secret');
 
-        $device = Device::where('registered', false)->where('secret', $secret)->first();
+        $device = Device::where('secret', $secret)->first();
 
         if(!$device) {
            abort(404);
@@ -81,6 +81,7 @@ class DeviceController extends Controller
 
         $device->active = true;
         $device->registered = true;
+        $device->ip = $request->ip();
 
         $device->save();
 
