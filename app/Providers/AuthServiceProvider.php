@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use LdapRecord\Laravel\Middleware\WindowsAuthenticate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,6 +21,10 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        WindowsAuthenticate::serverKey(config('app.sso_http_header_user_key'));
+
+        if(config('app.sso_bypass_domain_verification')) {
+            WindowsAuthenticate::bypassDomainVerification();
+        }
     }
 }
