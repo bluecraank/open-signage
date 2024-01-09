@@ -81,7 +81,7 @@ class DeviceController extends Controller
 
         $device->active = true;
         $device->registered = true;
-        $device->ip = $request->ip();
+        $device->ip_address = $request->ip();
 
         $device->save();
 
