@@ -87,14 +87,14 @@
                                 @if ($device->presentationFromGroup())
                                     <p><b>{{ __('Assigned template') }}:</b>
                                         {{ $device->getPresentation()?->name ?? __('No template assigned') }}
-                                        <br> <small><i class="mdi mdi-checkbox-marked-circle-outline"></i>
+                                        <br> <small class="has-text-success"><i class="mdi mdi-checkbox-marked-circle-outline"></i>
                                             {{ __('Inherited by group') }} - <a
                                                 href="{{ route('groups.show', $device->group->id) }}">{{ __('Go to group') }}</a></small>
                                     </p>
                                 @elseif($device->presentationFromSchedule())
                                     <p><b>{{ __('Assigned template') }}:</b>
                                         {{ $device->getPresentation()?->name ?? __('No template assigned') }}
-                                        <br> <small><i class="mdi mdi-checkbox-marked-circle-outline"></i>
+                                        <br> <small class="has-text-success"><i class="mdi mdi-checkbox-marked-circle-outline"></i>
                                             {{ __('Inherited by schedule') }} - <a
                                                 href="{{ route('schedules.show', $device->getPresentationId()) }}">{{ __('Go to schedule') }}</a></small>
                                     </p>
@@ -102,12 +102,12 @@
                                     <div class="field">
                                         <label class="label">{{ __('Assigned template') }}</label>
                                         <div class="select is-fullwidth">
-                                            <select name="presentation_id">
+                                            <select name="presentation_id" required>
                                                 <option value="">{{ __('No template assigned') }}</option>
                                                 @foreach ($presentations as $presentation)
                                                     <option @if ($device->getPresentationId() == $presentation->id) selected @endif
                                                         value="{{ $presentation->id }}"
-                                                        @if ($presentation->id == $device->getPresentationId()) selected @endif>{{ $presentation->name }}
+                                                        @if (!$presentation->processed) disabled @endif>{{ $presentation->name }} @if (!$presentation->processed) ({{ __('In process') }}) @endif
                                                     </option>
                                                 @endforeach
                                             </select>

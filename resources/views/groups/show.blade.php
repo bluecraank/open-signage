@@ -65,14 +65,16 @@
                                             <label class="label">{{ __('Assigned template') }}<span
                                                     class="has-text-danger">*</span></label>
                                             <div class="select is-fullwidth">
-                                                <select name="presentation_id" id="">
-                                                    <option value="0">{{ __('Select a template') }}...</option>
-                                                    @foreach ($presentations as $presentation)
-                                                        <option @if ($presentation->id == $group->presentation_id) selected @endif
-                                                            value="{{ $presentation->id }}">{{ $presentation->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
+                                                    <select name="presentation_id">
+                                                        <option value="">{{ __('No template assigned') }}</option>
+                                                        @foreach ($presentations as $presentation)
+                                                            <option @if ($group->presentation_id == $presentation->id) selected @endif
+                                                                value="{{ $presentation->id }}"
+                                                                @if (!$presentation->processed) disabled @endif>{{ $presentation->name }} @if (!$presentation->processed) ({{ __('In process') }}) @endif
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                                                            </div>
                                         </div>
 
                                         @can('assign device to group')

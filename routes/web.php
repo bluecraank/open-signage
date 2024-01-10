@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\MonitorController;
 use App\Http\Controllers\PresentationController;
 use App\Http\Controllers\SlideController;
@@ -97,6 +98,10 @@ Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
     Route::prefix('settings')->middleware('can:manage settings')->group(function () {
         Route::get('/', [SettingsController::class, 'index'])->name('settings.index');
         Route::put('/', [SettingsController::class, 'update'])->name('settings.update');
+    });
+
+    Route::prefix('logs')->middleware('can:read logs')->group(function () {
+        Route::get('/', [LogController::class, 'index'])->name('logs.index');
     });
 });
 

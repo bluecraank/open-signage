@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Device;
+use App\Models\Log;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SettingsController extends Controller
 {
@@ -30,15 +32,23 @@ class SettingsController extends Controller
 
         $settings = Setting::all()->keyBy('key')->toArray();
 
+        $updatedSettings = [];
+
         foreach ($request->all() as $key => $value) {
             if (isset($settings[$key]) && $settings[$key]['value'] != $value) {
-                $settings[$key]['value'] = $value;
+                $updatedSettings[$key]['value'] = $value;
             }
         }
 
         $forceReload = false;
-        foreach ($settings as $key => $value) {
+        foreach ($updatedSettings as $key => $value) {
             Setting::where('key', $key)->update(['value' => $value['value']]);
+
+            Log::create([
+                'ip_address' => request()->ip(),
+                'username' => Auth::user()->name,
+                'action' => __('log.setting_updated', ['name' => $key, 'value' => $value['value']]),
+            ]);
 
             $forceReload = true;
         }

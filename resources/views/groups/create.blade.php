@@ -32,11 +32,13 @@
                 <div class="field">
                     <label class="label">{{ __('Template') }}<span class="has-text-danger">*</span></label>
                     <div class="select is-fullwidth">
-                        <select required name="presentation_id" id="">
+                        <select required name="presentation_id">
                             <option value="0">{{ __('Select a template') }}...</option>
                             @foreach ($presentations as $presentation)
-                                <option value="{{ $presentation->id }}">{{ $presentation->name }}</option>
-                            @endforeach
+                            <option value="{{ $presentation->id }}"
+                                @if (!$presentation->processed) disabled @endif>{{ $presentation->name }} @if (!$presentation->processed) ({{ __('In process') }}) @endif
+                            </option>
+                        @endforeach
                         </select>
                     </div>
                 </div>

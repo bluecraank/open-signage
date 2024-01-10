@@ -7,6 +7,7 @@ use App\Models\Group;
 use App\Models\Presentation;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
 {
@@ -52,9 +53,9 @@ class ScheduleController extends Controller
         }
 
         $enabled = true;
-        if($request->has('submit_without_enable')) {
-            $enabled = false;
-        }
+        // if($request->has('submit_without_enable')) {
+        //     $enabled = false;
+        // }
 
         // Date to timestamp
         $start_date = strtotime($request->start_date);
@@ -68,6 +69,7 @@ class ScheduleController extends Controller
             'groups' => $request->groups ?? [],
             'presentation_id' => $request->presentation_id,
             'enabled' => $enabled,
+            'created_by' => Auth::user()->name ?? 'N/A'
         ]);
 
         return redirect()->route('schedules.index')->with('success', __('Schedule created'));

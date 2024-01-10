@@ -24,7 +24,7 @@
                     <label class="label">{{ __('Upload file') }}<span class="has-text-danger">*</span></label>
                     <div class="file has-name" id="file-upload">
                         <label class="file-label">
-                            <input class="file-input" type="file" name="file" accept="application/pdf,video/mp4">
+                            <input class="file-input" type="file" name="file" required accept="application/pdf,video/mp4">
                             <span class="file-cta">
                                 <span class="file-icon">
                                     <i class="mdi mdi-upload"></i>

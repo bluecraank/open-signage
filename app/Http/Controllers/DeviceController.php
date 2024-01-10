@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Device;
 use App\Models\Group;
+use App\Models\Log;
 use App\Models\Presentation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DeviceController extends Controller
 {
@@ -83,6 +85,12 @@ class DeviceController extends Controller
         $device->registered = true;
         $device->ip_address = $request->ip();
 
+        Log::create([
+            'username' => "System",
+            'ip_address' => request()->ip(),
+            'action' => __('log.device_registered', ['name' => $device->name]),
+        ]);
+
         $device->save();
 
         return redirect()->route('devices.monitor', ['secret' => $device->secret]);
@@ -99,7 +107,7 @@ class DeviceController extends Controller
             return redirect()->route('devices.index');
         }
 
-        $presentations = Presentation::where('processed', true)->get();
+        $presentations = Presentation::get();
 
         return view('devices.show', compact('device', 'presentations'));
     }
@@ -141,7 +149,11 @@ class DeviceController extends Controller
         $device->name = $name;
         $device->description = $description;
 
-
+        Log::create([
+            'ip_address' => request()->ip(),
+            'username' => Auth::user()->name,
+            'action' => __('log.device_updated', ['name' => $device->name]),
+        ]);
 
         $device->save();
 
@@ -158,6 +170,12 @@ class DeviceController extends Controller
 
         $device->force_reload = true;
         $device->save();
+
+        Log::create([
+            'username' => Auth::user()->name,
+            'ip_address' => request()->ip(),
+            'action' => __('log.device_force_reload', ['name' => $device->name]),
+        ]);
 
         return redirect()->back()->with('success', __('Device will reload on next update'));
     }

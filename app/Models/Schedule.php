@@ -4,9 +4,37 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Schedule extends Model
 {
+    protected static function booted(): void
+    {
+        static::created(function (Schedule $schedule) {
+            Log::create([
+                'ip_address' => request()->ip(),
+                'username' => Auth::user()->name,
+                'action' => __('log.schedule_created', ['name' => $schedule->name]),
+            ]);
+        });
+
+        static::updated(function (Schedule $schedule) {
+            Log::create([
+                'ip_address' => request()->ip(),
+                'username' => Auth::user()->name,
+                'action' => __('log.schedule_updated', ['name' => $schedule->name]),
+            ]);
+        });
+
+        static::deleted(function (Schedule $schedule) {
+            Log::create([
+                'ip_address' => request()->ip(),
+                'username' => Auth::user()->name,
+                'action' => __('log.schedule_deleted', ['name' => $schedule->name]),
+            ]);
+        });
+    }
+
     protected $fillable = [
         'name',
         'presentation_id',
@@ -14,7 +42,8 @@ class Schedule extends Model
         'groups',
         'start_time',
         'end_time',
-        'enabled'
+        'enabled',
+        'created_by',
     ];
 
     protected $casts = [

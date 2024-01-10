@@ -56,7 +56,7 @@
                             <div class="field">
                                 <label class="label">{{ __('Assigned template') }}<span class="has-text-danger">*</span></label>
                                 <div class="select is-fullwidth">
-                                    <select required name="presentation_id" id="">
+                                    <select required name="presentation_id">
                                         <option value="">{{ __('Select a template') }}...</option>
                                         @foreach ($presentations as $presentation)
                                             <option value="{{ $presentation->id }}">{{ $presentation->name }}</option>
@@ -92,7 +92,7 @@
                     </div>
 
                     <button type="submit" name="submit_with_enable" class="button is-success">{{ __('Save & enable') }}</button>
-                    <button type="submit" name="submit_without_enable" class="button is-primary">{{ __('Save') }}</button>
+                    {{-- <button type="submit" name="submit_without_enable" class="button is-primary">{{ __('Save') }}</button> --}}
                 </form>
             </div>
         </div>

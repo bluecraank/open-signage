@@ -3,9 +3,29 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Device extends Model
 {
+    protected static function booted(): void
+    {
+        static::created(function (Device $device) {
+            Log::create([
+                'ip_address' => request()->ip(),
+                'username' => Auth::user()->name,
+                'action' => __('log.device_created', ['name' => $device->name]),
+            ]);
+        });
+
+        static::deleted(function (Device $device) {
+            Log::create([
+                'ip_address' => request()->ip(),
+                'username' => Auth::user()->name,
+                'action' => __('log.device_deleted', ['name' => $device->name]),
+            ]);
+        });
+    }
+
     // The attributes that are mass assignable.
     protected $fillable = [
         'name',

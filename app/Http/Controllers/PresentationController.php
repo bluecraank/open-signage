@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Log;
 use App\Models\Presentation;
 use App\Models\Slide;
 use Illuminate\Http\Request;
@@ -115,6 +116,13 @@ class PresentationController extends Controller
         $presentation->description = "null";
 
         if($request->has('file')) {
+
+            Log::create([
+                'ip_address' => request()->ip(),
+                'username' => Auth::user()->name,
+                'action' => __('log.presentation_file_updated', ['name' => $presentation->name]),
+            ]);
+
 
             $file = $request->file('file');
 

@@ -69,6 +69,11 @@
                                     <a href="{{ route('settings.index') }}" class="navbar-item">
                                         {{ __('Monitorsettings') }}
                                     </a>
+                                    @can('read logs')
+                                        <a href="{{ route('logs.index') }}" class="navbar-item">
+                                            {{ __('Logs') }}
+                                        </a>
+                                    @endcan
                                 </div>
                             </div>
                         @endcan

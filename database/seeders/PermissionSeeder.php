@@ -41,6 +41,8 @@ class PermissionSeeder extends Seeder
         Permission::updateOrCreate(['name' => 'update schedules', 'guard_name' => 'sanctum']);
         Permission::updateOrCreate(['name' => 'delete schedules', 'guard_name' => 'sanctum']);
         Permission::updateOrCreate(['name' => 'manage settings', 'guard_name' => 'sanctum']);
+        Permission::updateOrCreate(['name' => 'read logs', 'guard_name' => 'sanctum']);
+
 
         Role::updateOrCreate(['name' => 'Super Administrator', 'guard_name' => 'sanctum'])
             ->givePermissionTo(Permission::all());
@@ -51,7 +53,9 @@ class PermissionSeeder extends Seeder
                 'read presentations',
                 'read groups',
                 'force reload monitor',
-                'register devices'
+                'register devices',
+                'read logs',
+                'read schedules'
             ]);
 
         Role::updateOrCreate(['name' => 'Manager', 'guard_name' => 'sanctum'])

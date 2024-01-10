@@ -24,7 +24,8 @@
                 <table class="table is-narrow is-striped is-hoverable is-fullwidth">
                     <thead>
                         <tr>
-                            <th>{{ __('Enabled') }}</th>
+                            {{-- <th>{{ __('Enabled') }}</th> --}}
+                            <th>{{ __('Created by') }}</th>
                             <th>Name</th>
                             <th>{{ __('Since') }}</th>
                             <th>{{ __('Until') }}</th>
@@ -36,7 +37,8 @@
                     <tbody>
                         @foreach ($activeSchedules as $schedule)
                             <tr>
-                                <td>@if($schedule->enabled) <span class="has-text-primary is-size-7">{{ __('ENABLED') }}</span> @else <span class="has-text-danger is-size-7">{{ __('DISABLED') }}</span> @endif</td>
+                                {{-- <td>@if($schedule->enabled) <span class="has-text-primary is-size-7">{{ __('ENABLED') }}</span> @else <span class="has-text-danger is-size-7">{{ __('DISABLED') }}</span> @endif</td> --}}
+                                <td>{{ $schedule->created_by }}</td>
                                 <td>{{ $schedule->name }}</td>
                                 <td>{{ $schedule->startDate() }}</td>
                                 <td>{{ $schedule->endDate() }}</td>
@@ -83,7 +85,8 @@
                         <table class="table is-narrow is-striped is-hoverable is-fullwidth">
                             <thead>
                                 <tr>
-                                    <th>{{ __('Enabled') }}</th>
+                                    {{-- <th>{{ __('Enabled') }}</th> --}}
+                                    <th>{{ __('Created by') }}</th>
                                     <th>Name</th>
                                     <th>{{ __('Starts') }}</th>
                                     <th>{{ __('Ends') }}</th>
@@ -95,7 +98,8 @@
                             <tbody>
                                 @foreach ($upcomingSchedules as $schedule)
                                     <tr>
-                                        <td>@if($schedule->enabled) <span class="has-text-primary is-size-7">{{ __('ENABLED') }}</span> @else <span class="has-text-danger is-size-7">{{ __('DISABLED') }}</span> @endif</td>
+                                        {{-- <td>@if($schedule->enabled) <span class="has-text-primary is-size-7">{{ __('ENABLED') }}</span> @else <span class="has-text-danger is-size-7">{{ __('DISABLED') }}</span> @endif</td> --}}
+                                        <td>{{ $schedule->created_by }}</td>
                                         <td>{{ $schedule->name }}</td>
                                         <td>{{ $schedule->startDate() }}</td>
                                         <td>{{ $schedule->endDate() }}</td>

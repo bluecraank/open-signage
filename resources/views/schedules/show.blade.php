@@ -115,11 +115,11 @@
                 </form>
 
                 @can('delete schedules')
-                    <form action="{{ route('schedules.destroy', ['id' => $schedule->id]) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="button is-danger is-pulled-right">{{ __('Delete') }}</button>
-                    </form>
+                <form action="{{ route('schedules.destroy', ['id' => $schedule->id]) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button style="margin-top:-35px" type="submit" class="button is-danger is-pulled-right">{{ __('Delete') }}</button>
+                </form>
                 @endcan
             </div>
         </div>

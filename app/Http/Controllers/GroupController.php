@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Device;
 use App\Models\Group;
+use App\Models\Log;
 use App\Models\Presentation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GroupController extends Controller
 {
@@ -23,7 +25,7 @@ class GroupController extends Controller
      */
     public function create()
     {
-        $presentations = Presentation::where('processed', true)->get();
+        $presentations = Presentation::get();
         $devices = Device::all();
         return view('groups.create', compact('presentations', 'devices'));
     }
@@ -63,7 +65,7 @@ class GroupController extends Controller
     {
         $group = Group::findOrFail($id);
         $devices = Device::all();
-        $presentations = Presentation::where('processed', true)->get();
+        $presentations = Presentation::get();
 
         return view('groups.show', compact('group', 'devices', 'presentations'));
     }
@@ -101,6 +103,12 @@ class GroupController extends Controller
                 $device->save();
             }
         }
+
+        Log::create([
+            'ip_address' => request()->ip(),
+            'username' => Auth::user()->name,
+            'action' => __('log.group_updated', ['name' => $group->name]),
+        ]);
 
         return redirect()->back()->with('success', __('Group updated'));
     }

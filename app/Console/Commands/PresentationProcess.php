@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Log;
 use App\Models\Presentation;
 use App\Models\Slide;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -70,6 +72,12 @@ class PresentationProcess extends Command
         File::deleteDirectory(storage_path('app/public/presentations/' . $presentation->id . '/'));
 
         $presentation->save();
+
+        Log::create([
+            'ip_address' => request()->ip(),
+            'username' => "System",
+            'action' => __('log.presentation_file_success_updated', ['name' => $presentation->name, 'type' => 'pdf', 'pages' => $pages]),
+        ]);
     }
 
     public function processVideo($presentation)
@@ -100,6 +108,12 @@ class PresentationProcess extends Command
         ]);
 
         $presentation->processed = true;
+
+        Log::create([
+            'ip_address' => request()->ip(),
+            'username' => "System",
+            'action' => __('log.presentation_file_success_updated', ['name' => $presentation->name, 'type' => 'video', 'pages' => 1]),
+        ]);
 
         File::delete(storage_path('app/public/presentations/' . $presentation->id . '/' . $presentation->id) . '.mp4');
         File::deleteDirectory(storage_path('app/public/presentations/' . $presentation->id . '/'));

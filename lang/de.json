@@ -153,5 +153,7 @@
     "Device not found": "Monitor nicht gefunden",
     "Monitor ip address could not be found on any registered monitor": "Monitor IP-Adresse konnte nicht bei keinem registriertem Monitor gefunden werden",
     "Logged in as": "Angemeldet als",
-    "No connection to server": "Keine Verbindung zum Server"
+    "No connection to server": "Keine Verbindung zum Server",
+    "In process": "Wird verarbeitet",
+    "Created by: ": "Erstellt von"
 }
