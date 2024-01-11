@@ -51,7 +51,8 @@
                                     <label class="label">{{ __('Upload new file') }}</label>
                                     <div class="file has-name" id="file-upload">
                                         <label class="file-label">
-                                            <input class="file-input" type="file" name="file" accept="application/pdf,video/mp4">
+                                            <input class="file-input" type="file" name="file"
+                                                accept="application/pdf,video/mp4">
                                             <span class="file-cta">
                                                 <span class="file-icon">
                                                     <i class="mdi mdi-upload"></i>
@@ -66,7 +67,7 @@
                                         </label>
 
                                     </div>
-                                        <span class="help is-danger">{{ __('Uploading new file will delete all slides!') }}</span>
+                                    <span class="help is-danger">{{ __('Uploading new file will delete all slides!') }}</span>
 
                                     <script>
                                         const fileInput = document.querySelector('#file-upload input[type=file]');
@@ -88,7 +89,7 @@
 
                 <hr>
 
-                <div class="subtitle pt-5">{{ __('Devices') }}</div>
+                <div class="subtitle pt-5">{{ __('Devices') }} ({{ $presentation->devices->count() }})</div>
                 <table class="table is-narrow is-striped is-hoverable is-fullwidth">
                     <thead>
                         <tr>
@@ -117,7 +118,7 @@
 
                 <hr>
 
-                <div class="subtitle pt-5">{{ __('Groups') }}</div>
+                <div class="subtitle pt-5">{{ __('Groups') }} ({{ $presentation->groups->count() }})</div>
                 <table class="table is-narrow is-striped is-hoverable is-fullwidth">
                     <thead>
                         <tr>
@@ -146,43 +147,11 @@
                 <hr>
 
                 <div class="slides pt-5">
-                    <div class="subtitle">{{ $presentation->slides->count() }} {{ __('Slides') }}</div>
                     @if (!$presentation->processed)
-                        <div class="box" style="display:flex">
-                            <button style="justify-content:center" class="button is-loading has-background-white pr-4"></button>
-                            <span style="justify-content: center"
-                                class="pl-4">{{ __('Slides are being processed, please wait...') }}</span>
-                        </div>
+                        @livewire('show-slides', ['presentation' => $presentation])
+                    @else
+                        @include('livewire.show-slides')
                     @endif
-                    @foreach ($presentation->slides as $slide)
-                        <div class="slide box">
-                            <div class="columns gapless">
-                                <img width="300" src="{{ $slide->publicpreviewpath() }}">
-                                <div class="column">
-                                    <div>Name: {{ $slide->name }}</div>
-                                    <div>{{ __('Filename') }}: {{ $slide->name_on_disk }} </div>
-                                    <div>{{ __('Order') }}: {{ $slide->order }}</div>
-                                    <div>{{ __('Created') }}: {{ $slide->created_at }}</div>
-                                    <div>&nbsp;</div>
-                                    <div><a target="_blank" href="{{ $slide->publicpath() }}">{{ __('Preview') }}</a></div>
-                                </div>
-
-                                <div class="column">
-
-                                </div>
-
-                                @can('delete slides')
-                                    <form action="{{ route('slides.destroy', $slide->id) }}" method="POST"
-                                        onsubmit="return confirm('{{ __('Are you sure to delete this slide?') }}')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="button is-danger is-smalls"><i
-                                                class="mdi mdi-trash-can"></i></button>
-                                    </form>
-                                @endcan
-                            </div>
-                        </div>
-                    @endforeach
                 </div>
             @endcan
         </div>

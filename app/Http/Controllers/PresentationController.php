@@ -146,6 +146,12 @@ class PresentationController extends Controller
 
             proc_open('php ' . base_path('artisan') . ' presentation:process ' . $presentation->id . ' ' . $type .' > /dev/null &', [], $pipes);
 
+        } else {
+            Log::create([
+                'ip_address' => request()->ip(),
+                'username' => Auth::user()->name,
+                'action' => __('log.presentation_updated', ['name' => $presentation->name]),
+            ]);
         }
 
         // Fix white screen bug

@@ -17,14 +17,6 @@ class Presentation extends Model
             ]);
         });
 
-        static::updated(function (Presentation $presentation) {
-            Log::create([
-                'ip_address' => request()->ip(),
-                'username' => Auth::user()->name,
-                'action' => __('log.presentation_updated', ['name' => $presentation->name]),
-            ]);
-        });
-
         static::deleted(function (Presentation $presentation) {
             Log::create([
                 'ip_address' => request()->ip(),
