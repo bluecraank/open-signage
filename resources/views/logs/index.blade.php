@@ -7,16 +7,11 @@
     <div class="card has-table">
         <header class="card-header">
             <p class="card-header-title">
-                {{ __('Groups') }}
+                {{ __('Activities') }}
             </p>
 
             <div class="card-header-actions">
-                @can('create groups')
-                    <a href="{{ route('groups.create') }}" class="button is-primary is-small">
-                        <span class="icon"><i class="mdi mdi-plus"></i></span>
-                        <span>{{ __('Create group') }}</span>
-                    </a>
-                @endcan
+
             </div>
         </header>
 
