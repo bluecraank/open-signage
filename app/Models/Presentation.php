@@ -32,6 +32,7 @@ class Presentation extends Model
         'description',
         'author',
         'processed',
+        'total_slides'
     ];
 
     public function devices()

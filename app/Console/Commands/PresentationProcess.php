@@ -48,6 +48,9 @@ class PresentationProcess extends Command
         $pdf = new \Spatie\PdfToImage\Pdf(storage_path('app/public/presentations/' . $presentation->id . '/' . $presentation->id) . '.pdf');
 
         $pages = $pdf->getNumberOfPages();
+        $presentation->total_slides = $pages;
+        $presentation->save();
+
         for ($i = 1; $i <= $pages; $i++) {
             $random = Str::random(7);
             $imagename = $random . '-' . $i . '.jpg';
