@@ -73,7 +73,7 @@
     "User updated": "Benutzer aktualisiert",
     "User deleted": "Benutzer gelöscht",
     "User created": "Benutzer erstellt",
-    "You must select at least one role": "Sie müssen mindestens eine Rolle auswählen",
+    "You must select a role": "Sie müssen eine Rolle auswählen",
     "You cannot delete an admin": "Sie können keinen Administrator löschen",
     "Roles updated": "Rollen aktualisiert",
     "Roles": "Rollen",
@@ -155,5 +155,10 @@
     "Logged in as": "Angemeldet als",
     "No connection to server": "Keine Verbindung zum Server",
     "In process": "Wird verarbeitet",
-    "Created by: ": "Erstellt von"
+    "Created by: ": "Erstellt von",
+    "Go to device": "Gehe zu Monitor",
+    "or drag and drop to upload": "oder Datei reinziehen zum Hochladen",
+    "File type is not supported": "Dateityp wird nicht unterstützt",
+    "Create": "Erstellen",
+    "Slides updated": "Folien aktualisiert"
 }
