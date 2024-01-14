@@ -24,3 +24,48 @@ for(var i = 0; i < calendars.length; i++) {
 		console.log(date);
 	});
 }
+
+window.checkIfFileIsNotValid = function(file) {
+    const fileType = file['type'];
+    const validImageTypes = ['application/pdf', 'video/mp4'];
+    if (!validImageTypes.includes(fileType)) {
+        alert('Invalid File Type. Only PDF and MP4 files are allowed.');
+        fileInput.value = '';
+        return true;
+    }
+    return false;
+}
+
+const fileInput = document.querySelector('#file-upload input[type=file]');
+
+fileInput.onchange = () => {
+    if (fileInput.files.length > 0) {
+        if(checkIfFileIsNotValid(fileInput.files[0])) {
+            return;
+        }
+
+        const fileName = document.querySelector('#file-upload .file-name');
+        fileName.textContent = fileInput.files[0].name;
+    }
+}
+
+window.dropHandler = function(ev) {
+    ev.preventDefault();
+
+    if(checkIfFileIsNotValid(ev.dataTransfer.files[0])) {
+        return;
+    }
+
+    if (ev.dataTransfer.files.length > 0) {
+        fileInput.files = ev.dataTransfer.files;
+        const fileName = document.querySelector('#file-upload .file-name');
+        fileName.textContent = fileInput.files[0].name;
+    }
+}
+
+window.dragOverHandler = function(ev) {
+    console.log("File(s) in drop zone");
+
+    // Prevent default behavior (Prevent file from being opened)
+    ev.preventDefault();
+}

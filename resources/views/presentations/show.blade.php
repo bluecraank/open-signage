@@ -49,39 +49,38 @@
 
                                 <div class="field">
                                     <label class="label">{{ __('Upload new file') }}</label>
-                                    <div class="file has-name" id="file-upload">
-                                        <label class="file-label">
-                                            <input class="file-input" type="file" name="file"
-                                                accept="application/pdf,video/mp4">
-                                            <span class="file-cta">
-                                                <span class="file-icon">
-                                                    <i class="mdi mdi-upload"></i>
+                                    <div id="drop_zone" ondrop="window.dropHandler(event)"
+                                        ondragover="window.dragOverHandler(event)">
+                                        <div style="display: inline-block" class="file has-name is-normal" id="file-upload">
+                                            <label class="file-label">
+                                                <input class="file-input" type="file" name="file"
+                                                    accept="application/pdf,video/mp4">
+                                                <span class="file-cta">
+                                                    <span class="file-icon">
+                                                        <i class="mdi mdi-upload"></i>
+                                                    </span>
+                                                    <span class="file-label">
+                                                        {{ __('Select file') }}...
+                                                    </span>
                                                 </span>
-                                                <span class="file-label">
-                                                    {{ __('Select file') }}...
+                                                <span class="file-name">
+                                                    {{ __('No file selected') }}
                                                 </span>
-                                            </span>
-                                            <span class="file-name">
-                                                {{ __('No file selected') }} (max: 100 Mb)
-                                            </span>
-                                        </label>
+                                            </label>
 
+                                        </div>
+                                        <p class="ml-5" style="display: inline-block">{{ __('or drag and drop to upload') }}</p>
                                     </div>
                                     <span class="help is-danger">{{ __('Uploading new file will delete all slides!') }}</span>
-
-                                    <script>
-                                        const fileInput = document.querySelector('#file-upload input[type=file]');
-                                        fileInput.onchange = () => {
-                                            if (fileInput.files.length > 0) {
-                                                const fileName = document.querySelector('#file-upload .file-name');
-                                                fileName.textContent = fileInput.files[0].name;
-                                            }
-                                        }
-                                    </script>
                                 </div>
 
                                 <label class="label">&nbsp;</label>
-                                <button type="submit" class="button is-primary">{{ __('Save') }}</button>
+                                @if ($presentation->processed)
+                                    <button type="submit" class="button is-primary">{{ __('Save') }}</button>
+                                @else
+                                    <button disabled type="button" class="button is-primary">{{ __('Save') }}
+                                        ({{ __('In process') }})</button>
+                                @endif
                             </form>
                         </div>
                     @endcan
@@ -96,6 +95,7 @@
                             <th>Name</th>
                             <th>{{ __('Location') }}</th>
                             <th>{{ __('Assigned') }}</th>
+                            <th style="width:150px">{{ __('Link') }}</th>
                         </tr>
                     </thead>
 
@@ -105,6 +105,8 @@
                                 <td>{{ $device->name }}</td>
                                 <td>{{ $device->description }}</td>
                                 <td>{{ $device->presentationFromGroup() ? __('By group') : __('Directly') }}</td>
+                                <td class="has-text-centered"><a
+                                        href="{{ route('devices.show', $device->id) }}">{{ __('Go to device') }}</a>
                             </tr>
                         @endforeach
 
@@ -124,6 +126,7 @@
                         <tr>
                             <th>Name</th>
                             <th>{{ __('Used by') }}</th>
+                            <th style="width:150px">{{ __('Link') }}</th>
                         </tr>
                     </thead>
 
@@ -133,12 +136,14 @@
                                 <td>{{ $group->name }}</td>
                                 <td>{{ $group->devices->count() }}
                                     {{ trans_choice('Device|Devices', $group->devices->count()) }}</td>
+                                <td class="has-text-centered"><a
+                                        href="{{ route('groups.show', $group->id) }}">{{ __('Go to group') }}</a>
                             </tr>
                         @endforeach
 
                         @if ($presentation->groups->count() == 0)
                             <tr>
-                                <td class="has-text-centered" colspan="2">{{ __('No groups assigned') }}</td>
+                                <td class="has-text-centered" colspan="3">{{ __('No groups assigned') }}</td>
                             </tr>
                         @endif
                     </tbody>
