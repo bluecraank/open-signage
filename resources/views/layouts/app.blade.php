@@ -119,9 +119,8 @@
                 @yield('content')
 
                 <footer>
-                    Contribute on <a href="https://github.com/bluecraank/open-signage">GitHub</a> | Build with <a
-                        href="https://laravel.com">Laravel</a>, <a href="https://bulma.io">Bulma</a> and <i
-                        class="mdi mdi-heart"></i>
+                    Build with <a href="https://laravel.com">Laravel</a>, <a href="https://bulma.io">Bulma</a> and <i
+                        class="mdi mdi-heart"></i> | v{{ config('app.version') }}
                 </footer>
             </div>
         </div>
