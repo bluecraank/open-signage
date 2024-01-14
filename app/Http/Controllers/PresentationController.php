@@ -16,7 +16,7 @@ class PresentationController extends Controller
      */
     public function index()
     {
-        $presentations = Presentation::all();
+        $presentations = Presentation::all()->sortBy('name');
         return view('presentations.index', compact('presentations'));
     }
 

@@ -16,7 +16,7 @@ class DeviceController extends Controller
      */
     public function index()
     {
-        $devices = Device::all();
+        $devices = Device::all()->sortBy('name');
         $presentation = Presentation::all()->keyBy('id')->toArray();
         return view('devices.index', ['devices' => $devices, 'presentation' => $presentation]);
     }

@@ -16,7 +16,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        $groups = Group::all();
+        $groups = Group::all()->sortBy('name');
         return view('groups.index', compact('groups'));
     }
 
@@ -44,6 +44,7 @@ class GroupController extends Controller
         $group = Group::create([
             'name' => $request->name,
             'presentation_id' => $request->presentation_id,
+            'created_by' => Auth::user()->name,
         ]);
 
         if ($request->devices) {

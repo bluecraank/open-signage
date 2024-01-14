@@ -26,7 +26,7 @@ class Group extends Model
         });
     }
 
-    protected $fillable = ['name', 'presentation_id'];
+    protected $fillable = ['name', 'presentation_id', 'created_by'];
 
     public function presentation()
     {
