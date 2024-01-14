@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                <div class="field">
+                <div class="field mb-5">
                     <label class="label">{{ __('Devices') }}<span class="has-text-danger">*</span></label>
                     <select name="devices[]" id="multiselect" multiple="multiple">
                         @foreach ($devices as $device)
@@ -53,7 +53,7 @@
                 </div>
 
                 <button type="submit" class="button is-primary">{{ __('Save') }}</button>
-                <button type="reset" class="button is-danger is-pulled-right">{{ __('Reset') }}</button>
+                <button type="reset" class="button is-danger is-light">{{ __('Reset') }}</button>
             </form>
         </div>
     </div>

@@ -27,6 +27,7 @@
                         <th>Name</th>
                         <th>{{ __('Devices assigned') }}</th>
                         <th>{{ __('Assigned template') }}</th>
+                        <th>{{ __('Created by') }}</th>
                         <th>{{ __('Actions') }}</th>
                     </tr>
                 </thead>
@@ -37,6 +38,7 @@
                             <td>{{ $group->name }}</td>
                             <td>{{ $group->devices->count() }}</td>
                             <td>{{ $group->presentation?->name ?? __('No template assigned') }}</td>
+                            <td>{{ $group->created_by }}</td>
                             <td class="actions-cell">
 
                                 <form action="{{ route('groups.destroy', ['id' => $group->id]) }}"
