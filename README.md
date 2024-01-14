@@ -5,9 +5,11 @@
 # This app is usable on any system, on any browser
 - Your monitor only need a webbrowser
 - Use Raspberry, Windows, FireTV, SmartTV or anything which has a browser with javascript
+- Not supported: Raspberry Zero 2W, Raspberry Pi 2B
+- Memory amount depends on amount of slides, i recommend at least 1GB
 
 # Usage
-- Export PowerPoint as PDF and upload document
+- Export Presentation as PDF and upload document
 - Background processing starts and generates images from each page
 - Create and register monitor
 - Assign presentation to monitor
@@ -20,7 +22,7 @@
 - Create, manage, delete presentations
 - Create, manage, delete devices
 - Assign roles to users
-- Discover url for easy mass deployment
+- Discover url for easy mass deployment (IP recognition)
 
 # Clientside browser functions
 - Hide cursor
@@ -83,11 +85,19 @@ LDAP_ALLOWED_GROUP="CN=MIS,OU=Groups,DC=ldap,DC=server"
 - If you use a reverse proxy to serve this app, set PROXY_URL in env file
 ```PROXY_URL="https://open-signage.company.com```
 - Make sure your proxy expose real ip-address of client, so open-signage can recognize monitors and redirect them to correct presentation
+## SSO
+- Set enviroment variables
+```
+SSO_ENABLED=false
+SSO_HTTP_HEADER_USER_KEY=HTTP_AUTH_USER
+SSO_BYPASS_DOMAIN_VERIFICATION=false
+```
 
 ## Deploy
 - Example chromium
 ```chromium --enable-logging --log-level=2 --v=0 --kiosk --touch-events=enabled --disable-pinch --noerrdialogs --simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT' --disable-session-crashed-bubble --disable-component-update --overscroll-history-navigation=0 --disable-features=Translate --autoplay-policy=no-user-gesture-required --app=https://mis.dc.local/discover```
 - or use FullPageOS <a href="https://github.com/guysoft/FullPageOS">https://github.com/guysoft/FullPageOS</a>
+
 ### SSL Errors
 - Add --ignore-certificate-errors to chromium flags (Not recommended, add Root-CA if internal, or fix ssl error)
 
