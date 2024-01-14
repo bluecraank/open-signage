@@ -83,7 +83,7 @@
                         <div class="navbar-item">
                             @livewire('poll-presentation-process')
                         </div>
-                        <div class="navbar-item">
+                        {{-- <div class="navbar-item">
                             {{ __('Logged in as') }} {{ Auth::user()->name }}
                             @if (!config('app.sso_enabled') || !isset($_SERVER[config('app.sso_http_header_user_key')]))
                                 <form class="pl-3" id="logout-form" action="/logout" method="POST">
@@ -92,10 +92,30 @@
                                         onclick="document.getElementById('logout-form').submit()">{{ __('Logout') }}</a>
                                 </form>
                             @endif
+                        </div> --}}
+                        <div class="navbar-item has-dropdown is-hoverable">
+                            <a class="navbar-link">
+                                <figure class="image is-32x32 mt-2 mr-2 ">
+                                    <img class="" src="https://ui-avatars.com/api/?background=random&rounded=true&name={{ Auth::user()->name }}"
+                                        alt="">
+                                </figure>
+                                {{ Auth::user()->name }}
+                            </a>
+
+                            <div class="navbar-dropdown is-right">
+                                <form id="logout-form" action="/logout" method="POST">
+                                    @csrf
+                                    <span class="navbar-item is-size-7">
+                                        {{ Auth::user()->roles->first()->name }}
+                                    </span>
+                                    <a class="navbar-item" onclick="document.getElementById('logout-form').submit()">
+                                        {{ __('Logout') }}
+                                    </a>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endauth
+                @endauth
         </nav>
     </div>
 
