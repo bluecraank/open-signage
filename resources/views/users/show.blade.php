@@ -24,7 +24,7 @@
                                         @foreach ($roles as $role)
                                             <div class="column is-2">
                                                 <label class="checkbox">
-                                                    <input @if(in_array($role->name, $user->getRoleNames()->toArray())) checked @endif type="checkbox" name="roles[]" value="{{ $role->id }}">
+                                                    <input @if(in_array($role->name, $user->getRoleNames()->toArray())) checked @endif type="radio" name="roles" value="{{ $role->id }}">
                                                     {{ $role->name }}
                                                 </label>
                                             </div>

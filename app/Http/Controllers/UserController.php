@@ -54,24 +54,23 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         $request->validate([
-            'roles' => 'nullable|array',
+            'roles' => 'integer|in:1,2,3,4',
         ]);
 
-        if(!$request->has('roles') || count($request->roles) == 0) {
-            return redirect()->route('users.show', $user->id)->withErrors(['message' =>'You must select at least one role']);
+        if(!$request->has('roles') || $request->roles == "") {
+            return redirect()->route('users.show', $user->id)->withErrors(['message' =>'You must select a role']);
         }
 
-        if($user->id == Auth::user()->id) {
-            return redirect()->route('users.show', $user->id)->withErrors(['message' => 'You cannot change your own roles']);
-        }
+        // if($user->id == Auth::user()->id) {
+        //     return redirect()->route('users.show', $user->id)->withErrors(['message' => 'You cannot change your own roles']);
+        // }
 
         // Remove every role
         $user->roles()->detach();
 
         // Add the new roles
-        foreach($request->roles as $role) {
-            $user->assignRole($role);
-        }
+        $user->assignRole($request->roles);
+
 
         return redirect()->route('users.show', $user->id)->with('success', 'Roles updated');
     }
