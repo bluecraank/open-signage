@@ -43,6 +43,10 @@
                     </div>
                 @endif
 
+                <div class="notification is-info">
+                    <span class="has-text-weight-bold">Monitor IP: {{ old('ip') }}</span>
+                </div>
+
                 <form action="{{ route('devices.register') }}" method="POST">
                     @csrf
                     <div class="field">

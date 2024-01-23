@@ -205,6 +205,6 @@ class DeviceController extends Controller
             return redirect()->route('devices.monitor', ['secret' => $device->secret]);
         }
 
-        return redirect()->route('devices.register')->withErrors(['message' => __('Monitor ip address could not be found on any registered monitor')]);
+        return redirect()->route('devices.register')->withErrors(['message' => __('Monitor ip address could not be found on any registered monitor')])->withInput(['ip' => $ip]);
     }
 }
