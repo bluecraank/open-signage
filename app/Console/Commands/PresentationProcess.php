@@ -72,6 +72,7 @@ class PresentationProcess extends Command
         File::delete(storage_path('app/public/presentations/' . $presentation->id . '/' . $presentation->id) . '.pdf');
         File::deleteDirectory(storage_path('app/public/presentations/' . $presentation->id . '/'));
 
+        $presentation->touch();
         $presentation->total_slides = $pages;
         $presentation->save();
 
