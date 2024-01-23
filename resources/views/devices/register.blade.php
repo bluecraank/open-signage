@@ -33,29 +33,32 @@
         <div class="container">
             <div class="box main-box">
 
-                @if($errors->any())
+                @if ($errors->any())
                     <div class="notification is-warning">
                         <ul>
-                            @foreach($errors->all() as $error)
+                            @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>
                     </div>
                 @endif
 
-                <div class="notification is-info">
-                    <span class="has-text-weight-bold">Monitor IP: {{ old('ip') }}</span>
-                </div>
+                @if (old('ip') != '')
+                    <div class="notification is-info">
+                        <span class="has-text-weight-bold">Monitor IP: {{ old('ip') }}</span>
+                    </div>
+                @endif
 
                 <form action="{{ route('devices.register') }}" method="POST">
                     @csrf
                     <div class="field">
                         <label class="label">{{ __('Enter identification key') }}:</label>
-                        <input class="input" type="text" name="secret"  placeholder="Secret Key">
+                        <input class="input" type="text" name="secret" placeholder="Secret Key">
                     </div>
 
                     <div class="field">
-                        <button class="button is-primary is-fullwidth" type="submit">{{ __('Register device') }}</button>
+                        <button class="button is-primary is-fullwidth"
+                            type="submit">{{ __('Register device') }}</button>
                     </div>
                 </form>
                 <footer>
