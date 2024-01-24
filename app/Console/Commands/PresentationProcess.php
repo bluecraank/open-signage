@@ -48,6 +48,9 @@ class PresentationProcess extends Command
         $pdf = new \Spatie\PdfToImage\Pdf(storage_path('app/public/presentations/' . $presentation->id . '/' . $presentation->id) . '.pdf');
 
         $pages = $pdf->getNumberOfPages();
+        $presentation->total_slides = $pages;
+        $presentation->timestamps = false;
+        $presentation->save();
 
         for ($i = 1; $i <= $pages; $i++) {
             $random = Str::random(7);
@@ -67,6 +70,7 @@ class PresentationProcess extends Command
             ]);
         }
 
+        $presentation->timestamps = true;
         $presentation->processed = true;
 
         File::delete(storage_path('app/public/presentations/' . $presentation->id . '/' . $presentation->id) . '.pdf');

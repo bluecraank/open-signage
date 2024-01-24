@@ -38,7 +38,7 @@
                             <tr>
                                 <td>{{ $presentation->name }}</td>
                                 <td>{{ $presentation->slides->count() }}</td>
-                                <td>{{ $presentation->slides->first()->created_at->format('d.m.Y H:i') }}</td>
+                                <td>{{ $presentation->slides->first()?->created_at?->format('d.m.Y H:i') ?? 'N/A' }}</td>
                                 <td>{{ $presentation->devices->count() }}
                                     {{ trans_choice('Device|Devices', $presentation->devices->count()) }},
 
