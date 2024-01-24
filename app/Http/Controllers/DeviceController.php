@@ -73,27 +73,26 @@ class DeviceController extends Controller
 
     public function register(Request $request)
     {
-        $secret = $request->input('secret');
+        $id = $request->input('id');
 
-        $device = Device::where('secret', $secret)->first();
+        $device = Device::whereId($id)->first();
 
         if(!$device) {
-           abort(404);
+           return redirect()->route('devices.index')->withErrors(['message' => __('Something went wrong!')]);
         }
 
         $device->active = true;
         $device->registered = true;
-        $device->ip_address = $request->ip();
 
         Log::create([
-            'username' => "System",
+            'username' => Auth::user()->name,
             'ip_address' => request()->ip(),
             'action' => __('log.device_registered', ['name' => $device->name]),
         ]);
 
         $device->save();
 
-        return redirect()->route('devices.monitor', ['secret' => $device->secret]);
+        return redirect()->route('devices.index')->with('success', __('Device successfully registered'));
     }
 
     /**
@@ -205,6 +204,19 @@ class DeviceController extends Controller
             return redirect()->route('devices.monitor', ['secret' => $device->secret]);
         }
 
-        return redirect()->route('devices.register')->withErrors(['message' => __('Monitor ip address could not be found on any registered monitor')])->withInput(['ip' => $ip]);
+        // Create monitor
+        $secret = bin2hex(random_bytes(4));
+        Device::create([
+            'name' => "Unknown monitor",
+            'description' => $ip,
+            'ip_address' => $ip,
+            'presentation_id' => null,
+            'secret' => $secret,
+            'group_id' => null,
+            'active' => true,
+            'registered' => false,
+        ]);
+
+        return redirect()->route('devices.monitor', ['secret' => $secret]);
     }
 }

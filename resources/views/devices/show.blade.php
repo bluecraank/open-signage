@@ -6,6 +6,18 @@
         <header class="card-header">
             <p class="card-header-title">
                 {{ __('Edit device') }}
+
+                @can('register devices')
+                    @if (!$device->registered)
+                        <div class="is-flex is-justify-content-center is-align-items-center mr-5">
+                            <form action="{{ route('devices.register.accept') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="id" value="{{ $device->id }}">
+                                <button class="button is-small is-success">{{ __('Accept and register monitor') }}</button>
+                            </form>
+                        </div>
+                    @endif
+                @endcan
             </p>
 
         </header>
@@ -16,7 +28,7 @@
                     <div class="column is-4">
                         @php
                             $slides = $device->getPresentation()?->slides;
-                            if($slides?->toArray() != null) {
+                            if ($slides?->toArray() != null) {
                                 $currentSlide = array_key_exists($device->current_slide ?? 0, $slides?->toArray()) ? $slides?->toArray()[$device->current_slide ?? 0] : $slides?->toArray()[0];
                                 $preview = $currentSlide['publicpreviewpath'] ?? config('app.placeholder_image');
                             } else {
@@ -107,7 +119,10 @@
                                                 @foreach ($presentations as $presentation)
                                                     <option @if ($device->getPresentationId() == $presentation->id) selected @endif
                                                         value="{{ $presentation->id }}"
-                                                        @if (!$presentation->processed) disabled @endif>{{ $presentation->name }} @if (!$presentation->processed) ({{ __('In process') }}) @endif
+                                                        @if (!$presentation->processed) disabled @endif>{{ $presentation->name }}
+                                                        @if (!$presentation->processed)
+                                                            ({{ __('In process') }})
+                                                        @endif
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -147,10 +162,6 @@
                     @can('register devices')
                         <div class="columns">
                             <div class="column">
-                                <p><b>{{ __('Secret') }}:</b> <br> {{ $device->secret }}</p>
-                            </div>
-
-                            <div class="column">
                                 <p><b>{{ __('Monitor URL') }}:</b> <br> <a target="_blank"
                                         href="{{ url(route('devices.monitor', $device->secret)) }}">{{ url(route('devices.monitor', $device->secret)) }}</a>
                                 </p>
@@ -175,15 +186,12 @@
                             <div class="columns">
                                 <div class="column">
                                     <div class="notification @if (!$device->registered) is-warning @else is-primary @endif">
-                                        Status: {{ $device->registered ? __('Successfully registered') : __('Not registered') }}
-                                        @if (!$device->registered)
-                                            <div>
-                                                <p><b>{!! __('Open :url on device and enter following key', [
-                                                    'url' => '<a href="' . url(route('devices.register')) . '">' . url(route('devices.register')) . '</a>',
-                                                ]) !!}:</b></p>
-                                                <b><code>{{ $device->secret }}</code></b>
+                                        <div class="is-justify-content-center is-align-content-center">
+                                            <div class="is-flex is-justify-content-center is-align-content-center">
+                                                <span
+                                                    class="has-text-weight-bold">Status: {{ $device->registered ? __('Successfully registered') : __('Please accept this monitor to register it') }}</span>
                                             </div>
-                                        @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>

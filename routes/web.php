@@ -27,7 +27,7 @@ Route::get('/devices/register', function() {
     return view('devices.register');
 })->name('devices.register');
 
-Route::post('/devices/register', [DeviceController::class, 'register']);
+// Route::post('/devices/register', [DeviceController::class, 'register']);
 
 Route::get('/monitor/{secret}', [MonitorController::class, 'show'])->name('devices.monitor');
 
@@ -47,6 +47,8 @@ Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
         Route::get('/create', [DeviceController::class, 'create'])->middleware('can:create devices')->name('devices.create');
 
         Route::post('/', [DeviceController::class, 'store'])->middleware('can:create devices')->name('devices.store');
+
+        Route::post('/register', [DeviceController::class, 'register'])->middleware('can:register devices')->name('devices.register.accept');
 
         Route::get('/{id}', [DeviceController::class, 'show'])->middleware('can:read devices')->name('devices.show');
 

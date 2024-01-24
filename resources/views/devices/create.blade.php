@@ -10,7 +10,20 @@
         </header>
 
         <div class="card-content">
-            <form action="{{ route('devices.store') }}" method="POST">
+            <div class="notification is-info">
+                <p>{{ __('To create a new device, follow these steps:') }}</p>
+            </div>
+
+            <ol class="m-5">
+                <li>Open <b>{{ url('/discover') }}</b> on monitor</li>
+                <li>If a monitor with request ip already exists, auto routing to presentation mode will be triggered</li>
+                <li>Else, open up the new monitor in admin panel and accept registration</li>
+            </ol>
+
+            <div class="notification is-info">
+                <p>{{ __('This page has been changed, its no longer possible to create a monitor manually') }}</p>
+            </div>
+            {{-- <form action="{{ route('devices.store') }}" method="POST">
                 @csrf
 
                 <div class="field">
@@ -18,10 +31,10 @@
                     <input required type="text" class="input" name="name" placeholder="Name">
                 </div>
 
-                {{-- <div class="field">
+                <div class="field">
                     <label class="label">{{ __('IP Address') }}<span class="has-text-danger">*</span></label>
                     <input required type="text" class="input" name="ip_address" placeholder="{{ __('IP Address') }}">
-                </div> --}}
+                </div>
 
                 <div class="field">
                     <label class="label">{{ __('Location') }}</label>
@@ -62,7 +75,7 @@
 
                 <button type="submit" class="button is-primary">{{ __('Save') }}</button>
                 <button type="reset" class="button is-danger is-pulled-right">{{ __('Reset') }}</button>
-            </form>
+            </form> --}}
         </div>
     </div>
 @endsection
