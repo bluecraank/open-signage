@@ -112,7 +112,7 @@
 
                         @if ($presentation->devices->count() == 0)
                             <tr>
-                                <td class="has-text-centered" colspan="3">{{ __('No devices assigned') }}</td>
+                                <td class="has-text-centered" colspan="4">{{ __('No devices assigned') }}</td>
                             </tr>
                         @endif
                     </tbody>
@@ -144,6 +144,34 @@
                         @if ($presentation->groups->count() == 0)
                             <tr>
                                 <td class="has-text-centered" colspan="3">{{ __('No groups assigned') }}</td>
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
+
+                <hr>
+
+                <div class="subtitle pt-5">{{ __('Schedules') }} ({{ $presentation->schedules()->count() }})</div>
+                <table class="table is-narrow is-striped is-hoverable is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th style="width:150px">{{ __('Link') }}</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach ($presentation->schedules() as $schedule)
+                            <tr>
+                                <td>{{ $schedule->name }}</td>
+                                <td class="has-text-centered"><a
+                                        href="{{ route('schedules.show', $schedule->id) }}">{{ __('Go to schedule') }}</a>
+                            </tr>
+                        @endforeach
+
+                        @if ($presentation->schedules()->count() == 0)
+                            <tr>
+                                <td class="has-text-centered" colspan="2">{{ __('No schedules upcoming or active with this presentation') }}</td>
                             </tr>
                         @endif
                     </tbody>

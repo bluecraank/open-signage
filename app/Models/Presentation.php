@@ -49,4 +49,15 @@ class Presentation extends Model
     {
         return $this->hasMany(Group::class);
     }
+
+    public function schedules()
+    {
+        $upcomingSchedules = Schedule::where('start_time', '>', now())->orderBy('start_time', 'asc')->get();
+        $activeSchedules = Schedule::where('start_time', '<', now())->where('end_time', '>', now())->orderBy('start_time', 'asc')->get();
+
+        $schedules = $upcomingSchedules->merge($activeSchedules);
+        $schedules = $schedules->where('presentation_id', $this->id);
+
+        return $schedules;
+    }
 }

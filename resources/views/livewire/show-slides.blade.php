@@ -53,7 +53,7 @@
                         onsubmit="return confirm('{{ __('Are you sure to delete this slide?') }}')">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="button is-danger is-smalls"><i class="mdi mdi-trash-can"></i></button>
+                        <button type="submit" class="button is-danger is-small"><i class="mdi mdi-trash-can"></i></button>
                     </form>
                 @endcan
             </div>

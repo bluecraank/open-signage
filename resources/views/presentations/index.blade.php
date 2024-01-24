@@ -39,11 +39,22 @@
                                 <td>{{ $presentation->name }}</td>
                                 <td>{{ $presentation->slides->count() }}</td>
                                 <td>{{ $presentation->slides->first()?->created_at?->format('d.m.Y H:i') ?? 'N/A' }}</td>
-                                <td>{{ $presentation->devices->count() }}
-                                    {{ trans_choice('Device|Devices', $presentation->devices->count()) }},
+                                <td>
+                                    
+                                    @if ($presentation->devices->count() > 0)
+                                        {{ $presentation->devices->count() }}
+                                        {{ trans_choice('Device|Devices', $presentation->devices->count()) }},
+                                    @endif
 
-                                    {{ $presentation->groups->count() }}
-                                    {{ trans_choice('Group|Groups', $presentation->groups->count()) }}
+                                    @if ($presentation->groups->count() > 0)
+                                        {{ $presentation->groups->count() }}
+                                        {{ trans_choice('Group|Groups', $presentation->groups->count()) }},
+                                    @endif
+
+                                    @if ($presentation->schedules()->count() > 0)
+                                        {{ $presentation->schedules()->count() }}
+                                        {{ trans_choice('Schedule|Schedules', $presentation->schedules()->count()) }},
+                                    @endif
                                 </td>
                                 <td>{{ $presentation->author }}</td>
                                 <td class="actions-cell">

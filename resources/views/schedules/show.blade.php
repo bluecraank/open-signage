@@ -92,12 +92,12 @@
                             </select>
 
                             <div class="column">
-                                <div class="field">
+                                {{-- <div class="field">
                                     <label class="label">{{ __('Activate schedule') }}</label>
                                     <input id="enabled-switch" type="checkbox" name="enabled" class="switch"
                                         @if ($schedule->enabled) checked="checked" @endif>
                                     <label for="enabled-switch">&nbsp;</label>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <div class="column is-4">
