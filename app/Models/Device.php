@@ -12,7 +12,7 @@ class Device extends Model
         static::created(function (Device $device) {
             Log::create([
                 'ip_address' => request()->ip(),
-                'username' => Auth::user()->name,
+                'username' => Auth::user()?->name ?? 'System',
                 'action' => __('log.device_created', ['name' => $device->name]),
             ]);
         });
