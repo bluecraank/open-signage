@@ -77,7 +77,7 @@
                             <label class="label">{{ __('Devices') }}</label>
                             <select multiple="multiple" name="devices[]" class="multiselect">
                                 @foreach ($devices as $device)
-                                    <option value="{{ $device->id }}">{{ $device->name }}</option>
+                                    <option value="{{ $device->id }}">{{ $device->description }} ({{ $device->name }})</option>
                                 @endforeach
                             </select>
                         </div>

@@ -87,7 +87,7 @@
                             <select multiple="multiple" name="devices[]" class="multiselect">
                                 @foreach ($devices as $device)
                                     <option @if (in_array($device->id, $schedule->devices)) selected @endif value="{{ $device->id }}">
-                                        {{ $device->name }}</option>
+                                        {{ $device->description }} ({{ $device->name }})</option>
                                 @endforeach
                             </select>
 

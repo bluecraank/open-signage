@@ -83,7 +83,7 @@
                                                 <select multiple="multiple" name="devices[]" id="multiselect">
                                                     @foreach ($devices as $device)
                                                         <option @if ($device->group_id == $group->id) selected @endif
-                                                            value="{{ $device->id }}">{{ $device->name }}</option>
+                                                            value="{{ $device->id }}">{{ $device->description }} ({{ $device->name }})</option>
                                                     @endforeach
                                                 </select>
                                             </div>

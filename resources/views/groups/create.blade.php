@@ -47,7 +47,7 @@
                     <label class="label">{{ __('Devices') }}<span class="has-text-danger">*</span></label>
                     <select name="devices[]" id="multiselect" multiple="multiple">
                         @foreach ($devices as $device)
-                            <option value="{{ $device->id }}">{{ $device->name }}</option>
+                            <option value="{{ $device->id }}">{{ $device->description }} ({{ $device->name }})</option>
                         @endforeach
                     </select>
                 </div>
