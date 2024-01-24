@@ -3,7 +3,7 @@ services:
         image: xxx/open-signage:latest
         container_name: open-signage
         volumes:
-            - public:/var/www/html/public:rw
+            - public:/var/www/html/public/data:rw
         networks:
             - open-signage
             - int_proxy
