@@ -191,13 +191,13 @@ class PresentationController extends Controller
         return redirect()->route('presentations.index', $presentation->id)->with('success', __('Presentation deleted'));
     }
 
-    static function getCurrentPresentationInProgress() {
-        $presentation = Presentation::where('processed', false)->first();
+    static function getCurrentPresentationsInProgress() {
+        $presentations = Presentation::where('processed', true)->get();
 
-        if(!$presentation) {
+        if(!$presentations) {
             return null;
         }
 
-        return $presentation;
+        return $presentations;
     }
 }

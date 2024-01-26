@@ -9,7 +9,7 @@ class PollPresentationProcess extends Component
 {
     public function render()
     {
-        $currentPresentation = PresentationController::getCurrentPresentationInProgress();
-        return view('livewire.poll-presentation-process', compact('currentPresentation'));
+        $currentPresentations = PresentationController::getCurrentPresentationsInProgress();
+        return view('livewire.poll-presentation-process', compact('currentPresentations'));
     }
 }
