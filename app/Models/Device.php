@@ -99,20 +99,29 @@ class Device extends Model
     public function activeSchedule() {
         $activeSchedule = Schedule::where('start_time', '<', now())->where('end_time', '>', now())->get();
 
+        $assignedOverDevice = null;
+        $assignedOverGroup = null;
+
         foreach($activeSchedule as $schedule) {
             if($schedule->devices) {
                 $devices = $schedule->devices;
                 if(in_array($this->id, $devices)) {
-                    return $schedule;
+                    $assignedOverDevice = $schedule;
                 }
             }
 
             if($schedule->groups) {
                 $groups = $schedule->groups;
                 if(in_array($this->group_id, $groups)) {
-                    return $schedule;
+                    $assignedOverGroup = $schedule;
                 }
             }
+        }
+
+        if($assignedOverDevice) {
+            return $assignedOverDevice;
+        } else if($assignedOverGroup) {
+            return $assignedOverGroup;
         }
 
         return null;
