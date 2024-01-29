@@ -156,7 +156,7 @@ class Device extends Model
         $minsInSecs = $diff->i * 60;
 
         $seconds = $daysInSecs + $hoursInSecs + $minsInSecs + $diff->s;
-        if ($seconds > $refresh_interval*2.5) {
+        if ($seconds > $refresh_interval*2.5 || $this->created_at == $this->updated_at) {
             return '🔴';
         }
 
