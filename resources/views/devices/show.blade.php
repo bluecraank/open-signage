@@ -87,17 +87,18 @@
                             <form action="{{ route('devices.update', $device->id) }}" method="post" enctype="multipart/form-data">
                                 @method('PUT')
                                 @csrf
-                                @can('create devices')
-                                    <div class="field">
-                                        <label class="label">Name<span class="has-text-danger">*</span></label>
-                                        <input class="input" type="text" required name="name" value="{{ $device->name }}" />
-                                    </div>
-                                    <div class="field">
-                                        <label class="label">{{ __('Location') }}<span class="has-text-danger">*</span></label>
-                                        <input class="input" type="text" required name="description"
-                                            value="{{ $device->description }}" />
-                                    </div>
-                                @endcan
+
+                                <div class="field">
+                                    <label class="label">Name<span class="has-text-danger">*</span></label>
+                                    <input class="input" type="text" required @cannot('create devices') disabled @endcannot
+                                        name="name" value="{{ $device->name }}" />
+                                </div>
+                                <div class="field">
+                                    <label class="label">{{ __('Location') }}<span class="has-text-danger">*</span></label>
+                                    <input class="input" type="text" required @cannot('create devices') disabled @endcannot
+                                        name="description" value="{{ $device->description }}" />
+                                </div>
+
                                 @if ($device->presentationFromGroup())
                                     <p><b>{{ __('Assigned template') }}:</b>
                                         {{ $device->getPresentation()?->name ?? __('No template assigned') }}
