@@ -204,6 +204,7 @@
                     }
 
                     console.log("[MISMANAGER] There is only one slide, not changing")
+                    giveServerUpdate();
                     return;
                 }
 
