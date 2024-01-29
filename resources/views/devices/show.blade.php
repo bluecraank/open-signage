@@ -87,15 +87,17 @@
                             <form action="{{ route('devices.update', $device->id) }}" method="post" enctype="multipart/form-data">
                                 @method('PUT')
                                 @csrf
-                                <div class="field">
-                                    <label class="label">Name<span class="has-text-danger">*</span></label>
-                                    <input class="input" type="text" required name="name" value="{{ $device->name }}" />
-                                </div>
-                                <div class="field">
-                                    <label class="label">{{ __('Location') }}<span class="has-text-danger">*</span></label>
-                                    <input class="input" type="text" required name="description" value="{{ $device->description }}" />
-                                </div>
-
+                                @can('create devices')
+                                    <div class="field">
+                                        <label class="label">Name<span class="has-text-danger">*</span></label>
+                                        <input class="input" type="text" required name="name" value="{{ $device->name }}" />
+                                    </div>
+                                    <div class="field">
+                                        <label class="label">{{ __('Location') }}<span class="has-text-danger">*</span></label>
+                                        <input class="input" type="text" required name="description"
+                                            value="{{ $device->description }}" />
+                                    </div>
+                                @endcan
                                 @if ($device->presentationFromGroup())
                                     <p><b>{{ __('Assigned template') }}:</b>
                                         {{ $device->getPresentation()?->name ?? __('No template assigned') }}
@@ -188,8 +190,8 @@
                                     <div class="notification @if (!$device->registered) is-warning @else is-primary @endif">
                                         <div class="is-justify-content-center is-align-content-center">
                                             <div class="is-flex is-justify-content-center is-align-content-center">
-                                                <span
-                                                    class="has-text-weight-bold">Status: {{ $device->registered ? __('Successfully registered') : __('Please accept this monitor to register it') }}</span>
+                                                <span class="has-text-weight-bold">Status:
+                                                    {{ $device->registered ? __('Successfully registered') : __('Please accept this monitor to register it') }}</span>
                                             </div>
                                         </div>
                                     </div>
