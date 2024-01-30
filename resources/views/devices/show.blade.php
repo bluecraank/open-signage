@@ -90,12 +90,12 @@
 
                                 <div class="field">
                                     <label class="label">Name<span class="has-text-danger">*</span></label>
-                                    <input class="input" type="text" required @cannot('create devices') disabled @endcannot
+                                    <input class="input" type="text" required @cannot('create devices') readonly @endcannot
                                         name="name" value="{{ $device->name }}" />
                                 </div>
                                 <div class="field">
                                     <label class="label">{{ __('Location') }}<span class="has-text-danger">*</span></label>
-                                    <input class="input" type="text" required @cannot('create devices') disabled @endcannot
+                                    <input class="input" type="text" required @cannot('create devices') readonly @endcannot
                                         name="description" value="{{ $device->description }}" />
                                 </div>
 
