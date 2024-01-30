@@ -44,7 +44,7 @@
                                 @csrf
                                 <div class="field">
                                     <label class="label">{{ __('Description') }}<span class="has-text-danger">*</span></label>
-                                    <input class="input" type="text" name="name" value="{{ $presentation->name }}" />
+                                    <input class="input" id="inputDescription" type="text" name="name" value="{{ $presentation->name }}" />
                                 </div>
 
                                 <div class="field">

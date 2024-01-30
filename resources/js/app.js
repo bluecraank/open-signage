@@ -46,6 +46,11 @@ fileInput.onchange = () => {
 
         const fileName = document.querySelector('#file-upload .file-name');
         fileName.textContent = fileInput.files[0].name;
+
+        if(inputDescription.value == "") {
+            let fileNameWithoutExtension = fileInput.files[0].name.split('.').slice(0, -1).join('.');
+            inputDescription.value = fileNameWithoutExtension;
+        }
     }
 }
 
@@ -60,12 +65,17 @@ window.dropHandler = function(ev) {
         fileInput.files = ev.dataTransfer.files;
         const fileName = document.querySelector('#file-upload .file-name');
         fileName.textContent = fileInput.files[0].name;
+        let inputDescription = document.getElementById('inputDescription')
+
+        if(inputDescription.value == "") {
+            let fileNameWithoutExtension = fileInput.files[0].name.split('.').slice(0, -1).join('.');
+            inputDescription.value = fileNameWithoutExtension;
+        }
+
     }
 }
 
 window.dragOverHandler = function(ev) {
-    console.log("File(s) in drop zone");
-
     // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault();
 }

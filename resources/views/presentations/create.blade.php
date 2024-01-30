@@ -17,7 +17,7 @@
 
                 <div class="field">
                     <label class="label">{{ __('Description') }}<span class="has-text-danger">*</span></label>
-                    <input required type="text" class="input" name="name" placeholder="{{ __('Description') }}">
+                    <input required type="text" class="input" id="inputDescription" name="name" placeholder="{{ __('Description') }}">
                 </div>
 
                 <div class="field">
