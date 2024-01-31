@@ -106,6 +106,7 @@
     "Enter identification key": "Ident-Schlüssel eingeben",
     "Register device": "Monitor registrieren",
     "No groups found": "Keine Gruppen gefunden",
+    "No groups assigned": "Keine Gruppen zugewiesen",
     "No roles": "Keine Rollen zugewiesen",
     "Select a group": "Gruppe auswählen",
     "Presentation is assigned to devices": "Präsentation ist Monitoren zugewiesen",
@@ -165,5 +166,7 @@
     "or drag and drop to upload": "oder Datei reinziehen zum Hochladen",
     "File type is not supported": "Dateityp wird nicht unterstützt",
     "Create": "Erstellen",
-    "Slides updated": "Folien aktualisiert"
+    "Slides updated": "Folien aktualisiert",
+    "Cancel": "Abbrechen",
+    "Today": "Heute"
 }
