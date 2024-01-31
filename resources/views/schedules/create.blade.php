@@ -66,11 +66,11 @@
                             </div>
                             <div class="field">
                                 <label class="label">{{ __('Start Date') }}<span class="has-text-danger">*</span></label>
-                                <input required data-date-format="dd.MM.yyyy" type="date" name="start_date" value="{{ now() }}">
+                                <input required data-date-format="dd.MM.yyyy" data-color="info" data-display-mode="dialog" data-validate-label="{{ __('Save') }}" data-now-label="{{ __('Now') }}" data-cancel-label="{{ __('Cancel') }}" data-clear-label="{{ __('Reset') }}" data-today-label="{{ __('Today') }}" type="date" name="start_date" value="{{ now() }}">
                             </div>
                             <div class="field">
                                 <label class="label">{{ __('End Date') }}<span class="has-text-danger">*</span></label>
-                                <input required data-date-format="dd.MM.yyyy" type="date" name="end_date" value="{{ now() }}">
+                                <input required data-date-format="dd.MM.yyyy" data-color="info" data-display-mode="dialog" data-validate-label="{{ __('Save') }}" data-now-label="{{ __('Now') }}" data-cancel-label="{{ __('Cancel') }}" data-clear-label="{{ __('Reset') }}" data-today-label="{{ __('Today') }}" type="date" name="end_date" value="{{ now() }}">
                             </div>
                         </div>
                         <div class="column is-4">
