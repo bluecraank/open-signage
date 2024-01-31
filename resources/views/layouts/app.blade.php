@@ -19,7 +19,10 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="columns is-centered">
+        <div class="column is-10">
+
+    <div class="container is-fluid">
         <nav class="navbar is-spaced is-dark" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
                 <a class="navbar-item" href="/">
@@ -120,7 +123,7 @@
     </div>
 
     <div id="app">
-        <div class="container">
+        <div class="container is-fluid">
             <div class="box main-box">
                 @if ($errors)
                     @foreach ($errors->all() as $error)
@@ -144,6 +147,8 @@
                 </footer>
             </div>
         </div>
+    </div>
+    </div>
     </div>
 </body>
 
