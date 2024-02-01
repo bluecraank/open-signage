@@ -181,6 +181,10 @@ class PresentationController extends Controller
             return redirect()->back()->withErrors(['message' => __('Presentation is assigned to devices')]);
         }
 
+        if($presentation->schedules->count() != 0) {
+            return redirect()->back()->withErrors(['message' => __('Presentation is assigned to schedules')]);
+        }
+
         // Delete all files
         File::cleanDirectory(public_path('data/presentations/'. $id));
         File::deleteDirectory(public_path('data/presentations/'. $id));
