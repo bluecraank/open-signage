@@ -157,9 +157,9 @@ class Device extends Model
 
         $seconds = $daysInSecs + $hoursInSecs + $minsInSecs + $diff->s;
         if ($seconds > $refresh_interval*2.5 || $this->created_at == $this->updated_at) {
-            return '🔴';
+            return '<div class="badge badge-danger">OFFLINE</div>';
         }
 
-        return '🟢';
+        return '<div class="badge badge-success">ACTIVE</div>';
     }
 }

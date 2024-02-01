@@ -2,9 +2,10 @@
 
 @section('content')
     @can('read devices')
-    <div class="title">{{ __('Devices') }}</div>
-
-    @livewire('live-monitor-overview')
+        <h3>{{ __('Devices') }}</h3>
+        <span class="badge bg-success mb-3">{{ $devices->where('active', true)->count() }} active</span>
+        <span class="badge bg-danger mb-3 ml-2">{{ $devices->where('active', true)->count() }} offline</span>
+        @livewire('live-monitor-overview')
     @endcan
 
     @cannot('read devices')

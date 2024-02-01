@@ -1,41 +1,47 @@
-<div class="card has-table" wire:poll.10s>
-    <header class="card-header">
-        <p class="card-header-title">
-            {{ __('Devices') }}
-        </p>
+<div class="card" wire:poll.10s>
+    <h5 class="card-header">
+        {{ __('Overview') }}
+        @can('create devices')
+        <a href="{{ route('devices.create') }}" class="btn-primary btn btn-sm float-end">
+            <span class="icon"><i class="bi-plus"></i></span>
+            <span>{{ __('Create device') }}</span>
+        </a>
+    @endcan
+    </h5>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <select class="form-select form-select-sm w-50" name="" id="select">
+                    <option value="">Name</option>
+                    <option value="">Gruppe</option>
+                    <option value="">Status</option>
+                    <option value="">Aktualisiert</option>
+                </select>
+            </div>
+            <div class="col">
 
-        <div class="card-header-actions">
-            @can('create devices')
-                <a href="{{ route('devices.create') }}" class="button is-primary is-small">
-                    <span class="icon"><i class="mdi mdi-plus"></i></span>
-                    <span>{{ __('Create device') }}</span>
-                </a>
-            @endcan
+            </div>
+            <div class="col"></div>
         </div>
-    </header>
 
-    <div class="card-content">
-        <table class="table is-narrow is-striped is-hoverable is-fullwidth">
+        <table class="table table-striped table-sm">
             <thead>
                 <tr>
-                    <th></th>
-                    <th>{{ __('Current slide') }}</th>
-                    <th>Name</th>
-                    <th>{{ __('Location') }}</th>
-                    <th>{{ __('Presentation') }}</th>
-                    <th>{{ __('Last connection') }}</th>
-                    <th>{{ __('Last monitor reload') }}</th>
-                    <th>{{ __('Actions') }}</th>
+                    <th style="width:201px" scope="col">{{ __('Current slide') }}</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">{{ __('Location') }}</th>
+                    <th scope="col">{{ __('Presentation') }}</th>
+                    {{-- <th scope="col">Status</th> --}}
+                    <th scope="col">{{ __('Last connection') }}</th>
+                    {{-- <th scope="col">{{ __('Last monitor reload') }}</th> --}}
+                    <th scope="col">{{ __('Actions') }}</th>
                 </tr>
             </thead>
 
             <tbody>
                 @foreach ($devices as $device)
                     <tr>
-                        <td style="text-align: center;vertical-align:middle;">
-                            {{ $device->isActive() }}
-                        </td>
-                        <td>
+                        <td style="width:201px">
                             @php
                                 $device_pres = $device->getPresentation();
                                 $slides = $device_pres?->slides;
@@ -45,43 +51,50 @@
                                 } else {
                                     $preview = config('app.placeholder_image');
                                 }
-                            @endphp
-                            <img width="150" src="{{ $preview }}" alt="">
+                                @endphp
+                            <img width="200" src="{{ $preview }}" alt="">
                         </td>
                         <td>{{ $device->name }}</td>
                         <td>{{ $device->description }}</td>
                         <td>{{ $device_pres?->name ?? __('No template assigned') }}
                             @if($device->presentationFromSchedule()) <br> <small class="has-text-success"><i class="mdi mdi-checkbox-marked-circle-outline"></i> {{ __('Inherited by schedule') }}</small> @elseif($device->presentationFromGroup()) <br> <small class="has-text-success"><i class="mdi mdi-checkbox-marked-circle-outline"></i> {{ __('Inherited by group') }}</small> @endif
                         </td>
+                        {{-- <td style="vertical-align:middle;">
+                            <div class="badge bg-danger">OFFLINE</div>
+                        </td> --}}
                         <td>
-                            @if ($device->last_seen)
-                                {{ Carbon::parse($device->last_seen)->diffForHumans() }}
-                            @else
+                            @if ($device->last_seen && Carbon::parse($device->last_seen)->diffInMinutes() < 5)
+                                <div class="badge bg-success">{{ Carbon::parse($device->last_seen)->diffForHumans() }}</div>
+                            @elseif($device->last_seen)
+                                <div class="badge bg-danger">{{ Carbon::parse($device->last_seen)->diffForHumans() }}</div>
+                            @elseif($device->last_seen == null)
                                 {{ $device->registered ? __('Registered') : __('Waiting for registration...') }}
                             @endif
                         </td>
-                        <td>
+                        {{-- <td>
                             @if ($device->startup_timestamp)
                                 {{ Carbon::parse($device->startup_timestamp)->diffForHumans() }}
                             @else
                                 N/A
                             @endif
-                        </td>
+                        </td> --}}
                         <td class="actions-cell">
 
                             <form action="{{ route('devices.destroy', ['id' => $device->id]) }}" method="POST"
                                 onsubmit="return confirm('{{ __('Are you sure to delete this device?') }}')">
                                 @method('DELETE')
                                 @csrf
+                                <div class="btn-group" role="group" aria-label="Basic example">
                                 @can('read devices')
-                                    <a class="button is-info is-small"
+                                    <a class="btn btn-primary btn-sm"
                                         href="{{ route('devices.update', ['id' => $device->id]) }}"><i
-                                            class="mdi mdi-pen"></i></a>
+                                            class="bi-pen"></i></a>
                                 @endcan
                                 @can('delete devices')
-                                    <button class="button is-danger is-small" type="submit"><i
-                                            class="mdi mdi-trash-can"></i></button>
+                                    <button class="btn btn-primary btn-sm" type="submit"><i
+                                            class="bi-trash"></i></button>
                                 @endcan
+                                </div>
                             </form>
                         </td>
                     </tr>
@@ -95,4 +108,4 @@
             </tbody>
         </table>
     </div>
-</div>
+  </div>

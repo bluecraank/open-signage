@@ -1,9 +1,5 @@
-@import 'bulma/bulma.sass';
-@import '@mdi/font/css/materialdesignicons.css';
-@import "bulma-prefers-dark/bulma-prefers-dark.sass";
-@import "bulma-calendar/src/sass/index.sass";
-@import "bulma-extensions/bulma-switch/src/sass/index.sass";
-
+@import 'bootstrap/scss/bootstrap.scss';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
 
 
 .is-fullheight {
@@ -114,4 +110,9 @@ footer {
 #drop_zone.dragover {
     border-color: #000;
     color: #000;
+}
+
+.fading {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
 }
