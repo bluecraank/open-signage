@@ -8,36 +8,39 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>MIS Manager</title>
+    <title>{{ config('app.name') }}</title>
+
+    <link rel="icon" type="image/png" href="/data/img/favicon.png">
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
 <body class="container">
-    @include('layouts.menu')
+    @auth
+        @include('layouts.menu')
+    @endauth
 
     <div id="app">
-        @if ($errors)
-            @foreach ($errors->all() as $error)
-                <div class="alert alert-danger fade-out">
-                    {{ $error }}
-                </div>
-            @endforeach
-        @endif
+        @auth
+            @if ($errors)
+                @foreach ($errors->all() as $error)
+                    <div class="alert alert-danger fade-out">
+                        {{ $error }}
+                    </div>
+                @endforeach
+            @endif
 
-        @if (session()->has('success'))
-            <div class="alert alert-success fade-out">
-                {{ session()->get('success') }}
-            </div>
-        @endif
+            @if (session()->has('success'))
+                <div class="alert alert-success fade-out">
+                    {{ session()->get('success') }}
+                </div>
+            @endif
+        @endauth
 
         @yield('content')
 
-        <footer>
-            Build with <a href="https://laravel.com">Laravel</a>, <a href="https://bulma.io">Bulma</a> and <i
-                class="mdi mdi-heart"></i> | v{{ config('app.version') }}
-        </footer>
+        @include('layouts.footer')
     </div>
 </body>
 

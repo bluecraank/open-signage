@@ -138,9 +138,10 @@ class Device extends Model
     public function isActive() {
         $now = new \DateTime();
         $lastSeen = new \DateTime($this->last_seen);
+        $this->active = true;
 
         if(!$this->registered) {
-            return '🟠';
+            $this->active = false;
         }
 
         $diff = $now->diff($lastSeen);
@@ -157,9 +158,11 @@ class Device extends Model
 
         $seconds = $daysInSecs + $hoursInSecs + $minsInSecs + $diff->s;
         if ($seconds > $refresh_interval*2.5 || $this->created_at == $this->updated_at) {
-            return '<div class="badge badge-danger">OFFLINE</div>';
+            $this->active = false;
         }
 
-        return '<div class="badge badge-success">ACTIVE</div>';
+        $this->save();
+
+        return $this->active;
     }
 }

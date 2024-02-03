@@ -2,170 +2,37 @@
 
 @section('content')
     @can('read schedules')
-        <div class="title">{{ __('Schedules') }}</div>
+        <h3 class="mb-3">{{ __('Schedules') }}</h3>
 
-        <div class="card has-table">
-            <header class="card-header">
-                <p class="card-header-title">
-                    {{ __('Running schedules') }}
-                </p>
+        <div class="card">
+            <h5 class="card-header">
+                {{ __('Running schedules') }}
 
-                <div class="card-header-actions">
-                    @can('create schedules')
-                        <a href="{{ route('schedules.create') }}" class="button is-primary is-small">
-                            <span class="icon"><i class="mdi mdi-plus"></i></span>
-                            <span>{{ __('Create schedule') }}</span>
-                        </a>
-                    @endcan
-                </div>
-            </header>
+                <a href="{{ route('schedules.create') }}" class="btn btn-primary btn-sm float-end">
+                    <i class="bi-plus"></i>
+                    {{ __('Create schedule') }}
+                </a>
+            </h5>
+            <div class="card-body">
 
-            <div class="card-content">
-                <table class="table is-narrow is-striped is-hoverable is-fullwidth">
-                    <thead>
-                        <tr>
-                            {{-- <th>{{ __('Enabled') }}</th> --}}
-                            <th>{{ __('Created by') }}</th>
-                            <th>Name</th>
-                            <th>{{ __('Since') }}</th>
-                            <th>{{ __('Until') }}</th>
-                            <th>{{ __('Applies to') }}</th>
-                            <th>{{ __('Actions') }}</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @foreach ($activeSchedules as $schedule)
-                            <tr>
-                                {{-- <td>@if ($schedule->enabled) <span class="has-text-primary is-size-7">{{ __('ENABLED') }}</span> @else <span class="has-text-danger is-size-7">{{ __('DISABLED') }}</span> @endif</td> --}}
-                                <td>{{ $schedule->created_by }}</td>
-                                <td>{{ $schedule->name }}</td>
-                                <td>{{ $schedule->startDate() }}</td>
-                                <td>{{ $schedule->endDate() }}</td>
-                                <td>{{ $schedule->appliesTo() }}</td>
-                                <td class="actions-cell">
-                                    <form action="{{ route('schedules.destroy', ['id' => $schedule->id]) }}" method="POST"
-                                        onsubmit="return confirm('{{ __('Are you sure to delete this schedule?') }}')">
-                                        @method('DELETE')
-                                        @csrf
-                                        @can('read schedules')
-                                            <a class="button is-info is-small"
-                                                href="{{ route('schedules.update', ['id' => $schedule->id]) }}"><i
-                                                    class="mdi mdi-pen"></i></a>
-                                        @endcan
-                                        @can('delete schedules')
-                                            <button class="button is-danger is-small" type="submit"><i
-                                                    class="mdi mdi-trash-can"></i></button>
-                                        @endcan
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                        @if ($activeSchedules->count() == 0)
-                            <tr>
-                                <td colspan="5" class="has-text-centered">
-                                    {{ __('No schedules found') }}</td>
-                            </tr>
-                        @endif
-                    </tbody>
-                </table>
             </div>
         </div>
 
-        <div class="card has-table mt-5">
-            <header class="card-header">
-                <p class="card-header-title">
-                    {{ __('Upcoming schedules') }}
-                </p>
-            </header>
+        <div class="card mt-5">
+            <h5 class="card-header">
+                {{ __('Upcoming schedules') }}
+            </h5>
+            <div class="card-body">
 
-            <div class="card-content">
-                <table class="table is-narrow is-striped is-hoverable is-fullwidth">
-                    <thead>
-                        <tr>
-                            <th>{{ __('Created by') }}</th>
-                            <th>Name</th>
-                            <th>{{ __('Starts') }}</th>
-                            <th>{{ __('Ends') }}</th>
-                            <th>{{ __('Applies to') }}</th>
-                            <th>{{ __('Actions') }}</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @foreach ($upcomingSchedules as $schedule)
-                            <tr>
-                                <td>{{ $schedule->created_by }}</td>
-                                <td>{{ $schedule->name }}</td>
-                                <td>{{ $schedule->startDate() }}</td>
-                                <td>{{ $schedule->endDate() }}</td>
-                                <td>{{ $schedule->appliesTo() }}</td>
-                                <td class="actions-cell">
-                                    <form action="{{ route('schedules.destroy', ['id' => $schedule->id]) }}" method="POST"
-                                        onsubmit="return confirm('{{ __('Are you sure to delete this schedule?') }}')">
-                                        @method('DELETE')
-                                        @csrf
-                                        @can('read schedules')
-                                            <a class="button is-info is-small"
-                                                href="{{ route('schedules.update', ['id' => $schedule->id]) }}"><i
-                                                    class="mdi mdi-pen"></i></a>
-                                        @endcan
-                                        @can('delete schedules')
-                                            <button class="button is-danger is-small" type="submit"><i
-                                                    class="mdi mdi-trash-can"></i></button>
-                                        @endcan
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                        @if ($upcomingSchedules->count() == 0)
-                            <tr>
-                                <td colspan="5" class="has-text-centered">
-                                    {{ __('No schedules found') }}</td>
-                            </tr>
-                        @endif
-                    </tbody>
-                </table>
             </div>
         </div>
 
-        <div class="card has-table mt-5">
-            <header class="card-header">
-                <p class="card-header-title">
-                    {{ __('Past schedules') }}
-                </p>
-            </header>
+        <div class="card mt-5">
+            <h5 class="card-header">
+                {{ __('Past schedules') }}
+            </h5>
+            <div class="card-body">
 
-            <div class="card-content">
-                <table class="table is-narrow is-striped is-hoverable is-fullwidth">
-                    <thead>
-                        <tr>
-                            <th>{{ __('Created by') }}</th>
-                            <th>Name</th>
-                            <th>{{ __('Starts') }}</th>
-                            <th>{{ __('Ends') }}</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @foreach ($pastSchedules as $schedule)
-                            <tr>
-                                <td>{{ $schedule->created_by }}</td>
-                                <td>{{ $schedule->name }}</td>
-                                <td>{{ $schedule->startDate() }}</td>
-                                <td>{{ $schedule->endDate() }}</td>
-                                <td></td>
-                            </tr>
-                        @endforeach
-                        @if ($pastSchedules->count() == 0)
-                            <tr>
-                                <td colspan="3" class="has-text-centered">
-                                    {{ __('No schedules found') }}</td>
-                            </tr>
-                        @endif
-                    </tbody>
-                </table>
             </div>
         </div>
     @endcan

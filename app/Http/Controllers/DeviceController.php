@@ -219,4 +219,11 @@ class DeviceController extends Controller
 
         return redirect()->route('devices.monitor', ['secret' => $secret]);
     }
+
+    static function getActiveInactiveDevices() {
+        $active = Device::where('active', true)->count();
+        $inactive = Device::where('active', false)->count();
+
+        return ['active' => $active, 'inactive' => $inactive];
+    }
 }

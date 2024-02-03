@@ -171,5 +171,7 @@
     "Today": "Heute",
     "Presentation is assigned to schedules": "Präsentation ist Zeitplänen zugewiesen",
     "Overview": "Übersicht",
-    "Change theme": "Design wechseln"
+    "Change theme": "Design wechseln",
+    "active": "aktiv",
+    "offline": "inaktiv"
 }

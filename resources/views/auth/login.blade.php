@@ -1,55 +1,37 @@
     @extends('layouts.app')
 
     @section('content')
-        <div class="container">
-            <div class="columns pt-5">
-                <div class="column is-6 is-offset-3 pt-5">
-                    <div class="card">
-                        <header class="card-header">
-                            <p class="card-header-title">
-                                {{ __('Login') }}
-                            </p>
-                        </header>
+        <div class="container py-5 d-flex justify-content-center" style="height:90vh;">
+            <div class="d-flex justify-content-center align-items-center flex-column">
+                <h1>
+                    {{ config('app.name') }}
+                </h1>
+                <div class="card mt-3" style="width:35rem">
+                    <h5 class="card-header">
+                        {{ __('Login') }}
+                    </h5>
+                    <div class="card-body">
+                        @error('username')
+                            <div class="alert alert-danger" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </div>
+                        @enderror
 
-                        <div class="card-content">
-                            <form method="POST" action="{{ route('login') }}">
-                                @csrf
+                        <form method="POST" action="{{ route('login') }}">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="username" class="form-label">{{ __('Username') }}</label>
+                                <input value="{{ old('username') }}" type="text" name="username"
+                                    class="@error('username') is-invalid @enderror form-control" id="username">
 
-                                <div class="field">
-                                    <label for="email" class="label">{{ __('Username') }}</label>
-
-                                    <input id="username" type="text"
-                                        class="input @error('username') is-invalid @enderror" name="username"
-                                        value="{{ old('username') }}" required autocomplete="username" autofocus />
-                                    @error('email')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                                <div class="field">
-                                    <label for="password" class="label">{{ __('Password') }}</label>
-
-
-                                    <input id="password" type="password"
-                                        class="input @error('password') is-invalid @enderror" name="password" required
-                                        autocomplete="current-password">
-
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-
-                                </div>
-
-                                <div class="field">
-                                    <button type="submit" class="button is-primary">
-                                        {{ __('Login') }}
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">{{ __('Password') }}</label>
+                                <input type="password" name="password"
+                                    class="@error('username') is-invalid @enderror form-control" id="password">
+                            </div>
+                            <button type="submit" class="btn btn-primary">{{ __('Login') }}</button>
+                        </form>
                     </div>
                 </div>
             </div>
