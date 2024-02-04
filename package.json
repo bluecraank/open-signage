@@ -14,12 +14,7 @@
         "vite": "^4.4.9"
     },
     "dependencies": {
-        "@mdi/font": "^7.2.96",
         "bootstrap-icons": "^1.11.3",
-        "bulma": "^0.9.4",
-        "bulma-calendar": "^6.1.19",
-        "bulma-extensions": "^6.2.7",
-        "bulma-prefers-dark": "^0.1.0-beta.1",
         "multiselect": "^0.9.12"
     }
 }

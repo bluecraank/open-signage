@@ -1,23 +1,4 @@
-import bulmaCalendar from 'bulma-calendar/dist/js/bulma-calendar.min.js';
 import "bootstrap/dist/js/bootstrap.min.js";
-
-
-// Initialize all input of type date
-let options = {
-    type: 'datetime',
-    showFooter: true,
-    startDate: new Date(),
-};
-
-var calendars = bulmaCalendar.attach('[type="date"]', options);
-
-// Loop on each calendar initialized
-for (var i = 0; i < calendars.length; i++) {
-    // Add listener to select event
-    calendars[i].on('select', date => {
-        console.log(date);
-    });
-}
 
 window.checkIfFileIsNotValid = function (file) {
     const fileType = file['type'];
@@ -38,9 +19,6 @@ if (fileInput) {
                 return;
             }
 
-            const fileName = document.querySelector('#file-upload .file-name');
-            fileName.textContent = fileInput.files[0].name;
-
             if (inputDescription.value == "") {
                 let fileNameWithoutExtension = fileInput.files[0].name.split('.').slice(0, -1).join('.');
                 inputDescription.value = fileNameWithoutExtension;
@@ -58,8 +36,7 @@ window.dropHandler = function (ev) {
 
     if (ev.dataTransfer.files.length > 0) {
         fileInput.files = ev.dataTransfer.files;
-        const fileName = document.querySelector('#file-upload .file-name');
-        fileName.textContent = fileInput.files[0].name;
+
         let inputDescription = document.getElementById('inputDescription')
 
         if (inputDescription.value == "") {
@@ -91,3 +68,14 @@ window.setTimeout(function () {
         }, 1000);
     }
 }, 5000);
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('DeviceSortBy').addEventListener('change', function () {
+        localStorage.setItem('sort', this.value);
+    });
+
+    let sort = localStorage.getItem('sort');
+    if (sort) {
+        document.getElementById('DeviceSortBy').value = sort;
+    }
+});

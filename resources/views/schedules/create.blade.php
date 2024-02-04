@@ -8,8 +8,8 @@
         <script>
             $(document).ready(function() {
                 $('.multiselect').multiSelect({
-                    'selectableHeader': '<div class="has-text-centered has-text-weight-bold">{{ __('Selectable') }}</div>',
-                    'selectionHeader': '<div class="has-text-centered has-text-weight-bold">{{ __('Selected') }}</div>'
+                    'selectableHeader': '<div class="text-center has-text-weight-bold">{{ __('Selectable') }}</div>',
+                    'selectionHeader': '<div class="text-center has-text-weight-bold">{{ __('Selected') }}</div>'
                 });
             });
 
@@ -35,64 +35,94 @@
                 return true;
             }
         </script>
-        <div class="title">{{ __('Create schedule') }}</div>
+        <h3 class="mb-3">{{ __('Schedules') }}</h3>
 
         <div class="card">
-            <header class="card-header">
-                <p class="card-header-title">
-                    {{ __('Create schedule') }}
-                </p>
-            </header>
-
-            <div class="card-content">
-                <form action="{{ route('schedules.store') }}" method="POST" onsubmit="return validate()">
+            <h5 class="card-header">{{ __('Create schedule') }}</h5>
+            <div class="card-body">
+                <form action="{{ route('schedules.store') }}" method="POST">
                     @csrf
-                    <div class="columns">
-                        <div class="column is-4">
-                            <div class="field">
-                                <label class="label">Name<span class="has-text-danger">*</span></label>
-                                <input required class="input" type="text" name="name" />
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name<span class="text-danger">*</span></label>
+                        <input required type="text" class="form-control" name="name" placeholder="Name" id="name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('Template') }}<span class="text-danger">*</span></label>
+                        <select required class="form-select" name="presentation_id">
+                            <option value="">{{ __('Select a template') }}...</option>
+                            @foreach ($presentations as $presentation)
+                                <option value="{{ $presentation->id }}" @if (!$presentation->processed) disabled @endif>
+                                    {{ $presentation->name }} @if (!$presentation->processed)
+                                        ({{ __('In process') }})
+                                    @endif
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="start_date" class="form-label">{{ __('Start date') }}<span
+                                        class="text-danger">*</span></label>
+                                <input required type="datetime-local" class="form-control" name="start_date" id="start_date"
+                                    value="{{ now()->format('Y-m-d H:m') }}">
                             </div>
-                            <div class="field">
-                                <label class="label">{{ __('Assigned template') }}<span class="has-text-danger">*</span></label>
-                                <div class="select is-fullwidth">
-                                    <select required name="presentation_id">
-                                        <option value="">{{ __('Select a template') }}...</option>
-                                        @foreach ($presentations as $presentation)
-                                            <option value="{{ $presentation->id }}">{{ $presentation->name }}</option>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="end_date" class="form-label">{{ __('End date') }}<span
+                                        class="text-danger">*</span></label>
+                                    <input required type="datetime-local" class="form-control" name="end_date" id="end_date"
+                                    value="{{ now()->addDays(1)->format('Y-m-d') }}T00:00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-5">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div>
+                                    <label class="form-label">{{ __('Devices') }}<span class="text-danger">*</span></label>
+                                    <select multiple="multiple" name="devices[]" class="multiselect">
+                                        @foreach ($devices as $device)
+                                            <option value="{{ $device->id }}">{{ $device->description }}
+                                                ({{ $device->name }})
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                            <div class="field">
-                                <label class="label">{{ __('Start Date') }}<span class="has-text-danger">*</span></label>
-                                <input required data-date-format="dd.MM.yyyy" data-color="info" data-display-mode="dialog" data-validate-label="{{ __('Save') }}" data-now-label="{{ __('Now') }}" data-cancel-label="{{ __('Cancel') }}" data-clear-label="{{ __('Reset') }}" data-today-label="{{ __('Today') }}" type="date" name="start_date" value="{{ now() }}">
-                            </div>
-                            <div class="field">
-                                <label class="label">{{ __('End Date') }}<span class="has-text-danger">*</span></label>
-                                <input required data-date-format="dd.MM.yyyy" data-color="info" data-display-mode="dialog" data-validate-label="{{ __('Save') }}" data-now-label="{{ __('Now') }}" data-cancel-label="{{ __('Cancel') }}" data-clear-label="{{ __('Reset') }}" data-today-label="{{ __('Today') }}" type="date" name="end_date" value="{{ now() }}">
+                        </div>
+
+                        <div class="col-2 d-flex justify-content-center">
+                            <div class="d-flex align-items-center">
+                                <h5 class="w-full text-center">
+                                    {{ __('and/or') }}
+                                </h5>
                             </div>
                         </div>
-                        <div class="column is-4">
-                            <label class="label">{{ __('Devices') }}</label>
-                            <select multiple="multiple" name="devices[]" class="multiselect">
-                                @foreach ($devices as $device)
-                                    <option value="{{ $device->id }}">{{ $device->description }} ({{ $device->name }})</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="column is-4">
-                            <label class="label">{{ __('Groups') }}</label>
-                            <select multiple="multiple" name="groups[]" class="multiselect">
-                                @foreach ($groups as $group)
-                                    <option value="{{ $group->id }}">{{ $group->name }}</option>
-                                @endforeach
-                            </select>
+
+                        <div class="col-5">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div>
+                                    <label class="form-label">{{ __('Groups') }}<span class="text-danger">*</span></label>
+                                    <select multiple="multiple" name="groups[]" class="multiselect">
+                                        @foreach ($groups as $group)
+                                            <option value="{{ $group->id }}">{{ $group->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <button type="submit" name="submit_with_enable" class="button is-success">{{ __('Save & enable') }}</button>
-                    {{-- <button type="submit" name="submit_without_enable" class="button is-primary">{{ __('Save') }}</button> --}}
+                    <hr>
+
+                    <button type="submit" name="submit_with_enable" class="btn btn-primary">{{ __('Save & enable') }}</button>
+                    <button type="reset" class="btn btn-danger">{{ __('Reset') }}</button>
                 </form>
             </div>
         </div>

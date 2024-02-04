@@ -7,44 +7,39 @@
     <script>
         $(document).ready(function() {
             $('#multiselect').multiSelect({
-                'selectableHeader': '<div class="has-text-centered has-text-weight-bold">{{ __('Selectable') }}</div>',
-                'selectionHeader': '<div class="has-text-centered has-text-weight-bold">{{ __('Selected') }}</div>'
+                'selectableHeader': '<div class="text-center has-text-weight-bold">{{ __('Selectable') }}</div>',
+                'selectionHeader': '<div class="text-center has-text-weight-bold">{{ __('Selected') }}</div>'
             });
         });
     </script>
-    <div class="title">{{ __('Create group') }}</div>
-    <div class="card">
-        <header class="card-header">
-            <p class="card-header-title">
-                {{ __('Create group') }}
-            </p>
-        </header>
 
-        <div class="card-content">
+    <h3 class="mb-3">{{ __('Groups') }}</h3>
+
+    <div class="card">
+        <h5 class="card-header">{{ __('Create group') }}</h5>
+        <div class="card-body">
+
             <form action="{{ route('groups.store') }}" method="POST">
                 @csrf
-
-                <div class="field">
-                    <label class="label">Name<span class="has-text-danger">*</span></label>
-                    <input required type="text" class="input" name="name" placeholder="Name">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name<span class="text-danger">*</span></label>
+                    <input required type="text" class="form-control" name="name" placeholder="Name" id="name">
                 </div>
-
-                <div class="field">
-                    <label class="label">{{ __('Template') }}<span class="has-text-danger">*</span></label>
-                    <div class="select is-fullwidth">
-                        <select required name="presentation_id">
-                            <option value="0">{{ __('Select a template') }}...</option>
-                            @foreach ($presentations as $presentation)
-                            <option value="{{ $presentation->id }}"
-                                @if (!$presentation->processed) disabled @endif>{{ $presentation->name }} @if (!$presentation->processed) ({{ __('In process') }}) @endif
+                <div class="mb-3">
+                    <label class="form-label">{{ __('Template') }}<span class="text-danger">*</span></label>
+                    <select required class="form-select" name="presentation_id">
+                        <option value="0">{{ __('Select a template') }}...</option>
+                        @foreach ($presentations as $presentation)
+                            <option value="{{ $presentation->id }}" @if (!$presentation->processed) disabled @endif>
+                                {{ $presentation->name }} @if (!$presentation->processed)
+                                    ({{ __('In process') }})
+                                @endif
                             </option>
                         @endforeach
-                        </select>
-                    </div>
+                    </select>
                 </div>
-
-                <div class="field mb-5">
-                    <label class="label">{{ __('Devices') }}<span class="has-text-danger">*</span></label>
+                <div class="mb-3">
+                    <label class="form-label">{{ __('Devices') }}<span class="text-danger">*</span></label>
                     <select name="devices[]" id="multiselect" multiple="multiple">
                         @foreach ($devices as $device)
                             <option value="{{ $device->id }}">{{ $device->description }} ({{ $device->name }})</option>
@@ -52,8 +47,10 @@
                     </select>
                 </div>
 
-                <button type="submit" class="button is-primary">{{ __('Save') }}</button>
-                <button type="reset" class="button is-danger is-light">{{ __('Reset') }}</button>
+                <hr>
+
+                <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                <button type="reset" class="btn btn-danger">{{ __('Reset') }}</button>
             </form>
         </div>
     </div>

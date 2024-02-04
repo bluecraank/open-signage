@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Auth;
 
 class Device extends Model
 {
+    use \Illuminate\Database\Eloquent\Factories\HasFactory;
+
+
     protected static function booted(): void
     {
         static::created(function (Device $device) {

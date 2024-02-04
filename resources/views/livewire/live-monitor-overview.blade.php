@@ -11,11 +11,12 @@
     <div class="card-body">
         <div class="row">
             <div class="col">
-                <select class="form-select form-select-sm w-50 mb-1" name="" id="select">
-                    <option value="">Name</option>
-                    <option value="">Gruppe</option>
-                    <option value="">Status</option>
-                    <option value="">Aktualisiert</option>
+                <select wire:model="sort_by" wire:change="sortBy" class="form-select form-select-sm w-50" name="sort_by" id="DeviceSortBy">
+                    <option value="name">Name</option>
+                    <option value="group">{{ __('Group') }}</option>
+                    <option value="presentation">Presentation</option>
+                    <option value="status">Status</option>
+                    <option value="updated">{{ __('Updated') }}</option>
                 </select>
             </div>
             <div class="col">
@@ -50,18 +51,16 @@
                                     $preview = config('app.placeholder_image');
                                 }
                             @endphp
-                            <img class="img-thumbnail" style="max-height: 100px;" src="{{ $preview }}" alt="">
+                            <a href="{{ route('devices.show', $device->id) }}"><img class="img-thumbnail" style="max-height: 100px;" src="{{ $preview }}" alt=""></a>
                         </td>
                         <td>{{ $device->name }}</td>
                         <td>{{ $device->description }}</td>
                         <td>{{ $device_pres?->name ?? __('No template assigned') }}
                             @if ($device->presentationFromSchedule())
-                                <br> <small class="has-text-success"><i
-                                        class="mdi mdi-checkbox-marked-circle-outline"></i>
+                                <br> <small class="text-success"><i class="bi bi-check2-circle"></i>
                                     {{ __('Inherited by schedule') }}</small>
                             @elseif($device->presentationFromGroup())
-                                <br> <small class="has-text-success"><i
-                                        class="mdi mdi-checkbox-marked-circle-outline"></i>
+                                <br> <small class="text-success"><i class="bi bi-check2-circle"></i>
                                     {{ __('Inherited by group') }}</small>
                             @endif
                         </td>
@@ -100,7 +99,7 @@
                 @endforeach
                 @if ($devices->count() == 0)
                     <tr>
-                        <td colspan="8" class="has-text-centered">
+                        <td colspan="8" class="text-center">
                             {{ __('No devices found') }}</td>
                     </tr>
                 @endif

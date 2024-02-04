@@ -40,8 +40,8 @@
     <div id="app">
         <div class="container">
             <div class="box main-box">
-                <p class="has-text-centered is-size-4">{{ __('You are not allowed to perform this action') }}</p>
-                <p class="has-text-centered is-size-6">{{ __('If you think this is a mistake, please contact your administrator') }}</p>
+                <p class="text-center is-size-4">{{ __('You are not allowed to perform this action') }}</p>
+                <p class="text-center is-size-6">{{ __('If you think this is a mistake, please contact your administrator') }}</p>
 
 
                 <footer>

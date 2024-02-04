@@ -2,7 +2,7 @@
     <div class="subtitle">{{ $presentation->slides->count() }}@if(!$presentation->processed)/{{ $presentation->total_slides }} @endif {{ __('Slides') }}</div>
 
     @if (!$presentation->processed)
-        <div class="notification is-info">
+        <div class="alert alert-info">
             <style>
                 .loader1 {
                     width: 48px;
@@ -35,7 +35,7 @@
         <div class="slide box">
             <div class="columns gapless">
                 <img width="300" src="{{ $slide->publicpreviewpath() }}">
-                <div class="column">
+                <div class="col">
                     <div>{{ __('Order') }}: {{ $slide->order }}</div>
                     <div>{{ __('Created') }}: {{ $slide->created_at }}</div>
                     <div>{{ __('Filename') }}: {{ $slide->name_on_disk }} </div>
@@ -44,7 +44,7 @@
                     <div><a target="_blank" href="{{ $slide->publicpath() }}">{{ __('Preview') }}</a></div>
                 </div>
 
-                <div class="column">
+                <div class="col">
 
                 </div>
 

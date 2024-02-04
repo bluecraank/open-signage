@@ -56,7 +56,7 @@
                         @endforeach
                         @if ($groups->count() == 0)
                             <tr>
-                                <td colspan="5" class="has-text-centered">
+                                <td colspan="5" class="text-center">
                                     {{ __('No groups found') }}</td>
                             </tr>
                         @endif

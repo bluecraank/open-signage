@@ -2,8 +2,9 @@
 
 @section('content')
     @can('read presentations')
-        <h3 class="mb-3">{{ __('Templates') }}</h3>
-
+        <h3>{{ __('Templates') }}</h3>
+        <span class="badge bg-primary mb-3">0 {{ __('in use') }}</span>
+        <span class="badge bg-secondary mb-3 ml-2">0 {{ __('unused') }}</span>
         <div class="card">
             <h5 class="card-header">
                 {{ __('Overview') }}
@@ -82,7 +83,7 @@
                         @endforeach
                         @if ($presentations->count() == 0)
                             <tr>
-                                <td colspan="5" class="has-text-centered">
+                                <td colspan="7" class="text-center">
                                     {{ __('No templates found') }}</td>
                             </tr>
                         @endif

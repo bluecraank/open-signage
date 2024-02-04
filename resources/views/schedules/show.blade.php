@@ -8,8 +8,8 @@
         <script>
             $(document).ready(function() {
                 $('.multiselect').multiSelect({
-                    'selectableHeader': '<div class="has-text-centered has-text-weight-bold">{{ __('Selectable') }}</div>',
-                    'selectionHeader': '<div class="has-text-centered has-text-weight-bold">{{ __('Selected') }}</div>'
+                    'selectableHeader': '<div class="text-center has-text-weight-bold">{{ __('Selectable') }}</div>',
+                    'selectionHeader': '<div class="text-center has-text-weight-bold">{{ __('Selected') }}</div>'
                 });
             });
 
@@ -49,15 +49,15 @@
                     onsubmit="return validate()">
                     @csrf
                     @method('PUT')
-                    <div class="columns">
+                    <div class="row">
                         <div class="column is-4">
                             <div class="field">
-                                <label class="label">Name<span class="has-text-danger">*</span></label>
-                                <input required class="input" type="text" name="name" value="{{ $schedule->name }}" />
+                                <label class="form-label">Name<span class="text-danger">*</span></label>
+                                <input required class="form-control" type="text" name="name" value="{{ $schedule->name }}" />
                             </div>
                             <div class="field">
-                                <label class="label">{{ __('Assigned template') }}<span
-                                        class="has-text-danger">*</span></label>
+                                <label class="form-label">{{ __('Assigned template') }}<span
+                                        class="text-danger">*</span></label>
                                 <div class="select is-fullwidth">
                                     <select required name="presentation_id" id="">
                                         <option value="">{{ __('Select a template') }}...</option>
@@ -69,21 +69,21 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <label class="label">{{ __('Start Date') }}<span class="has-text-danger">*</span></label>
+                                <label class="form-label">{{ __('Start Date') }}<span class="text-danger">*</span></label>
                                 <input required data-date-format="dd.MM.yyyy" data-time-format="HH:mm" type="date"
                                     name="start_date"
                                     data-start-date="{{ Carbon::parse($schedule->startDate())->toDateString() }}"
                                     data-start-time="{{ Carbon::parse($schedule->startDate())->format('H:i') }}">
                             </div>
                             <div class="field">
-                                <label class="label">{{ __('End Date') }}<span class="has-text-danger">*</span></label>
+                                <label class="form-label">{{ __('End Date') }}<span class="text-danger">*</span></label>
                                 <input required data-date-format="dd.MM.yyyy" data-time-format="hh:mm" type="date"
                                     name="end_date" data-start-date="{{ Carbon::parse($schedule->endDate())->toDateString() }}"
                                     data-start-time="{{ Carbon::parse($schedule->endDate())->format('H:i') }}">
                             </div>
                         </div>
                         <div class="column is-4">
-                            <label class="label">{{ __('Devices') }}</label>
+                            <label class="form-label">{{ __('Devices') }}</label>
                             <select multiple="multiple" name="devices[]" class="multiselect">
                                 @foreach ($devices as $device)
                                     <option @if (in_array($device->id, $schedule->devices)) selected @endif value="{{ $device->id }}">
@@ -91,9 +91,9 @@
                                 @endforeach
                             </select>
 
-                            <div class="column">
+                            <div class="col">
                                 {{-- <div class="field">
-                                    <label class="label">{{ __('Activate schedule') }}</label>
+                                    <label class="form-label">{{ __('Activate schedule') }}</label>
                                     <input id="enabled-switch" type="checkbox" name="enabled" class="switch"
                                         @if ($schedule->enabled) checked="checked" @endif>
                                     <label for="enabled-switch">&nbsp;</label>
@@ -101,7 +101,7 @@
                             </div>
                         </div>
                         <div class="column is-4">
-                            <label class="label">{{ __('Groups') }}</label>
+                            <label class="form-label">{{ __('Groups') }}</label>
                             <select multiple="multiple" name="groups[]" class="multiselect">
                                 @foreach ($groups as $group)
                                     <option @if (in_array($group->id, $schedule->groups)) selected @endif value="{{ $group->id }}">

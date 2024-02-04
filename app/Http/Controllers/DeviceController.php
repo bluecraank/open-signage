@@ -92,7 +92,7 @@ class DeviceController extends Controller
 
         $device->save();
 
-        return redirect()->route('devices.index')->with('success', __('Device successfully registered'));
+        return redirect()->back()->with('success', __('Device successfully registered'));
     }
 
     /**
