@@ -2,12 +2,16 @@
 
 @section('content')
     @can('read presentations')
-        <h3>{{ __('Templates') }}</h3>
-        <span class="badge bg-primary mb-3">0 {{ __('in use') }}</span>
-        <span class="badge bg-secondary mb-3 ml-2">0 {{ __('unused') }}</span>
+    <h3>{{ __('Templates') }}</h3>
         <div class="card">
             <h5 class="card-header">
                 {{ __('Overview') }}
+
+                <span style="font-size: 13px;position:absolute;margin-left:10px;margin-top:5px;">
+                    <span class="badge bg-primary mb-3">{{ $countUsed }} {{ __('in use') }}</span>
+                    <span class="badge bg-secondary mb-3 ml-2">{{ $countUnused }} {{ __('unused') }}</span>
+                </span>
+
                 @can('create presentations')
                     <a href="{{ route('presentations.create') }}" class="btn-primary btn btn-sm float-end">
                         <span class="icon"><i class="bi-plus"></i></span>

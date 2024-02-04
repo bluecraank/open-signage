@@ -77,5 +77,6 @@ document.addEventListener('DOMContentLoaded', function () {
     let sort = localStorage.getItem('sort');
     if (sort) {
         document.getElementById('DeviceSortBy').value = sort;
+        document.getElementById('DeviceSortBy').dispatchEvent(new Event('change'));
     }
 });

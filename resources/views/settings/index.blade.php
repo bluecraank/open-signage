@@ -142,6 +142,8 @@
                         </div>
                     </div>
 
+                    <hr>
+
                     <div class="row mt-4">
                         <div class="col">
                             <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Log;
 use App\Models\Presentation;
 use App\Models\Slide;
+use App\Models\Group;
+use App\Models\Device;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -17,7 +19,31 @@ class PresentationController extends Controller
     public function index()
     {
         $presentations = Presentation::all()->sortBy('name');
-        return view('presentations.index', compact('presentations'));
+
+        $groups = Group::all()->sortBy('name');
+        $devices = Device::all()->sortBy('name');
+
+        $countUsed = 0;
+        $countUnused = 0;
+
+        // Loop through groups and devices and see which presentations are unused
+        foreach($presentations as $presentation) {
+            foreach($groups as $group) {
+                if($group->presentation?->id == $presentation->id) {
+                    $countUsed++;
+                    break;
+                }
+            }
+
+            foreach($devices as $device) {
+                if($device->presentation?->id == $presentation->id) {
+                    $countUsed++;
+                    break;
+                }
+            }
+        }
+
+        return view('presentations.index', compact('presentations', 'countUsed', 'countUnused'));
     }
 
     /**

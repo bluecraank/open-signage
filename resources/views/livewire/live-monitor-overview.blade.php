@@ -1,6 +1,12 @@
 <div class="card" wire:poll.10s>
     <h5 class="card-header">
         {{ __('Overview') }}
+
+        <span style="font-size: 13px;position:absolute;margin-left:10px;margin-top:5px;">
+            <span class="badge bg-success mb-3">{{ $devices->where('active', true)->count() }} {{ __('active') }}</span>
+            <span class="badge bg-danger mb-3 ml-2">{{ $devices->where('active', false)->count() }} {{ __('offline') }}</span>
+        </span>
+
         @can('create devices')
             <a href="{{ route('devices.create') }}" class="btn-primary btn btn-sm float-end">
                 <span class="icon"><i class="bi-plus"></i></span>
@@ -77,7 +83,6 @@
                             @endif
                         </td>
                         <td class="actions-cell">
-
                             <form action="{{ route('devices.destroy', ['id' => $device->id]) }}" method="POST"
                                 onsubmit="return confirm('{{ __('Are you sure to delete this device?') }}')">
                                 @method('DELETE')
