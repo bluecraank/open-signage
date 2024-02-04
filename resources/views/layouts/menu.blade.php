@@ -73,8 +73,8 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        <img height="25px"
-                            src="https://ui-avatars.com/api/?rounded=true&background=a0a0a0&size=30&name={{ Auth::user()->name }}">
+                        <img style="margin-top:-2px;" height="25px"
+                            src="https://ui-avatars.com/api/?rounded=true&background=a0a0a0&size=30&name={{ Auth::user()->initials() }}">
                         {{ Auth::user()->name }}
                     </a>
                     <ul class="dropdown-menu">
