@@ -1,5 +1,7 @@
 <div wire:poll>
-    <div class="subtitle">{{ $presentation->slides->count() }}@if(!$presentation->processed)/{{ $presentation->total_slides }} @endif {{ __('Slides') }}</div>
+    <div class="subtitle">{{ $presentation->slides->count() }}@if (!$presentation->processed)
+            /{{ $presentation->total_slides }}
+        @endif {{ __('Slides') }}</div>
 
     @if (!$presentation->processed)
         <div class="alert alert-info">
@@ -31,32 +33,27 @@
         </div>
     @endif
 
-    @foreach ($presentation->slides as $slide)
-        <div class="slide box">
-            <div class="columns gapless">
-                <img width="300" src="{{ $slide->publicpreviewpath() }}">
-                <div class="col">
-                    <div>{{ __('Order') }}: {{ $slide->order }}</div>
-                    <div>{{ __('Created') }}: {{ $slide->created_at }}</div>
-                    <div>{{ __('Filename') }}: {{ $slide->name_on_disk }} </div>
-                    {{-- <div>Name: {{ $slide->name }}</div> --}}
-                    <div>&nbsp;</div>
-                    <div><a target="_blank" href="{{ $slide->publicpath() }}">{{ __('Preview') }}</a></div>
+    <div class="row">
+        @foreach ($presentation->slides as $slide)
+            <div class="col-auto mb-3 d-flex justify-content-center">
+                <div class="card d-flex justify-content-center" style="width: 18rem;">
+                    <img src="{{ $slide->publicpreviewpath() }}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <div>{{ __('Order') }}: {{ $slide->order }}</div>
+                        <div>{{ __('Created') }}: {{ $slide->created_at }}</div>
+                        <div>{{ __('Filename') }}: {{ $slide->name_on_disk }} </div>
+                        <div><a target="_blank" href="{{ $slide->publicpath() }}">{{ __('Preview') }}</a></div>
+                        @can('delete slides')
+                            <form action="{{ route('slides.destroy', $slide->id) }}" method="POST"
+                                onsubmit="return confirm('{{ __('Are you sure to delete this slide?') }}')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm float-end"><i
+                                        class="bi-trash"></i></button>
+                            </form>
+                        @endcan
+                    </div>
                 </div>
-
-                <div class="col">
-
-                </div>
-
-                @can('delete slides')
-                    <form action="{{ route('slides.destroy', $slide->id) }}" method="POST"
-                        onsubmit="return confirm('{{ __('Are you sure to delete this slide?') }}')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="button is-danger is-small"><i class="mdi mdi-trash-can"></i></button>
-                    </form>
-                @endcan
             </div>
-        </div>
-    @endforeach
-</div>
+        @endforeach
+    </div>
