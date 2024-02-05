@@ -135,7 +135,7 @@
                         <hr>
 
                         <div class="p-3">
-                            <h5 class="pt-5">{{ __('Schedules') }} ({{ $presentation->schedules()->count() }})</h5>
+                            <h5 class="pt-5">{{ __('Schedules') }} ({{ $presentation->getSchedules()->count() }})</h5>
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
@@ -145,7 +145,7 @@
                                 </thead>
 
                                 <tbody>
-                                    @foreach ($presentation->schedules() as $schedule)
+                                    @foreach ($presentation->getSchedules() as $schedule)
                                         <tr>
                                             <td>{{ $schedule->name }}</td>
                                             <td class="text-center"><a
@@ -153,7 +153,7 @@
                                         </tr>
                                     @endforeach
 
-                                    @if ($presentation->schedules()->count() == 0)
+                                    @if ($presentation->getSchedules()->count() == 0)
                                         <tr>
                                             <td class="text-center" colspan="2">
                                                 {{ __('No schedules upcoming or active with this presentation') }}</td>

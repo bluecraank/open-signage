@@ -52,6 +52,11 @@ class Presentation extends Model
 
     public function schedules()
     {
+        return $this->hasMany(Schedule::class);
+    }
+
+    public function getSchedules()
+    {
         $upcomingSchedules = Schedule::where('start_time', '>', now())->orderBy('start_time', 'asc')->get();
         $activeSchedules = Schedule::where('start_time', '<', now())->where('end_time', '>', now())->orderBy('start_time', 'asc')->get();
 

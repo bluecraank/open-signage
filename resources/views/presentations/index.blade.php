@@ -57,9 +57,9 @@
                                         {{ trans_choice('Group|Groups', $presentation->groups->count()) }},
                                     @endif
 
-                                    @if ($presentation->schedules()->count() > 0)
-                                        {{ $presentation->schedules()->count() }}
-                                        {{ trans_choice('Schedule|Schedules', $presentation->schedules()->count()) }},
+                                    @if ($presentation->getSchedules()->count() > 0)
+                                        {{ $presentation->getSchedules()->count() }}
+                                        {{ trans_choice('Schedule|Schedules', $presentation->getSchedules()->count()) }},
                                     @endif
                                 </td>
                                 <td>{{ $presentation->author }}</td>
