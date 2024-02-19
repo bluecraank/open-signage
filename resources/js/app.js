@@ -120,9 +120,3 @@ document.addEventListener('DOMContentLoaded', function () {
         darkMode.classList.remove('d-none');
     }
 });
-
-const patchnotes = localStorage.getItem('patchnotes');
-if (patchnotes === null || patchnotes !== 'seen') {
-    $('#myModal').modal('toggle');
-    localStorage.setItem('patchnotes', 'seen');
-}
