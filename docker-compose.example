@@ -1,6 +1,6 @@
 services:
     app:
-        image: bluecraank/open-signage:master
+        image: ghcr.io/bluecraank/open-signage:master
         container_name: open-signage
         volumes:
             - public:/var/www/html/public/data:rw
