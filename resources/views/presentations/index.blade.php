@@ -2,28 +2,28 @@
 
 @section('content')
     @can('read presentations')
-        <div class="title">{{ __('Templates') }}</div>
+    <h3>{{ __('Templates') }}</h3>
+        <div class="card">
+            <h5 class="card-header">
+                {{ __('Overview') }}
 
-        <div class="card has-table">
-            <header class="card-header">
-                <p class="card-header-title">
-                    {{ __('Templates') }}
-                </p>
+                <span style="font-size: 13px;position:absolute;margin-left:10px;margin-top:5px;">
+                    <span class="badge bg-primary mb-3">{{ $countUsed }} {{ __('in use') }}</span>
+                    <span class="badge bg-secondary mb-3 ml-2">{{ $countUnused }} {{ __('unused') }}</span>
+                </span>
 
-                <div class="card-header-actions">
-                    @can('create presentations')
-                        <a href="{{ route('presentations.create') }}" class="button is-primary is-small">
-                            <span class="icon"><i class="mdi mdi-plus"></i></span>
-                            <span>{{ __('Create template') }}</span>
-                        </a>
-                    @endcan
-                </div>
-            </header>
-
-            <div class="card-content">
-                <table class="table is-narrow is-striped is-hoverable is-fullwidth">
+                @can('create presentations')
+                    <a href="{{ route('presentations.create') }}" class="btn-primary btn btn-sm float-end">
+                        <span class="icon"><i class="bi-plus"></i></span>
+                        <span>{{ __('Create template') }}</span>
+                    </a>
+                @endcan
+            </h5>
+            <div class="card-body">
+                <table class="table table-striped">
                     <thead>
                         <tr>
+                            <th>{{ __('Preview') }}</th>
                             <th>{{ __('Description') }}</th>
                             <th>{{ __('Slides') }}</th>
                             <th>{{ __('Slides updated') }}</th>
@@ -36,11 +36,17 @@
                     <tbody>
                         @foreach ($presentations as $presentation)
                             <tr>
+                                <td>
+                                    <a href="{{ route('presentations.show', ['id' => $presentation->id]) }}">
+                                        <img src="{{ $presentation->slides->first()?->publicpreviewpath ?? config('app.placeholder_image') }}"
+                                            class="img-thumbnail" style="max-height: 100px;">
+                                    </a>
+                                </td>
                                 <td>{{ $presentation->name }}</td>
                                 <td>{{ $presentation->slides->count() }}</td>
                                 <td>{{ $presentation->slides->first()?->created_at?->format('d.m.Y H:i') ?? 'N/A' }}</td>
                                 <td>
-                                    
+
                                     @if ($presentation->devices->count() > 0)
                                         {{ $presentation->devices->count() }}
                                         {{ trans_choice('Device|Devices', $presentation->devices->count()) }},
@@ -51,9 +57,9 @@
                                         {{ trans_choice('Group|Groups', $presentation->groups->count()) }},
                                     @endif
 
-                                    @if ($presentation->schedules()->count() > 0)
-                                        {{ $presentation->schedules()->count() }}
-                                        {{ trans_choice('Schedule|Schedules', $presentation->schedules()->count()) }},
+                                    @if ($presentation->getSchedules()->count() > 0)
+                                        {{ $presentation->getSchedules()->count() }}
+                                        {{ trans_choice('Schedule|Schedules', $presentation->getSchedules()->count()) }},
                                     @endif
                                 </td>
                                 <td>{{ $presentation->author }}</td>
@@ -64,22 +70,24 @@
                                         onsubmit="return confirm('{{ __('Are you sure to delete this template?') }}')">
                                         @method('DELETE')
                                         @csrf
-                                        @can('read presentations')
-                                            <a class="button is-info is-small"
-                                                href="{{ route('presentations.update', ['id' => $presentation->id]) }}"><i
-                                                    class="mdi mdi-pen"></i></a>
-                                        @endcan
-                                        @can('delete presentations')
-                                            <button class="button is-danger is-small" type="submit"><i
-                                                    class="mdi mdi-trash-can"></i></button>
-                                        @endcan
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            @can('read presentations')
+                                                <a class="btn btn-sm btn-primary"
+                                                    href="{{ route('presentations.update', ['id' => $presentation->id]) }}"><i
+                                                        class="bi-pen"></i></a>
+                                            @endcan
+                                            @can('delete presentations')
+                                                <button class="btn btn-sm btn-primary" type="submit"><i
+                                                        class="bi-trash"></i></button>
+                                            @endcan
+                                        </div>
                                     </form>
                                 </td>
                             </tr>
                         @endforeach
                         @if ($presentations->count() == 0)
                             <tr>
-                                <td colspan="5" class="has-text-centered">
+                                <td colspan="7" class="text-center">
                                     {{ __('No templates found') }}</td>
                             </tr>
                         @endif

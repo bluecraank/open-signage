@@ -92,7 +92,7 @@ class DeviceController extends Controller
 
         $device->save();
 
-        return redirect()->route('devices.index')->with('success', __('Device successfully registered'));
+        return redirect()->back()->with('success', __('Device successfully registered'));
     }
 
     /**
@@ -218,5 +218,12 @@ class DeviceController extends Controller
         ]);
 
         return redirect()->route('devices.monitor', ['secret' => $secret]);
+    }
+
+    static function getActiveInactiveDevices() {
+        $active = Device::where('active', true)->count();
+        $inactive = Device::where('active', false)->count();
+
+        return ['active' => $active, 'inactive' => $inactive];
     }
 }

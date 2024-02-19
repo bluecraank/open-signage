@@ -2,17 +2,14 @@
 
 @section('content')
     @can('read users')
-        <div class="title">{{ __('Users') }}</div>
+    <h3 class="mb-3">{{ __('Users') }}</h3>
 
-        <div class="card has-table">
-            <header class="card-header">
-                <p class="card-header-title">
-                    {{ __('Users') }}
-                </p>
-            </header>
-
-            <div class="card-content">
-                <table class="table is-narrow is-striped is-hoverable is-fullwidth">
+        <div class="card">
+            <h5 class="card-header">
+                {{ __('Overview') }}
+            </h5>
+            <div class="card-body">
+                <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -34,22 +31,24 @@
                                         onsubmit="return confirm('{{ __('Are you sure to delete this user?') }}')">
                                         @method('DELETE')
                                         @csrf
+                                        <div class="btn-group" role="group">
                                         @can('update users')
-                                            <a class="button is-info is-small"
+                                            <a class="btn btn-primary btn-sm"
                                                 href="{{ route('users.update', ['id' => $user->id]) }}"><i
-                                                    class="mdi mdi-pen"></i></a>
+                                                    class="bi-pen"></i></a>
                                         @endcan
                                         @can('delete users')
-                                            <button class="button is-danger is-small" type="submit"><i
-                                                    class="mdi mdi-trash-can"></i></button>
+                                            <button class="btn btn-primary btn-sm" type="submit"><i
+                                                    class="bi-trash"></i></button>
                                         @endcan
+                                        </div>
                                     </form>
                                 </td>
                             </tr>
                         @endforeach
                         @if ($users->count() == 0)
                             <tr>
-                                <td colspan="5" class="has-text-centered">
+                                <td colspan="5" class="text-center">
                                     {{ __('No users found, should not be possible :D') }}</td>
                             </tr>
                         @endif

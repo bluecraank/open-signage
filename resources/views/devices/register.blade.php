@@ -34,7 +34,7 @@
             <div class="box main-box">
 
                 @if ($errors->any())
-                    <div class="notification is-warning">
+                    <div class="alert is-warning">
                         <ul>
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -44,7 +44,7 @@
                 @endif
 
                 @if (old('ip') != '')
-                    <div class="notification is-info">
+                    <div class="alert alert-info">
                         <span class="has-text-weight-bold">Monitor IP: {{ old('ip') }}</span>
                     </div>
                 @endif
@@ -52,8 +52,8 @@
                 <form action="{{ route('devices.register') }}" method="POST">
                     @csrf
                     <div class="field">
-                        <label class="label">{{ __('Enter identification key') }}:</label>
-                        <input class="input" type="text" name="secret" placeholder="Secret Key">
+                        <label class="form-label">{{ __('Enter identification key') }}:</label>
+                        <input class="form-control" type="text" name="secret" placeholder="Secret Key">
                     </div>
 
                     <div class="field">

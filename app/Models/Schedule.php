@@ -21,7 +21,7 @@ class Schedule extends Model
         static::updated(function (Schedule $schedule) {
             Log::create([
                 'ip_address' => request()->ip(),
-                'username' => Auth::user()->name,
+                'username' => Auth::user()->name ?? 'System',
                 'action' => __('log.schedule_updated', ['name' => $schedule->name]),
             ]);
         });
@@ -44,6 +44,7 @@ class Schedule extends Model
         'end_time',
         'enabled',
         'created_by',
+        'delete_presentation',
     ];
 
     protected $casts = [
@@ -52,6 +53,7 @@ class Schedule extends Model
         'end_time' => 'datetime',
         'groups' => 'array',
         'devices' => 'array',
+        'delete_presentation' => 'boolean',
     ];
 
     public function groups()

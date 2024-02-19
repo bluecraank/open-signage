@@ -2,29 +2,21 @@
 
 @section('content')
     @can('read schedules')
-        <div class="title">{{ __('Schedules') }}</div>
+        <h3 class="mb-3">{{ __('Schedules') }}</h3>
 
-        <div class="card has-table">
-            <header class="card-header">
-                <p class="card-header-title">
-                    {{ __('Running schedules') }}
-                </p>
+        <div class="card">
+            <h5 class="card-header">
+                {{ __('Running schedules') }}
 
-                <div class="card-header-actions">
-                    @can('create schedules')
-                        <a href="{{ route('schedules.create') }}" class="button is-primary is-small">
-                            <span class="icon"><i class="mdi mdi-plus"></i></span>
-                            <span>{{ __('Create schedule') }}</span>
-                        </a>
-                    @endcan
-                </div>
-            </header>
-
-            <div class="card-content">
-                <table class="table is-narrow is-striped is-hoverable is-fullwidth">
+                <a href="{{ route('schedules.create') }}" class="btn btn-primary btn-sm float-end">
+                    <i class="bi-plus"></i>
+                    {{ __('Create schedule') }}
+                </a>
+            </h5>
+            <div class="card-body">
+                <table class="table table-striped">
                     <thead>
                         <tr>
-                            {{-- <th>{{ __('Enabled') }}</th> --}}
                             <th>{{ __('Created by') }}</th>
                             <th>Name</th>
                             <th>{{ __('Since') }}</th>
@@ -37,7 +29,6 @@
                     <tbody>
                         @foreach ($activeSchedules as $schedule)
                             <tr>
-                                {{-- <td>@if ($schedule->enabled) <span class="has-text-primary is-size-7">{{ __('ENABLED') }}</span> @else <span class="has-text-danger is-size-7">{{ __('DISABLED') }}</span> @endif</td> --}}
                                 <td>{{ $schedule->created_by }}</td>
                                 <td>{{ $schedule->name }}</td>
                                 <td>{{ $schedule->startDate() }}</td>
@@ -48,22 +39,24 @@
                                         onsubmit="return confirm('{{ __('Are you sure to delete this schedule?') }}')">
                                         @method('DELETE')
                                         @csrf
+                                        <div class="btn-group" role="group">
                                         @can('read schedules')
-                                            <a class="button is-info is-small"
+                                            <a class="btn btn-primary btn-sm"
                                                 href="{{ route('schedules.update', ['id' => $schedule->id]) }}"><i
-                                                    class="mdi mdi-pen"></i></a>
+                                                    class="bi-pen"></i></a>
                                         @endcan
                                         @can('delete schedules')
-                                            <button class="button is-danger is-small" type="submit"><i
-                                                    class="mdi mdi-trash-can"></i></button>
+                                            <button class="btn btn-primary btn-sm" type="submit"><i
+                                                    class="bi-trash"></i></button>
                                         @endcan
+                                        </div>
                                     </form>
                                 </td>
                             </tr>
                         @endforeach
                         @if ($activeSchedules->count() == 0)
                             <tr>
-                                <td colspan="5" class="has-text-centered">
+                                <td colspan="6" class="text-center">
                                     {{ __('No schedules found') }}</td>
                             </tr>
                         @endif
@@ -72,15 +65,12 @@
             </div>
         </div>
 
-        <div class="card has-table mt-5">
-            <header class="card-header">
-                <p class="card-header-title">
-                    {{ __('Upcoming schedules') }}
-                </p>
-            </header>
-
-            <div class="card-content">
-                <table class="table is-narrow is-striped is-hoverable is-fullwidth">
+        <div class="card mt-5">
+            <h5 class="card-header">
+                {{ __('Upcoming schedules') }}
+            </h5>
+            <div class="card-body">
+                <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>{{ __('Created by') }}</th>
@@ -105,22 +95,24 @@
                                         onsubmit="return confirm('{{ __('Are you sure to delete this schedule?') }}')">
                                         @method('DELETE')
                                         @csrf
+                                        <div class="btn-group" role="group">
                                         @can('read schedules')
-                                            <a class="button is-info is-small"
+                                            <a class="btn btn-primary btn-sm"
                                                 href="{{ route('schedules.update', ['id' => $schedule->id]) }}"><i
-                                                    class="mdi mdi-pen"></i></a>
+                                                    class="bi-pen"></i></a>
                                         @endcan
                                         @can('delete schedules')
-                                            <button class="button is-danger is-small" type="submit"><i
-                                                    class="mdi mdi-trash-can"></i></button>
+                                            <button class="btn btn-primary btn-sm" type="submit"><i
+                                                    class="bi-trash"></i></button>
                                         @endcan
+                                        </div>
                                     </form>
                                 </td>
                             </tr>
                         @endforeach
                         @if ($upcomingSchedules->count() == 0)
                             <tr>
-                                <td colspan="5" class="has-text-centered">
+                                <td colspan="6" class="text-center">
                                     {{ __('No schedules found') }}</td>
                             </tr>
                         @endif
@@ -129,22 +121,18 @@
             </div>
         </div>
 
-        <div class="card has-table mt-5">
-            <header class="card-header">
-                <p class="card-header-title">
-                    {{ __('Past schedules') }}
-                </p>
-            </header>
-
-            <div class="card-content">
-                <table class="table is-narrow is-striped is-hoverable is-fullwidth">
+        <div class="card mt-5">
+            <h5 class="card-header">
+                {{ __('Past schedules') }}
+            </h5>
+            <div class="card-body">
+                <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>{{ __('Created by') }}</th>
                             <th>Name</th>
                             <th>{{ __('Starts') }}</th>
-                            <th>{{ __('Ends') }}</th>
-                            <th></th>
+                            <th style="width:200px;">{{ __('Ends') }}</th>
                         </tr>
                     </thead>
 
@@ -160,7 +148,7 @@
                         @endforeach
                         @if ($pastSchedules->count() == 0)
                             <tr>
-                                <td colspan="3" class="has-text-centered">
+                                <td colspan="4" class="text-center">
                                     {{ __('No schedules found') }}</td>
                             </tr>
                         @endif

@@ -2,21 +2,14 @@
 
 @section('content')
     @can('read logs')
-    <div class="title">{{ __('Logs') }}</div>
+    <h3 class="mb-3">{{ __('Logs') }}</h3>
 
-    <div class="card has-table">
-        <header class="card-header">
-            <p class="card-header-title">
-                {{ __('Activities') }}
-            </p>
-
-            <div class="card-header-actions">
-
-            </div>
-        </header>
-
-        <div class="card-content">
-            <table class="table is-narrow is-striped is-hoverable is-fullwidth">
+    <div class="card">
+        <h5 class="card-header">
+          {{ __('Overview') }}
+        </h5>
+        <div class="card-body">
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>{{ __('Time') }}</th>
@@ -37,14 +30,14 @@
                     @endforeach
                     @if ($logs->count() == 0)
                         <tr>
-                            <td colspan="5" class="has-text-centered">
+                            <td colspan="4" class="text-center">
                                 {{ __('No logs found') }}</td>
                         </tr>
                     @endif
                 </tbody>
             </table>
         </div>
-    </div>
+      </div>
     @endcan
 
     @cannot('read logs')

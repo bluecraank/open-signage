@@ -34,11 +34,14 @@ Route::get('/monitor/{secret}', [MonitorController::class, 'show'])->name('devic
 Route::get('/discover', [DeviceController::class, 'discover'])->name('devices.discover');
 
 Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
-    Route::get('/', [App\Http\Controllers\DeviceController::class, 'index']);
+    Route::get('/', function () {
+        // Redirect to /
+        return redirect('/devices');
+    });
 
     Route::get('/home', function() {
         // Redirect to /
-        return redirect('/');
+        return redirect('/devices');
     });
 
     Route::prefix('devices')->group(function () {
@@ -106,6 +109,10 @@ Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
         Route::get('/', [LogController::class, 'index'])->name('logs.index');
     });
 });
+
+Route::get('/test', function() {
+    dd(ScheduleController::checkForExpiredSchedules());
+})->name('test');
 
 Auth::routes();
 

@@ -1,40 +1,42 @@
 <h1 align="center" id="title">open-signage</h1>
 
-<p id="description">Very easy way to create signage for digital content based on web browser built with Laravel</p>
+<p id="description">Create signage for digital content based on web browser built with Laravel</p>
 
-# This app is usable on any system, on any browser
-- Your monitor only need a webbrowser
-- Use Raspberry, Windows, FireTV, SmartTV or anything which has a browser with javascript
+# Requirements
+- Your monitor only needs a webbrowser with javascript
+- Use a Raspberry Pi 3B or higher or any other device with browser
 - Not supported: Raspberry Zero 2W, Raspberry Pi 2B
-- Memory amount depends on amount of slides, i recommend at least 1GB
+- Memory amount depends on amount of slides, recommend at least 1GB
+- Recommendation: <a href="https://github.com/guysoft/FullPageOS">FullPageOS</a>
 
 # Usage
 - Export Presentation as PDF and upload document
 - Background processing starts and generates images from each page
 - Create and register monitor
-- Assign presentation to monitor
-- Display presentation on monitor
-- Create schedule or group to easily assign mutliple devices one presentation
+- Assign presentation to monitor, group or schedule
+- Automatically display presentation on monitor
+- Create schedules or groups to easily assign presentations to multiple devices
 
 # Functions
-- Create, manage, delete schedules
+- LDAP-Login only
+- Create, manage, delete devices
 - Create, manage, delete groups
 - Create, manage, delete presentations
-- Create, manage, delete devices
-- Assign roles to users
+- Create, manage, delete schedules
+- Manage monitor settings (e.g Slide-duration)
 - Discover url for easy mass deployment (IP recognition)
+- Logging of actions in UI
+- Rightmanagement
 
 # Clientside browser functions
-- Hide cursor
+- Hides the cursor
 - Force monitor reload on request
 - Force monitor reload after x hours to prevent memory leak
-- Select and set loading screen
-- Configure animation times and more
-
 
 # Configuration
 ## Docker
 - Edit docker-compose.yml to your needs
+
 ## Native
 - Move env.example to .env
 - Setup LDAP Connection
@@ -69,16 +71,27 @@ LDAP_ALLOWED_GROUP="CN=MIS,OU=Groups,DC=ldap,DC=server"
 
 ## Install native
 ### Requirements
+```
+apt install php8.2 php8.2-imagick php8.2-mbstring php8.2-curl php8.2-ldap php8.2-bcmath
+```
 - php8.2
+- npm
+- composer
 - php ldap extension
 - php imagick extension
 - ghostscript
+- Replace imagick policy
+```sed -ri -e 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' /etc/ImageMagick-6/policy.xml```
+
 ### Installation
 - ```git clone https://github.com/bluecraank/open-signage```
 - ```cd open-signage```
+- ```composer install```
+- ```npm install```
+- ```npm run build```
 - ```php artisan migrate --force```
 - ```php artisan db:seed```
-- Serve with ```php artisan serve``` (Not recommended)
+- ```php artisan serve``` (Not recommended)
 - Use apache/nginx/caddy and configure root directory to ./public
 
 ## Words about reverse proxy
@@ -94,15 +107,13 @@ SSO_BYPASS_DOMAIN_VERIFICATION=false
 ```
 
 ## Deploy
-- Example chromium
+- use FullPageOS <a href="https://github.com/guysoft/FullPageOS">https://github.com/guysoft/FullPageOS</a>
+- or chromium parameters
 ```chromium --enable-logging --log-level=2 --v=0 --kiosk --touch-events=enabled --disable-pinch --noerrdialogs --simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT' --disable-session-crashed-bubble --disable-component-update --overscroll-history-navigation=0 --disable-features=Translate --autoplay-policy=no-user-gesture-required --app=https://mis.dc.local/discover```
-- or use FullPageOS <a href="https://github.com/guysoft/FullPageOS">https://github.com/guysoft/FullPageOS</a>
 
 ### SSL Errors
-- Add --ignore-certificate-errors to chromium flags (Not recommended, add Root-CA if internal, or fix ssl error)
-
-# Contribution
-- Feel free to contribute and help to improve it
+- Add --ignore-certificate-errors to chromium flags (Not recommended)
+- Add root-ca of your organization or domain
 
 # License
 The MIT License (MIT). Please see License File for more information.

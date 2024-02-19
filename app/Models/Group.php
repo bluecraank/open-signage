@@ -12,7 +12,7 @@ class Group extends Model
         static::created(function (Group $group) {
             Log::create([
                 'ip_address' => request()->ip(),
-                'username' => Auth::user()->name,
+                'username' => Auth::user()->name ?? 'System',
                 'action' => __('log.group_created', ['name' => $group->name]),
             ]);
         });
@@ -20,7 +20,7 @@ class Group extends Model
         static::deleted(function (Group $group) {
             Log::create([
                 'ip_address' => request()->ip(),
-                'username' => Auth::user()->name,
+                'username' => Auth::user()->name ?? 'System',
                 'action' => __('log.group_deleted', ['name' => $group->name]),
             ]);
         });

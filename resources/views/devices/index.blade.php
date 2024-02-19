@@ -2,9 +2,9 @@
 
 @section('content')
     @can('read devices')
-    <div class="title">{{ __('Devices') }}</div>
+        <h3>{{ __('Devices') }}</h3>
 
-    @livewire('live-monitor-overview')
+        @livewire('live-monitor-overview')
     @endcan
 
     @cannot('read devices')
