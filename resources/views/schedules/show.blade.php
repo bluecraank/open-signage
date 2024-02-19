@@ -61,6 +61,11 @@
                                     {{ $presentation->name }}</option>
                             @endforeach
                         </select>
+
+                        <div class="form-group form-check mb-3 mt-1">
+                            <input @if($schedule->delete_presentation) checked @endif type="checkbox" class="form-check-input" name="del_pres_after_schedule_ends" id="delete-pres-after-schedule">
+                            <label class="form-check-label" for="delete-pres-after-schedule">{{ __('Delete presentation after schedule ends') }}</label>
+                        </div>
                     </div>
 
                     <div class="row mb-3">

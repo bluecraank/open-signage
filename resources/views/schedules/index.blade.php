@@ -132,7 +132,7 @@
                             <th>{{ __('Created by') }}</th>
                             <th>Name</th>
                             <th>{{ __('Starts') }}</th>
-                            <th>{{ __('Ends') }}</th>
+                            <th style="width:200px;">{{ __('Ends') }}</th>
                         </tr>
                     </thead>
 

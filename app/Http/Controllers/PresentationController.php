@@ -222,7 +222,7 @@ class PresentationController extends Controller
     }
 
     static function getCurrentPresentationsInProgress() {
-        $presentations = Presentation::where('processed', false)->get();
+        $presentations = Presentation::where('processed', false)->latest()->take(2)->get();
 
         if(!$presentations) {
             return null;

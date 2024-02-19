@@ -17,7 +17,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col">
-                <select wire:model="sort_by" wire:change="sortBy" class="form-select form-select-sm w-50" name="sort_by" id="DeviceSortBy">
+                <select wire:model.live="sort_by" class="form-select form-select-sm w-50" name="sort_by" id="DeviceSortBy">
                     <option value="name">Name</option>
                     <option value="group">{{ __('Group') }}</option>
                     <option value="presentation">Presentation</option>

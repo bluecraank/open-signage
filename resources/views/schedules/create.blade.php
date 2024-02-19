@@ -59,6 +59,11 @@
                                 </option>
                             @endforeach
                         </select>
+
+                        <div class="form-group form-check mb-3 mt-1">
+                            <input type="checkbox" class="form-check-input" name="del_pres_after_schedule_ends" id="delete-pres-after-schedule">
+                            <label class="form-check-label" for="delete-pres-after-schedule">{{ __('Delete presentation after schedule ends') }}</label>
+                        </div>
                     </div>
 
                     <div class="row">
@@ -75,8 +80,8 @@
                             <div class="mb-3">
                                 <label for="end_date" class="form-label">{{ __('End date') }}<span
                                         class="text-danger">*</span></label>
-                                    <input required type="datetime-local" class="form-control" name="end_date" id="end_date"
-                                    value="{{ now()->addDays(1)->format('Y-m-d') }}T00:00">
+                                <input required type="datetime-local" class="form-control" name="end_date" id="end_date"
+                                    value="{{ now()->addHours(1)->format('Y-m-d H:m') }}">
                             </div>
                         </div>
                     </div>

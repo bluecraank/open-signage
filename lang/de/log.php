@@ -21,5 +21,7 @@
         'presentation_file_success_updated' => 'Inhalt der Präsentation ":name" aktualisiert (:type, :pages Seiten)',
         'device_force_reload' => 'Monitor ":name" wird beim nächsten Update neu geladen',
         'device_registered' => 'Monitor ":name" registriert',
+        'presentation_deleted_because_schedule' => 'Präsentation ":name" automatisch gelöscht, weil Zeitplan ":schedule" abgelaufen ist',
+        'presentation_not_deleted_because_schedule' => 'Präsentation ":name" konnte nicht automatisch gelöscht werden, weil Geräte oder Gruppen zugeordnet sind',
     ];
 ?>

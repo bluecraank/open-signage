@@ -1,4 +1,7 @@
 import "bootstrap/dist/js/bootstrap.min.js";
+import $ from "jquery";
+
+window.$ = window.jQuery = $;
 
 window.checkIfFileIsNotValid = function (file) {
     const fileType = file['type'];
@@ -54,7 +57,7 @@ window.dragOverHandler = function (ev) {
 
 // Hide alert after 5 seconds
 window.setTimeout(function () {
-    let alert = document.querySelector('.alert');
+    let alert = document.querySelector('.fade-out');
     if (alert) {
         alert.animate([
             { opacity: 1 },
@@ -70,13 +73,56 @@ window.setTimeout(function () {
 }, 5000);
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('DeviceSortBy').addEventListener('change', function () {
+    const DeviceSortBy = document.getElementById('DeviceSort');
+
+    if(!DeviceSortBy) return;
+
+    DeviceSortBy.addEventListener('change', function () {
         localStorage.setItem('sort', this.value);
     });
 
     let sort = localStorage.getItem('sort');
     if (sort) {
-        document.getElementById('DeviceSortBy').value = sort;
-        document.getElementById('DeviceSortBy').dispatchEvent(new Event('change'));
+        DeviceSortBy.value = sort;
+        DeviceSortBy.dispatchEvent(new Event('change'));
     }
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const darkMode = document.querySelector('.dark-mode');
+    const lightMode = document.querySelector('.light-mode');
+    const body = document.querySelector('body');
+    const switchMode = document.querySelector('.themeButton');
+
+    if (switchMode) {
+        switchMode.addEventListener('click', () => {
+            if (body.dataset.bsTheme === 'dark') {
+                body.dataset.bsTheme = '';
+                localStorage.setItem('theme', 'light');
+                darkMode.classList.remove('d-none');
+                lightMode.classList.add('d-none');
+            } else {
+                body.dataset.bsTheme = 'dark';
+                localStorage.setItem('theme', 'dark');
+                lightMode.classList.remove('d-none');
+                darkMode.classList.add('d-none');
+            }
+
+        });
+    }
+
+    if (localStorage.getItem('theme') === 'dark') {
+        body.dataset.bsTheme = 'dark';
+        if(darkMode) darkMode.classList.add('d-none');
+    } else {
+        body.dataset.bsTheme = '';
+        if(lightMode) lightMode.classList.add('d-none');
+        darkMode.classList.remove('d-none');
+    }
+});
+
+const patchnotes = localStorage.getItem('patchnotes');
+if (patchnotes === null || patchnotes !== 'seen') {
+    $('#myModal').modal('toggle');
+    localStorage.setItem('patchnotes', 'seen');
+}

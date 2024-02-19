@@ -1,7 +1,10 @@
 <div wire:poll>
-    <div class="subtitle">{{ $presentation->slides->count() }}@if (!$presentation->processed)
-            /{{ $presentation->total_slides }}
-        @endif {{ __('Slides') }}</div>
+    <h5 class="">
+        @if (!$presentation->processed)
+        {{ __('Slides') }} ({{ $presentation->slides->count() }}/{{ $presentation->total_slides }})
+        @else
+        {{ __('Slides') }} ({{ $presentation->slides->count() }})
+        @endif</h5>
 
     @if (!$presentation->processed)
         <div class="alert alert-info">

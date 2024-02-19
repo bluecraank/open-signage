@@ -34,9 +34,4 @@ class LiveMonitorOverview extends Component
 
         return view('livewire.live-monitor-overview', ['devices' => $devices, 'presentation' => $presentation]);
     }
-
-    public function sortBy()
-    {
-        return true;
-    }
 }

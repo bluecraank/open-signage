@@ -120,21 +120,19 @@
                                 @else
                                     <div class="field">
                                         <label class="form-label">{{ __('Assigned template') }}</label>
-                                        <div class="select is-fullwidth">
-                                            <select name="presentation_id">
-                                                <option value="">{{ __('No template assigned') }}</option>
-                                                @foreach ($presentations as $presentation)
-                                                    <option @if ($device->getPresentationId() == $presentation->id) selected @endif
-                                                        value="{{ $presentation->id }}"
-                                                        @if (!$presentation->processed) disabled @endif>
-                                                        {{ $presentation->name }}
-                                                        @if (!$presentation->processed)
-                                                            ({{ __('In process') }})
-                                                        @endif
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                        <select class="form-select" name="presentation_id">
+                                            <option value="">{{ __('No template assigned') }}</option>
+                                            @foreach ($presentations as $presentation)
+                                                <option @if ($device->getPresentationId() == $presentation->id) selected @endif
+                                                    value="{{ $presentation->id }}"
+                                                    @if (!$presentation->processed) disabled @endif>
+                                                    {{ $presentation->name }}
+                                                    @if (!$presentation->processed)
+                                                        ({{ __('In process') }})
+                                                    @endif
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 @endif
 

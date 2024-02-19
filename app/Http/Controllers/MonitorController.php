@@ -47,6 +47,8 @@ class MonitorController extends Controller
     }
 
     public function hasUpdate(Request $request) {
+        // Trigger schedule check
+        ScheduleController::checkForExpiredSchedules();
 
         $validator = Validator::make(
             $request->all(),

@@ -1,43 +1,6 @@
 @import 'bootstrap/scss/bootstrap.scss';
 @import 'bootstrap-icons/font/bootstrap-icons.css';
 
-
-.is-fullheight {
-    height: 100%;
-}
-
-.footer {
-    margin-top: -12px;
-}
-
-@media screen and (max-width: 768px) {
-    #menu-toggle:checked+.nav-menu {
-        display: block;
-    }
-}
-
-.custom-menu li {
-    height: 55px;
-    padding: 1px;
-    line-height: 55px;
-}
-
-.card.has-table .card-content {
-    padding: 1em 0;
-}
-
-.card-header-actions {
-    align-items: center;
-    display: flex;
-    padding-right: 1em;
-}
-
-.main-box {
-    padding: 3em;
-    padding-bottom: 0;
-    min-height: calc(100vh - 5.25rem);
-}
-
 footer {
     padding-top: 2em;
     padding-bottom: 0.5em;
@@ -57,11 +20,15 @@ footer {
     margin-top: 0.25em;
 }
 
+body[data-bs-theme=dark] .loader {
+    border: 4px dotted #FFF !important;
+}
+
 .loader {
     width: 20px;
     height: 20px;
-    border: 4px dotted #FFF;
     border-radius: 50%;
+    border: 4px dotted #000;
     display: inline-block;
     position: relative;
     box-sizing: border-box;
@@ -78,23 +45,8 @@ footer {
     }
   }
 
-.table thead th:last-child {
-    width: 5%;
-    white-space: nowrap;
-    text-align: center;
-}
-
 .table td {
     vertical-align: middle;
-}
-.actions-cell {
-    width: 5%;
-    white-space: nowrap;
-    text-align: center;
-}
-
-.field.is-fullwidth {
-    width: 100%;
 }
 
 #drop_zone {

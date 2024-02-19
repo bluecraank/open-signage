@@ -178,5 +178,6 @@
     "unused": "nicht verwendet",
     "in use": "in Verwendung",
     "Updated": "Aktualisiert",
-    "Go to presentation": "Gehe zu Präsentation"
+    "Go to presentation": "Gehe zu Präsentation",
+    "Delete presentation after schedule ends": "Präsentation nach Ablauf des Zeitplans löschen"
 }

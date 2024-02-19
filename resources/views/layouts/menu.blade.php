@@ -69,7 +69,11 @@
                 @endcan
             </ul>
 
+
             <ul class="navbar-nav ms-auto">
+                <div class="nav-item d-flex align-items-center">
+                    @livewire('poll-presentation-process')
+                </div>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
@@ -95,35 +99,6 @@
                                 @csrf
                             </form>
                         @endif
-                        <script>
-                            const darkMode = document.querySelector('.dark-mode');
-                            const lightMode = document.querySelector('.light-mode');
-                            const body = document.querySelector('body');
-                            const switchMode = document.querySelector('.themeButton');
-
-                            switchMode.addEventListener('click', () => {
-                                if (body.dataset.bsTheme === 'dark') {
-                                    body.dataset.bsTheme = '';
-                                    localStorage.setItem('theme', 'light');
-                                    darkMode.classList.remove('d-none');
-                                    lightMode.classList.add('d-none');
-                                } else {
-                                    body.dataset.bsTheme = 'dark';
-                                    localStorage.setItem('theme', 'dark');
-                                    lightMode.classList.remove('d-none');
-                                    darkMode.classList.add('d-none');
-                                }
-
-                            });
-
-                            if (localStorage.getItem('theme') === 'dark') {
-                                body.dataset.bsTheme = 'dark';
-                                lightMode.classList.remove('d-none');
-                            } else {
-                                body.dataset.bsTheme = '';
-                                darkMode.classList.remove('d-none');
-                            }
-                        </script>
                     </ul>
                 </li>
             </ul>

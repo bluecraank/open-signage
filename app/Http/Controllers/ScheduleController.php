@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Device;
 use App\Models\Group;
+use App\Models\Log;
 use App\Models\Presentation;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
@@ -46,30 +47,33 @@ class ScheduleController extends Controller
             'devices' => 'nullable|array',
             'groups' => 'nullable|array',
             'presentation_id' => 'required|integer|exists:presentations,id',
+            'del_pres_after_schedule_ends' => 'nullable|in:"on"',
         ]);
 
         if(empty($request->devices) && empty($request->groups)) {
             return redirect()->back()->withErrors(['message' => __('You must select at least one device or group')]);
         }
 
-        $enabled = true;
-        // if($request->has('submit_without_enable')) {
-        //     $enabled = false;
-        // }
+        if($request->has('del_pres_after_schedule_ends') && $request->del_pres_after_schedule_ends == 'on') {
+            $del_pres_after_schedule_ends = true;
+        } else {
+            $del_pres_after_schedule_ends = false;
+        }
 
         // Date to timestamp
         $start_date = strtotime($request->start_date);
         $end_date = strtotime($request->end_date);
 
-        $schedule = Schedule::create([
+        Schedule::create([
             'name' => $request->name,
             'start_time' => $start_date,
             'end_time' => $end_date,
             'devices' => $request->devices ?? [],
             'groups' => $request->groups ?? [],
             'presentation_id' => $request->presentation_id,
-            'enabled' => $enabled,
-            'created_by' => Auth::user()->name ?? 'N/A'
+            'enabled' => true,
+            'created_by' => Auth::user()->name ?? 'N/A',
+            'delete_presentation' => $del_pres_after_schedule_ends,
         ]);
 
         return redirect()->route('schedules.index')->with('success', __('Schedule created'));
@@ -111,15 +115,11 @@ class ScheduleController extends Controller
             'devices' => 'nullable|array',
             'groups' => 'nullable|array',
             'presentation_id' => 'required|integer|exists:presentations,id',
+            'del_pres_after_schedule_ends' => 'nullable|in:"on"',
         ]);
 
         if(empty($request->devices) && empty($request->groups)) {
             return redirect()->back()->withErrors(['message' => __('You must select at least one device or group')]);
-        }
-
-        $enabled = false;
-        if($request->has('enabled') && $request->enabled == 'on') {
-            $enabled = true;
         }
 
         // Date to timestamp
@@ -134,7 +134,8 @@ class ScheduleController extends Controller
             'devices' => $request->devices ?? [],
             'groups' => $request->groups ?? [],
             'presentation_id' => $request->presentation_id,
-            'enabled' => $enabled,
+            'enabled' => true,
+            'delete_presentation' => $request->has('del_pres_after_schedule_ends') && $request->del_pres_after_schedule_ends == 'on' ? true : false,
         ]);
 
         return redirect()->route('schedules.index')->with('success', __('Schedule updated'));
@@ -154,5 +155,51 @@ class ScheduleController extends Controller
         $schedule->delete();
 
         return redirect()->route('schedules.index')->with('success', __('Schedule deleted'));
+    }
+
+    static function checkForExpiredSchedules() {
+        $currentTimestamp = now();
+
+        $expiredSchedules = Schedule::where('end_time', '<', $currentTimestamp)->get();
+
+        // dd($expiredSchedules);
+
+        foreach($expiredSchedules as $schedule) {
+            if($schedule->delete_presentation == 1) {
+                $presentation = $schedule->presentation;
+
+                if($presentation) {
+                    if($presentation->devices()->count() == 0 && $presentation->groups()->count() == 0) {
+                        Log::create([
+                            'ip_address' => "127.0.0.1",
+                            'username' => 'System',
+                            'action' => __('log.presentation_deleted_because_schedule', ['name' => $presentation->name, 'schedule' => $schedule->name,]),
+                        ]);
+
+                        $presentation->delete();
+                    } else {
+                        Log::create([
+                            'ip_address' => "127.0.0.1",
+                            'username' => 'System',
+                            'action' => __('log.presentation_not_deleted_because_schedule', ['name' => $presentation->name, 'schedule' => $schedule->name,]),
+                        ]);
+
+                        $schedule->delete_presentation = false;
+                        $schedule->save();
+
+                        return false;
+                    }
+                }
+
+                // Disable delete_presentation after deleting assigned presentation to avoid double deletion
+                $schedule->delete_presentation = false;
+                $schedule->save();
+
+                return true;
+            }
+
+        }
+
+        return false;
     }
 }

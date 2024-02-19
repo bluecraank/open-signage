@@ -110,6 +110,10 @@ Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
     });
 });
 
+Route::get('/test', function() {
+    dd(ScheduleController::checkForExpiredSchedules());
+})->name('test');
+
 Auth::routes();
 
 
