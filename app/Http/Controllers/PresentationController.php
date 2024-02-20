@@ -212,12 +212,12 @@ class PresentationController extends Controller
 
             foreach($schedules as $schedule) {
                 if($schedule->end_date < now()) {
-                    $schedule->presentation_id = null;
+                    $schedule->presentation_id = 0;
                     $schedule->save();
+                } else {
+                    return redirect()->back()->withErrors(['message' => __('Presentation is assigned to schedules')]);
                 }
             }
-
-            return redirect()->back()->withErrors(['message' => __('Presentation is assigned to schedules')]);
         }
 
         // Delete all files
