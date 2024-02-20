@@ -208,6 +208,15 @@ class PresentationController extends Controller
         }
 
         if($presentation->schedules->count() != 0) {
+            $schedules = $presentation->schedules;
+
+            foreach($schedules as $schedule) {
+                if($schedule->end_date < now()) {
+                    $schedule->presentation_id = null;
+                    $schedule->save();
+                }
+            }
+
             return redirect()->back()->withErrors(['message' => __('Presentation is assigned to schedules')]);
         }
 
