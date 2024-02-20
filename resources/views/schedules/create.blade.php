@@ -8,8 +8,8 @@
         <script>
             $(document).ready(function() {
                 $('.multiselect').multiSelect({
-                    'selectableHeader': '<div class="text-center has-text-weight-bold">{{ __('Selectable') }}</div>',
-                    'selectionHeader': '<div class="text-center has-text-weight-bold">{{ __('Selected') }}</div>'
+                    'selectableHeader': '<div class="text-center font-weight-bold">Selectable</div>',
+                    'selectionHeader': '<div class="text-center font-weight-bold">Selected</div>'
                 });
             });
 

@@ -1,7 +1,4 @@
 import "bootstrap/dist/js/bootstrap.min.js";
-import $ from "jquery";
-
-window.$ = window.jQuery = $;
 
 window.checkIfFileIsNotValid = function (file) {
     const fileType = file['type'];
