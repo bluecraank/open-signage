@@ -179,5 +179,7 @@
     "in use": "in Verwendung",
     "Updated": "Aktualisiert",
     "Go to presentation": "Gehe zu Präsentation",
-    "Delete presentation after schedule ends": "Präsentation nach Ablauf des Zeitplans löschen"
+    "Delete presentation after schedule ends": "Präsentation nach Ablauf des Zeitplans löschen",
+    "Start date": "Startdatum",
+    "End date": "Enddatum"
 }

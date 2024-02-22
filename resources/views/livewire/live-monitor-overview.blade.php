@@ -4,7 +4,8 @@
 
         <span style="font-size: 13px;position:absolute;margin-left:10px;margin-top:5px;">
             <span class="badge bg-success mb-3">{{ $devices->where('active', true)->count() }} {{ __('active') }}</span>
-            <span class="badge bg-danger mb-3 ml-2">{{ $devices->where('active', false)->count() }} {{ __('offline') }}</span>
+            <span class="badge bg-danger mb-3 ml-2">{{ $devices->where('active', false)->count() }}
+                {{ __('offline') }}</span>
         </span>
 
         @can('create devices')
@@ -17,7 +18,8 @@
     <div class="card-body">
         <div class="row">
             <div class="col">
-                <select wire:model.live="sort_by" class="form-select form-select-sm w-50" name="sort_by" id="DeviceSortBy">
+                <select wire:model.live="sort_by" class="form-select form-select-sm w-50" name="sort_by"
+                    id="DeviceSortBy">
                     <option value="name">Name</option>
                     <option value="group">{{ __('Group') }}</option>
                     <option value="presentation">Presentation</option>
@@ -57,7 +59,8 @@
                                     $preview = config('app.placeholder_image');
                                 }
                             @endphp
-                            <a href="{{ route('devices.show', $device->id) }}"><img class="img-thumbnail" style="max-height: 100px;" src="{{ $preview }}" alt=""></a>
+                            <a href="{{ route('devices.show', $device->id) }}"><img class="img-thumbnail"
+                                    style="max-height: 100px;" src="{{ $preview }}" alt=""></a>
                         </td>
                         <td>{{ $device->name }}</td>
                         <td>{{ $device->description }}</td>
@@ -87,17 +90,14 @@
                                 onsubmit="return confirm('{{ __('Are you sure to delete this device?') }}')">
                                 @method('DELETE')
                                 @csrf
-                                <div class="btn-group" role="group" aria-label="Basic example">
-                                    @can('read devices')
-                                        <a class="btn btn-primary btn-sm"
-                                            href="{{ route('devices.update', ['id' => $device->id]) }}"><i
-                                                class="bi-pen"></i></a>
-                                    @endcan
-                                    @can('delete devices')
-                                        <button class="btn btn-primary btn-sm" type="submit"><i
-                                                class="bi-trash"></i></button>
-                                    @endcan
-                                </div>
+                                @can('read devices')
+                                    <a class="btn btn-primary btn-sm"
+                                        href="{{ route('devices.update', ['id' => $device->id]) }}"><i
+                                            class="bi-pen"></i></a>
+                                @endcan
+                                @can('delete devices')
+                                    <button class="btn btn-danger btn-sm" type="submit"><i class="bi-trash"></i></button>
+                                @endcan
                             </form>
                         </td>
                     </tr>

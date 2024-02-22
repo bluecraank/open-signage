@@ -70,17 +70,15 @@
                                         onsubmit="return confirm('{{ __('Are you sure to delete this template?') }}')">
                                         @method('DELETE')
                                         @csrf
-                                        <div class="btn-group" role="group" aria-label="Basic example">
                                             @can('read presentations')
                                                 <a class="btn btn-sm btn-primary"
                                                     href="{{ route('presentations.update', ['id' => $presentation->id]) }}"><i
                                                         class="bi-pen"></i></a>
                                             @endcan
                                             @can('delete presentations')
-                                                <button class="btn btn-sm btn-primary" type="submit"><i
+                                                <button class="btn btn-sm btn-danger" type="submit"><i
                                                         class="bi-trash"></i></button>
                                             @endcan
-                                        </div>
                                     </form>
                                 </td>
                             </tr>

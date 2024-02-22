@@ -13,7 +13,7 @@
                         <span>{{ __('Create group') }}</span>
                     </a>
                 @endcan
-                </h5>
+            </h5>
             <div class="card-body">
                 <table class="table table-striped">
                     <thead>
@@ -39,17 +39,14 @@
                                         onsubmit="return confirm('{{ __('Are you sure to delete this group?') }}')">
                                         @method('DELETE')
                                         @csrf
-                                        <div class="btn-group" role="group" aria-label="Basic example">
-                                            @can('read groups')
-                                                <a class="btn btn-primary btn-sm"
-                                                    href="{{ route('groups.update', ['id' => $group->id]) }}"><i
-                                                        class="bi-pen"></i></a>
-                                            @endcan
-                                            @can('delete groups')
-                                                <button class="btn btn-primary btn-sm" type="submit"><i
-                                                        class="bi-trash"></i></button>
-                                            @endcan
-                                        </div>
+                                        @can('read groups')
+                                            <a class="btn btn-primary btn-sm"
+                                                href="{{ route('groups.update', ['id' => $group->id]) }}"><i
+                                                    class="bi-pen"></i></a>
+                                        @endcan
+                                        @can('delete groups')
+                                            <button class="btn btn-danger btn-sm" type="submit"><i class="bi-trash"></i></button>
+                                        @endcan
                                     </form>
                                 </td>
                             </tr>

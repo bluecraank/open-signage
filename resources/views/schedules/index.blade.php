@@ -39,17 +39,14 @@
                                         onsubmit="return confirm('{{ __('Are you sure to delete this schedule?') }}')">
                                         @method('DELETE')
                                         @csrf
-                                        <div class="btn-group" role="group">
                                         @can('read schedules')
                                             <a class="btn btn-primary btn-sm"
                                                 href="{{ route('schedules.update', ['id' => $schedule->id]) }}"><i
                                                     class="bi-pen"></i></a>
                                         @endcan
                                         @can('delete schedules')
-                                            <button class="btn btn-primary btn-sm" type="submit"><i
-                                                    class="bi-trash"></i></button>
+                                            <button class="btn btn-danger btn-sm" type="submit"><i class="bi-trash"></i></button>
                                         @endcan
-                                        </div>
                                     </form>
                                 </td>
                             </tr>
@@ -95,17 +92,14 @@
                                         onsubmit="return confirm('{{ __('Are you sure to delete this schedule?') }}')">
                                         @method('DELETE')
                                         @csrf
-                                        <div class="btn-group" role="group">
                                         @can('read schedules')
                                             <a class="btn btn-primary btn-sm"
                                                 href="{{ route('schedules.update', ['id' => $schedule->id]) }}"><i
                                                     class="bi-pen"></i></a>
                                         @endcan
                                         @can('delete schedules')
-                                            <button class="btn btn-primary btn-sm" type="submit"><i
-                                                    class="bi-trash"></i></button>
+                                            <button class="btn btn-danger btn-sm" type="submit"><i class="bi-trash"></i></button>
                                         @endcan
-                                        </div>
                                     </form>
                                 </td>
                             </tr>
