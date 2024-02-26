@@ -28,18 +28,14 @@ class PresentationController extends Controller
 
         // Loop through groups and devices and see which presentations are unused
         foreach($presentations as $presentation) {
-            foreach($groups as $group) {
-                if($group->presentation?->id == $presentation->id) {
-                    $countUsed++;
-                    break;
-                }
-            }
+            $devices = $presentation->devices->count();
+            $groups = $presentation->groups->count();
+            $schedules = $presentation->schedules->count();
 
-            foreach($devices as $device) {
-                if($device->presentation?->id == $presentation->id) {
-                    $countUsed++;
-                    break;
-                }
+            if($devices == 0 && $groups == 0 && $schedules == 0) {
+                $countUnused++;
+            } else {
+                $countUsed++;
             }
         }
 

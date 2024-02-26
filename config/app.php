@@ -16,7 +16,7 @@ return [
     | any other location as required by the application or its packages.
     |
     */
-    'version' => '1.5.4',
+    'version' => '1.5.5',
 
     'placeholder_image' => 'https://placehold.co/600x338?text=Assign\nTemplate',
 
