@@ -80,6 +80,14 @@ RUN echo "php_value post_max_size 100M" >> /var/www/html/public/.htaccess
 
 # Allow pdf imaging
 RUN sed -ri -e 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' /etc/ImageMagick-6/policy.xml
+# change <policy domain="resource" name="disk" value="1GiB"/>
+# to <policy domain="resource" name="disk" value="8GiB"/>
+# more resources for imagick
+RUN sed -ri -e 's/<policy domain="resource" name="memory" value="256MiB"\/>/<policy domain="resource" name="memory" value="2GiB"\/>/g' /etc/ImageMagick-6/policy.xml
+RUN sed -ri -e 's/<policy domain="resource" name="map" value="512MiB"\/>/<policy domain="resource" name="map" value="8GiB"\/>/g' /etc/ImageMagick-6/policy.xml
+RUN sed -ri -e 's/<policy domain="resource" name="disk" value="1GiB"\/>/<policy domain="resource" name="disk" value="8GiB"\/>/g' /etc/ImageMagick-6/policy.xml
+
+
 
 USER root
 RUN chown -R www-data:www-data /var/www/html/
