@@ -1,7 +1,8 @@
     @extends('layouts.app')
 
     @section('content')
-        <h3 class="mb-3">{{ __('Template') }}: {{ $presentation->name }}</h3>
+        <h3 class="mb-3">
+            {{ __('Template') }}: {{ $presentation->name }}</h3>
         <div class="card">
             <h5 class="card-header">
                 {{ __('Edit template') }}
@@ -44,13 +45,15 @@
                                     </div>
 
 
-                                    <div class="mb-3">
+                                    <div class="mb-3 mt-4">
                                         <label class="form-label">{{ __('Upload file') }}<span class="text-danger">*</span></label>
-                                        <div id="drop_zone" ondrop="window.dropHandler(event)" ondragover="window.dragOverHandler(event)">
+                                        <div id="drop_zone" ondrop="window.dropHandler(event)"
+                                            ondragover="window.dragOverHandler(event)">
                                             <div id="file-upload">
                                                 <input class="form-control file-input" type="file" name="file" required
                                                     accept="application/pdf,video/mp4" id="formFile">
-                                                <p class="mt-4" style="display: inline-block">{{ __('or drag and drop to upload') }}</p>
+                                                <p class="mt-4" style="display: inline-block">
+                                                    {{ __('or drag and drop to upload') }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -58,13 +61,22 @@
                                     <hr>
 
                                     @if ($presentation->processed)
-                                        <button @if (!$presentation->processed) disabled @endif type="submit" class="btn btn-primary">{{ __('Save') }} @if (!$presentation->processed) ({{ __('In process') }}) @endif</button>
+                                        <button @if (!$presentation->processed) disabled @endif type="submit"
+                                            class="btn btn-primary">{{ __('Save') }} @if (!$presentation->processed)
+                                                ({{ __('In process') }})
+                                            @endif
+                                        </button>
+                                    @else
+                                        <button disabled type="submit" class="btn btn-primary">{{ __('Save') }} @if (!$presentation->processed)
+                                                ({{ __('In process') }})
+                                            @endif
+                                        </button>
                                     @endif
                                 </form>
                             @endcan
                         </div>
 
-                        <hr>
+                        <hr style="margin-top: 20px">
 
                         <div class="p-3">
                             <h5 class="pt-1">{{ __('Devices') }} ({{ $presentation->devices->count() }})</h5>

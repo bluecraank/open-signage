@@ -64,6 +64,12 @@
                                     </a>
                                 </li>
                             @endcan
+                            @can('read logs')
+                                <li><a href="{{ route('presentations.ongoing') }}" class="dropdown-item">
+                                        {{ __('Ongoing processing') }}
+                                    </a>
+                                </li>
+                            @endcan
                         </ul>
                     </li>
                 @endcan

@@ -64,6 +64,8 @@ Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
 
     Route::prefix('presentations')->group(function () {
         Route::get('/', [PresentationController::class, 'index'])->name('presentations.index');
+        Route::post('/ongoing/{id}', [PresentationController::class, 'stopOngoingProcessing'])->name('presentations.ongoing.stop');
+        Route::get('/ongoing', [PresentationController::class, 'ongoing'])->name('presentations.ongoing');
         Route::get('/create', [PresentationController::class, 'create'])->middleware('can:create presentations')->name('presentations.create');
         Route::post('/', [PresentationController::class, 'store'])->middleware('can:create presentations')->name('presentations.store');
         Route::get('/{id}', [PresentationController::class, 'show'])->middleware('can:read presentations')->name('presentations.show');
@@ -109,10 +111,6 @@ Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
         Route::get('/', [LogController::class, 'index'])->name('logs.index');
     });
 });
-
-Route::get('/test', function() {
-    dd(ScheduleController::checkForExpiredSchedules());
-})->name('test');
 
 Auth::routes();
 

@@ -46,6 +46,25 @@ class PresentationController extends Controller
         return view('presentations.index', compact('presentations', 'countUsed', 'countUnused'));
     }
 
+    public function ongoing() {
+        $presentations = Presentation::where('processed', false)->latest()->get();
+
+        return view('presentations.ongoing', compact('presentations'));
+    }
+
+    public function stopOngoingProcessing(Request $request, $id) {
+        $presentation = Presentation::whereId($id)->first();
+
+        if(!$presentation) {
+            return redirect()->back()->withErrors(['message' => __('Presentation not found')]);
+        }
+
+        $presentation->processed = true;
+        $presentation->save();
+
+        return redirect()->route('presentations.ongoing')->with('success', __('Presentation processing stopped'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */

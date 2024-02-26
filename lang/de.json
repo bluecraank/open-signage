@@ -181,5 +181,7 @@
     "Go to presentation": "Gehe zu Präsentation",
     "Delete presentation after schedule ends": "Präsentation nach Ablauf des Zeitplans löschen",
     "Start date": "Startdatum",
-    "End date": "Enddatum"
+    "End date": "Enddatum",
+    "Ongoing processing": "Laufende Verarbeitung",
+    "Are you sure to stop this processing?" : "Sind Sie sicher, dass Sie diese Verarbeitung stoppen möchten?"
 }
