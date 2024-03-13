@@ -31,7 +31,7 @@ class Slide extends Model
         $name = pathinfo($this->name_on_disk, PATHINFO_FILENAME);
         $extension = pathinfo($this->name_on_disk, PATHINFO_EXTENSION);
         $name = $name . '.jpg';
-        return asset('data/presentations/' . $this->presentation_id . '/preview-' . $name);
+        return asset('data/presentations/' . $this->presentation_id . '/' . $name);
     }
 
     public function getPublicpathAttribute() {

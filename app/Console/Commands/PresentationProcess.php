@@ -55,15 +55,12 @@ class PresentationProcess extends Command
             $imagename = $random . '-' . $i . '.jpg';
             $pdf->setResolution(300);
 
-            $pdf->setPage($i)->saveImage(public_path('data/presentations/' . $presentation->id . '/' . $imagename));
-            $resizeImage = \Intervention\Image\Facades\Image::make(public_path('data/presentations/' . $presentation->id . '/' . $imagename))
-            ->resize(1920, 1080)
-            ->save(public_path('data/presentations/' . $presentation->id . '/' . $imagename));
+            // $pdf->setPage($i)->saveImage(storage_path('app/public/presentations/' . $presentation->id . '/orig-' . $imagename));
+            $imageData = $pdf->setPage($i)->getImageData(storage_path('app/public/presentations/' . $presentation->id . '/orig-' . $imagename));
 
-            $pdf->setPage($i)->saveImage(public_path('data/presentations/' . $presentation->id . '/preview-' . $imagename));
-            $resizeImage = \Intervention\Image\Facades\Image::make(public_path('data/presentations/' . $presentation->id . '/preview-' . $imagename))
-            ->resize(1920, 1080)
-            ->save(public_path('data/presentations/' . $presentation->id . '/preview-' . $imagename));
+            $resizeImage = \Intervention\Image\Facades\Image::make($imageData);
+            $resizeImage->resize(1920, 1080)
+            ->save(public_path('data/presentations/' . $presentation->id . '/' . $imagename));
 
             Slide::updateOrCreate([
                 'presentation_id' => $presentation->id,
