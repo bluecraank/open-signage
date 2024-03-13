@@ -53,6 +53,7 @@ class PresentationProcess extends Command
         for ($i = 1; $i <= $pages; $i++) {
             $random = Str::random(7);
             $imagename = $random . '-' . $i . '.jpg';
+            $pdf->setResolution(300);
 
             $pdf->setPage($i)->saveImage(public_path('data/presentations/' . $presentation->id . '/' . $imagename));
             $resizeImage = \Intervention\Image\Facades\Image::make(public_path('data/presentations/' . $presentation->id . '/' . $imagename))

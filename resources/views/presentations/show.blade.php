@@ -17,7 +17,7 @@
                                 alt="">
 
                             @can('delete presentations')
-                                <form class="mb-5" action="{{ route('presentations.destroy', $presentation->id) }}" method="POST"
+                                <form class="mt-5" action="{{ route('presentations.destroy', $presentation->id) }}" method="POST"
                                     onsubmit="return confirm('{{ __('Are you sure to delete this template?') }}')">
                                     @csrf
                                     @method('DELETE')
