@@ -6,10 +6,8 @@ use App\Models\Log;
 use App\Models\Presentation;
 use App\Models\Slide;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-
 
 class PresentationProcess extends Command
 {
@@ -55,10 +53,16 @@ class PresentationProcess extends Command
         for ($i = 1; $i <= $pages; $i++) {
             $random = Str::random(7);
             $imagename = $random . '-' . $i . '.jpg';
-            $pdf->setResolution(300);
+
             $pdf->setPage($i)->saveImage(public_path('data/presentations/' . $presentation->id . '/' . $imagename));
-            $pdf->setResolution(25);
+            $resizeImage = \Intervention\Image\Facades\Image::make(public_path('data/presentations/' . $presentation->id . '/' . $imagename))
+            ->resize(1920, 1080)
+            ->save(public_path('data/presentations/' . $presentation->id . '/' . $imagename));
+
             $pdf->setPage($i)->saveImage(public_path('data/presentations/' . $presentation->id . '/preview-' . $imagename));
+            $resizeImage = \Intervention\Image\Facades\Image::make(public_path('data/presentations/' . $presentation->id . '/preview-' . $imagename))
+            ->resize(1920, 1080)
+            ->save(public_path('data/presentations/' . $presentation->id . '/preview-' . $imagename));
 
             Slide::updateOrCreate([
                 'presentation_id' => $presentation->id,
