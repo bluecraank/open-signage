@@ -56,9 +56,9 @@ class PresentationProcess extends Command
             $pdf->setResolution(300);
 
             // $pdf->setPage($i)->saveImage(storage_path('app/public/presentations/' . $presentation->id . '/orig-' . $imagename));
-            $imageData = $pdf->setPage($i)->getImageData(storage_path('app/public/presentations/' . $presentation->id . '/orig-' . $imagename));
+            $pdf->setPage($i)->saveImage(storage_path('app/public/presentations/' . $presentation->id . '/orig-' . $imagename));
 
-            $resizeImage = \Intervention\Image\Facades\Image::make($imageData);
+            $resizeImage = \Intervention\Image\Facades\Image::make(storage_path('app/public/presentations/' . $presentation->id . '/orig-' . $imagename));
             $resizeImage->resize(1920, 1080)
             ->save(public_path('data/presentations/' . $presentation->id . '/' . $imagename));
 
