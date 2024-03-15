@@ -113,14 +113,6 @@ Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
     });
 });
 
-Route::get('/test', function() {
-    $id = 1;
-    Artisan::call('presentation:process', [
-        'id' => $id,
-        'type' => 'pdf'
-    ]);
-});
-
 Auth::routes();
 
 
