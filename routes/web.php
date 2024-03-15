@@ -9,6 +9,7 @@ use App\Http\Controllers\SlideController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SettingsController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -110,6 +111,14 @@ Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
     Route::prefix('logs')->middleware('can:read logs')->group(function () {
         Route::get('/', [LogController::class, 'index'])->name('logs.index');
     });
+});
+
+Route::get('/test', function() {
+    $id = 1;
+    Artisan::call('presentation:process', [
+        'id' => $id,
+        'type' => 'pdf'
+    ]);
 });
 
 Auth::routes();

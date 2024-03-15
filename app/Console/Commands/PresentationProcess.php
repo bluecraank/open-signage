@@ -8,6 +8,7 @@ use App\Models\Slide;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Imagick;
 
 class PresentationProcess extends Command
 {
@@ -31,55 +32,54 @@ class PresentationProcess extends Command
     public function handle()
     {
         $id = $this->argument('id');
+
         $presentation = Presentation::where('id', $id)->firstOrFail();
+
         $type = $this->argument('type');
 
         if ($type == 'pdf') {
             $this->processPdf($presentation);
         } else if ($type == 'video') {
-            $this->processVideo($presentation);
+            // Deprecated
         }
     }
 
     public function processPdf($presentation)
     {
-        $pdf = new \Spatie\PdfToImage\Pdf(storage_path('app/public/presentations/' . $presentation->id . '/' . $presentation->id) . '.pdf');
 
-        $pages = $pdf->getNumberOfPages();
-        $presentation->total_slides = $pages;
-        $presentation->timestamps = false;
-        $presentation->save();
+        $i = 0;
+        $images = [];
 
-        for ($i = 1; $i <= $pages; $i++) {
+        while(true) {
             $random = Str::random(7);
             $imagename = $random . '-' . $i . '.jpg';
-            $pdf->setResolution(300);
 
-            // $pdf->setPage($i)->saveImage(storage_path('app/public/presentations/' . $presentation->id . '/orig-' . $imagename));
-            $pdf->setPage($i)->saveImage(storage_path('app/public/presentations/' . $presentation->id . '/orig-' . $imagename));
+            $image = $this->processPdfPageToImage(storage_path('app/public/presentations/' . $presentation->id . '/' . $presentation->id) . '.pdf', $i, $presentation->id, $imagename);
 
-            $resizeImage = \Intervention\Image\Facades\Image::make(storage_path('app/public/presentations/' . $presentation->id . '/orig-' . $imagename));
-            $resizeImage->resize(1920, 1080)
-            ->save(public_path('data/presentations/' . $presentation->id . '/' . $imagename));
+            if ($image) {
+                $images[] = $imagename;
+            } else {
+                break;
+            }
 
             Slide::updateOrCreate([
                 'presentation_id' => $presentation->id,
-                'order' => $i,
+                'order' => $i + 1,
                 'type' => 'image',
             ], [
                 'name_on_disk' => $imagename,
                 'name' => $random,
             ]);
+
+            $i++;
         }
 
-        $presentation->timestamps = true;
-        $presentation->processed = true;
 
         File::delete(storage_path('app/public/presentations/' . $presentation->id . '/' . $presentation->id) . '.pdf');
         File::deleteDirectory(storage_path('app/public/presentations/' . $presentation->id . '/'));
 
-        $presentation->touch();
-        $presentation->total_slides = $pages;
+        $presentation->processed = true;
+        $presentation->total_slides = count($images);
         $presentation->save();
 
         Log::create([
@@ -89,44 +89,32 @@ class PresentationProcess extends Command
         ]);
     }
 
-    public function processVideo($presentation)
-    {
-        $random = Str::random(7);
-        $videoname = $random . '-' . 'v' . '.mp4';
-        $previewname = 'preview-' . $random . '-v' . '.jpg';
+    public function processPdfPageToImage($pdf, $page, $pres_id, $imagename) {
+        $image = new Imagick();
+        $image->setResolution(300, 300);
+        try {
+            $image->readImage($pdf . '[' . $page . ']');
+        } catch (\ImagickException $e) {
+            return false;
+        }
 
-        // Save video to public
-        $ffmpeg = \FFMpeg\FFMpeg::create();
+        $image->setImageFormat('jpg');
 
-        $video = $ffmpeg->open(storage_path('app/public/presentations/' . $presentation->id . '/' . $presentation->id) . '.mp4');
 
-        $timeCode = \FFMpeg\Coordinate\TimeCode::fromSeconds(0);
-        $frame = $video->frame($timeCode);
+        if ($image->getImageWidth() == 0) {
+            return false;
+        }
 
-        $frame->save(public_path('data/presentations/' . $presentation->id . '/' . $previewname));
+        // Compress
+        $image->setImageCompressionQuality(100);
 
-        $video->save(new \FFMpeg\Format\Video\X264(), public_path('data/presentations/' . $presentation->id . '/' . $videoname) );
+        // Resize
+        $image->resizeImage(1920, 1080, Imagick::FILTER_LANCZOS, 1);
 
-        Slide::updateOrCreate([
-            'presentation_id' => $presentation->id,
-            'order' => 1,
-            'type' => 'video',
-        ], [
-            'name_on_disk' => $videoname,
-            'name' => $random,
-        ]);
+        $image->writeImage(public_path('data/presentations/' . $pres_id . '/' . $imagename));
 
-        $presentation->processed = true;
+        $image->clear();
 
-        Log::create([
-            'ip_address' => request()->ip(),
-            'username' => "System",
-            'action' => __('log.presentation_file_success_updated', ['name' => $presentation->name, 'type' => 'video', 'pages' => 1]),
-        ]);
-
-        File::delete(storage_path('app/public/presentations/' . $presentation->id . '/' . $presentation->id) . '.mp4');
-        File::deleteDirectory(storage_path('app/public/presentations/' . $presentation->id . '/'));
-
-        $presentation->save();
+        return true;
     }
 }

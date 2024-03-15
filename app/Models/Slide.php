@@ -27,11 +27,9 @@ class Slide extends Model
     }
 
     public function publicpreviewpath() {
-        // Replace file extension
-        $name = pathinfo($this->name_on_disk, PATHINFO_FILENAME);
-        $extension = pathinfo($this->name_on_disk, PATHINFO_EXTENSION);
-        $name = $name . '.jpg';
-        return asset('data/presentations/' . $this->presentation_id . '/' . $name);
+        // Deprecated
+
+        return asset('data/presentations/' . $this->presentation_id . '/' . $this->name_on_disk);
     }
 
     public function getPublicpathAttribute() {
