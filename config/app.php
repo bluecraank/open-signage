@@ -21,6 +21,8 @@ return [
     'placeholder_image' => 'https://placehold.co/600x338?text=Assign\nTemplate',
 
     'name' => env('APP_NAME', 'MIS Manager'),
+    'image_width' => env('IMAGE_WIDTH', 1920),
+    'image_height' => env('IMAGE_HEIGHT', 1080),
 
     /*
     |--------------------------------------------------------------------------

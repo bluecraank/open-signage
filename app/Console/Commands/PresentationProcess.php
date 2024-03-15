@@ -109,7 +109,7 @@ class PresentationProcess extends Command
         $image->setImageCompressionQuality(100);
 
         // Resize
-        $image->resizeImage(1920, 1080, Imagick::FILTER_LANCZOS, 1);
+        $image->resizeImage(config('app.image_width'), config('app.image_height'), Imagick::FILTER_LANCZOS, 1);
 
         $image->writeImage(public_path('data/presentations/' . $pres_id . '/' . $imagename));
 
