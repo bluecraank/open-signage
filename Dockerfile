@@ -35,9 +35,8 @@ RUN chmod +x /usr/local/bin/install-php-extensions && \
 # Clone source code if not downloaded
 RUN rm -rf /var/www/html
 # RUN git clone https://github.com/bluecraank/open-signage.git /var/www/html
-
 ADD https://api.github.com/repos/bluecraank/open-signage/git/refs/heads/master version.json
-RUN git clone -b master https://github.com/bluecraank/open-signage.git /var/www/html
+RUN git clone https://github.com/bluecraank/open-signage.git /var/www/html
 
 COPY .env.example.productive /var/www/html/.env
 
