@@ -35,8 +35,6 @@ class Presentation extends Model
         'total_slides'
     ];
 
-    protected $appends = ['in_use'];
-
     public function devices()
     {
         return $this->hasMany(Device::class);
