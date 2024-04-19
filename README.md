@@ -2,6 +2,8 @@
 
 <p id="description">Create signage for digital content based on web browser built with Laravel</p>
 
+[![Docker](https://github.com/bluecraank/open-signage/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/bluecraank/open-signage/actions/workflows/docker-publish.yml)
+
 # Requirements
 - Your monitor only needs a webbrowser with javascript
 - Use a Raspberry Pi 3B or higher or any other device with browser
