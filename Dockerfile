@@ -1,4 +1,4 @@
-FROM php:8.2-apache
+FROM php:8.3-apache
 
 LABEL maintainer "blueCraanK"
 ARG NODE_VERSION=20
@@ -35,8 +35,9 @@ RUN chmod +x /usr/local/bin/install-php-extensions && \
 # Clone source code if not downloaded
 RUN rm -rf /var/www/html
 # RUN git clone https://github.com/bluecraank/open-signage.git /var/www/html
-ADD https://api.github.com/repos/bluecraank/open-signage/git/refs/heads/master version.json
-RUN git clone https://github.com/bluecraank/open-signage.git /var/www/html
+ARG BRANCH=master
+ADD https://api.github.com/repos/bluecraank/open-signage/git/refs/heads/$BRANCH /var/www/version.json
+RUN git clone -b $BRANCH https://github.com/bluecraank/open-signage.git /var/www/html
 
 COPY .env.example.productive /var/www/html/.env
 
