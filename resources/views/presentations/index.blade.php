@@ -46,20 +46,21 @@
                                 <td>{{ $presentation->slides->count() }}</td>
                                 <td>{{ $presentation->slides->first()?->created_at?->format('d.m.Y H:i') ?? 'N/A' }}</td>
                                 <td>
-
+                                    @php $list = []; @endphp
                                     @if ($presentation->devices->count() > 0)
-                                        {{ $presentation->devices->count() }}
-                                        {{ trans_choice('Device|Devices', $presentation->devices->count()) }},
+                                        @php $list[] = $presentation->devices->count() . " " . trans_choice('Device|Devices', $presentation->devices->count()); @endphp
                                     @endif
 
                                     @if ($presentation->groups->count() > 0)
-                                        {{ $presentation->groups->count() }}
-                                        {{ trans_choice('Group|Groups', $presentation->groups->count()) }},
+                                        @php $list[] = $presentation->groups->count() . " " . trans_choice('Group|Groups', $presentation->groups->count()); @endphp
                                     @endif
 
                                     @if ($presentation->getSchedules()->count() > 0)
-                                        {{ $presentation->getSchedules()->count() }}
-                                        {{ trans_choice('Schedule|Schedules', $presentation->getSchedules()->count()) }},
+                                        @php $list[] = $presentation->getSchedules()->count() . " " . trans_choice('Schedule|Schedules', $presentation->getSchedules()->count()); @endphp
+                                    @endif
+
+                                    @if (count($list) > 0)
+                                        {{ implode(', ', $list) }}
                                     @endif
                                 </td>
                                 <td>{{ $presentation->author }}</td>

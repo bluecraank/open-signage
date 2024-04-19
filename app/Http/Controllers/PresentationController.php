@@ -20,6 +20,11 @@ class PresentationController extends Controller
     {
         $presentations = Presentation::all()->sortBy('name');
 
+        // Sort by inUse
+        $presentations = $presentations->sortBy(function ($presentation) {
+            return !$presentation->in_use();
+        });
+
         $groups = Group::all()->sortBy('name');
         $devices = Device::all()->sortBy('name');
 
@@ -28,15 +33,7 @@ class PresentationController extends Controller
 
         // Loop through groups and devices and see which presentations are unused
         foreach($presentations as $presentation) {
-            $devices = $presentation->devices->count();
-            $groups = $presentation->groups->count();
-            $schedules = $presentation->schedules->count();
-
-            if($devices == 0 && $groups == 0 && $schedules == 0) {
-                $countUnused++;
-            } else {
-                $countUsed++;
-            }
+            $presentation->in_use() ? $countUsed++ : $countUnused++;
         }
 
         return view('presentations.index', compact('presentations', 'countUsed', 'countUnused'));

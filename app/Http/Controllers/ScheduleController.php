@@ -9,6 +9,7 @@ use App\Models\Presentation;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class ScheduleController extends Controller
 {
@@ -160,34 +161,37 @@ class ScheduleController extends Controller
     static function checkForExpiredSchedules() {
         $currentTimestamp = now();
 
-        $expiredSchedules = Schedule::where('end_time', '<', $currentTimestamp)->get();
-
-        // dd($expiredSchedules);
+        $expiredSchedules = Schedule::where('end_time', '<', $currentTimestamp)->where('delete_presentation', 1)->get();
 
         foreach($expiredSchedules as $schedule) {
-            if($schedule->delete_presentation == 1) {
                 $presentation = $schedule->presentation;
 
                 if($presentation) {
                     if($presentation->devices()->count() == 0 && $presentation->groups()->count() == 0) {
-                        Log::create([
-                            'ip_address' => "127.0.0.1",
-                            'username' => 'System',
-                            'action' => __('log.presentation_deleted_because_schedule', ['name' => $presentation->name, 'schedule' => $schedule->name,]),
-                        ]);
+                        try {
+                            $presentation->slides()->delete();
 
-                        $presentation->delete();
+                            File::delete(storage_path('app/public/presentations/' . $presentation->id . '/' . $presentation->id) . '.pdf');
+                            File::deleteDirectory(storage_path('app/public/presentations/' . $presentation->id . '/'));
+
+                            $oldName = $presentation->name;
+
+                            $presentation->delete();
+
+                            Log::create([
+                                'ip_address' => "127.0.0.1",
+                                'username' => 'System',
+                                'action' => __('log.presentation_deleted_because_schedule', ['name' => $oldName, 'schedule' => $schedule->name,]),
+                            ]);
+                        } catch (\Exception $e) {
+
+                        }
                     } else {
                         Log::create([
                             'ip_address' => "127.0.0.1",
                             'username' => 'System',
                             'action' => __('log.presentation_not_deleted_because_schedule', ['name' => $presentation->name, 'schedule' => $schedule->name,]),
                         ]);
-
-                        $schedule->delete_presentation = false;
-                        $schedule->save();
-
-                        return false;
                     }
                 }
 
@@ -196,8 +200,6 @@ class ScheduleController extends Controller
                 $schedule->save();
 
                 return true;
-            }
-
         }
 
         return false;

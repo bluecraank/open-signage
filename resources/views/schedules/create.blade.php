@@ -72,7 +72,7 @@
                                 <label for="start_date" class="form-label">{{ __('Start date') }}<span
                                         class="text-danger">*</span></label>
                                 <input required type="datetime-local" class="form-control" name="start_date" id="start_date"
-                                    value="{{ now()->format('Y-m-d H:i') }}">
+                                    value="{{ now()->format('Y-m-d H:00') }}">
                             </div>
                         </div>
 
@@ -81,7 +81,7 @@
                                 <label for="end_date" class="form-label">{{ __('End date') }}<span
                                         class="text-danger">*</span></label>
                                 <input required type="datetime-local" class="form-control" name="end_date" id="end_date"
-                                    value="{{ now()->addHours(1)->format('Y-m-d H:i') }}">
+                                    value="{{ now()->addHours(1)->format('Y-m-d H:00') }}">
                             </div>
                         </div>
                     </div>

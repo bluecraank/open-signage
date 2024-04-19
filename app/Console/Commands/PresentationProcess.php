@@ -35,13 +35,7 @@ class PresentationProcess extends Command
 
         $presentation = Presentation::where('id', $id)->firstOrFail();
 
-        $type = $this->argument('type');
-
-        if ($type == 'pdf') {
-            $this->processPdf($presentation);
-        } else if ($type == 'video') {
-            // Deprecated
-        }
+        $this->processPdf($presentation);
     }
 
     public function processPdf($presentation)

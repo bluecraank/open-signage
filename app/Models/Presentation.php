@@ -35,6 +35,8 @@ class Presentation extends Model
         'total_slides'
     ];
 
+    protected $appends = ['in_use'];
+
     public function devices()
     {
         return $this->hasMany(Device::class);
@@ -64,5 +66,10 @@ class Presentation extends Model
         $schedules = $schedules->where('presentation_id', $this->id);
 
         return $schedules;
+    }
+
+    public function in_use()
+    {
+        return $this->devices->count() > 0 || $this->groups->count() > 0 || $this->getSchedules()->count() > 0;
     }
 }
