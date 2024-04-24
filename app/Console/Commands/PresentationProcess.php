@@ -79,7 +79,7 @@ class PresentationProcess extends Command
         Log::create([
             'ip_address' => request()->ip(),
             'username' => "System",
-            'action' => __('log.presentation_file_success_updated', ['name' => $presentation->name, 'type' => 'pdf', 'pages' => $pages]),
+            'action' => __('log.presentation_file_success_updated', ['name' => $presentation->name, 'type' => 'pdf', 'pages' => $i]),
         ]);
     }
 
