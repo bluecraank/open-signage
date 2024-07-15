@@ -35,13 +35,10 @@ services:
         container_name: open-signage-db
         restart: unless-stopped
         tty: true
-        ports:
-            - ':3306'
         environment:
             TZ: 'Europe/Berlin'
             MYSQL_DATABASE: open-signage
             MYSQL_ROOT_PASSWORD: random_root_password
-            SERVICE_TAGS: dev
             SERVICE_NAME: mysql
         networks:
             - open-signage
