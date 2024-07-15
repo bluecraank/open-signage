@@ -80,7 +80,8 @@ apt install php8.3 php8.3-imagick php8.3-mbstring php8.3-curl php8.3-ldap php8.3
 - php imagick extension
 - ghostscript
 - Replace imagick policy
-```sed -ri -e 's/<policy domain="resource" name="memory" value="256MiB"\/>/<policy domain="resource" name="memory" value="2GiB"\/>/g' /etc/ImageMagick-6/policy.xml
+```
+sed -ri -e 's/<policy domain="resource" name="memory" value="256MiB"\/>/<policy domain="resource" name="memory" value="2GiB"\/>/g' /etc/ImageMagick-6/policy.xml
 
 sed -ri -e 's/<policy domain="resource" name="map" value="512MiB"\/>/<policy domain="resource" name="map" value="8GiB"\/>/g' /etc/ImageMagick-6/policy.xml
 
