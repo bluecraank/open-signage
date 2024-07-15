@@ -9,9 +9,9 @@
                 @csrf
 
                 <div class="mb-3">
-                    <label class="form-label">{{ __('Description') }}<span class="text-danger">*</span></label>
+                    <label class="form-label">{{ __('Description of presentation') }}<span class="text-danger">*</span></label>
                     <input required type="text" class="form-control" id="inputDescription" name="name"
-                        placeholder="{{ __('Description') }}">
+                        placeholder="{{ __('Description of presentation') }}">
                 </div>
 
                 <div class="mb-3">

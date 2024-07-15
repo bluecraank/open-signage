@@ -43,8 +43,8 @@
                 <form action="{{ route('schedules.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <label for="name" class="form-label">Name<span class="text-danger">*</span></label>
-                        <input required type="text" class="form-control" name="name" placeholder="Name" id="name">
+                        <label for="name" class="form-label">{{ __('Description of schedule') }}<span class="text-danger">*</span></label>
+                        <input required type="text" class="form-control" name="name" placeholder="{{ __('Description of schedule') }}" id="name">
                     </div>
 
                     <div class="mb-3">
