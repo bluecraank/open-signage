@@ -46,6 +46,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function casts(): array
+    {
+        return $this->casts;
+    }
+
     public function initials()
     {
         $name = $this->name;
