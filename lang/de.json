@@ -183,5 +183,10 @@
     "Start date": "Startdatum",
     "End date": "Enddatum",
     "Ongoing processing": "Laufende Verarbeitung",
-    "Are you sure to stop this processing?" : "Sind Sie sicher, dass Sie diese Verarbeitung stoppen möchten?"
+    "Are you sure to stop this processing?" : "Sind Sie sicher, dass Sie diese Verarbeitung stoppen möchten?",
+    "Create schedules with ease": "Jetzt den Zeitplan Assistent nutzen",
+    "NEW": "NEU",
+    "Schedule assistant": "Zeitplan Assistent",
+    "Create schedule with assistant": "Zeitplan mit Assistent erstellen",
+    "Unused": "Nicht verwendet"
 }

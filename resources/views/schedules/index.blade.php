@@ -4,14 +4,24 @@
     @can('read schedules')
         <h3 class="mb-3">{{ __('Schedules') }}</h3>
 
+        <div class="alert alert-primary" role="alert">
+            <b>{{ __('NEW') }}:</b>  {{ __('Create schedules with ease') }}: <a href="{{ route('schedules.assistant') }}">{{ __('Schedule assistant') }}</a>
+        </div>
+
         <div class="card">
             <h5 class="card-header">
                 {{ __('Running schedules') }}
 
-                <a href="{{ route('schedules.create') }}" class="btn btn-primary btn-sm float-end">
-                    <i class="bi-plus"></i>
-                    {{ __('Create schedule') }}
-                </a>
+                <div class="float-end">
+                    <a href="{{ route('schedules.create') }}" class="btn btn-primary btn-sm">
+                        <i class="bi-plus"></i>
+                        {{ __('Create schedule') }}
+                    </a>
+                    <a href="{{ route('schedules.assistant') }}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi-plus"></i>
+                        {{ __('Create schedule with assistant') }}
+                    </a>
+                </div>
             </h5>
             <div class="card-body">
                 <table class="table table-striped">

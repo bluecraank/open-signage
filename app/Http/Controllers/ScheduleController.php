@@ -25,6 +25,10 @@ class ScheduleController extends Controller
         return view('schedules.index', compact('upcomingSchedules', 'activeSchedules', 'pastSchedules'));
     }
 
+    public function assistant() {
+        return view('schedules.assistant');
+    }
+
     /**
      * Show the form for creating a new resource.
      */

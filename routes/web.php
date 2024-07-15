@@ -9,7 +9,6 @@ use App\Http\Controllers\SlideController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SettingsController;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -96,6 +95,7 @@ Route::middleware(['auth:sanctum', 'check_for_first_user'])->group(function () {
 
     Route::prefix('schedules')->group(function () {
         Route::get('/', [ScheduleController::class, 'index'])->name('schedules.index');
+        Route::get('/assistant', [ScheduleController::class, 'assistant'])->middleware('can:create schedules')->name('schedules.assistant');
         Route::get('/create', [ScheduleController::class, 'create'])->middleware('can:create schedules')->name('schedules.create');
         Route::post('/', [ScheduleController::class, 'store'])->middleware('can:create schedules')->name('schedules.store');
         Route::get('/{id}', [ScheduleController::class, 'show'])->middleware('can:read schedules')->name('schedules.show');
