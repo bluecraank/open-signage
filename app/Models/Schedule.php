@@ -56,6 +56,11 @@ class Schedule extends Model
         'delete_presentation' => 'boolean',
     ];
 
+    public function casts(): array
+    {
+        return $this->casts;
+    }
+
     public function groups()
     {
         $groups = Group::whereIn('id', $this->groups)->get();
