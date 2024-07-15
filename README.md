@@ -67,23 +67,26 @@ LDAP_ALLOWED_GROUP="CN=MIS,OU=Groups,DC=ldap,DC=server"
 - ```sudo docker ps``` and grab container id for open-signage-app
 - ```sudo docker exec ID php artisan migrate```
 - ```sudo docker exec ID php artisan db:seed```
-## Updating
-- sudo docker builder prune
-- sudo docker compose up --force-recreate --build
 
 ## Install native
 ### Requirements
 ```
-apt install php8.2 php8.2-imagick php8.2-mbstring php8.2-curl php8.2-ldap php8.2-bcmath
+apt install php8.3 php8.3-imagick php8.3-mbstring php8.3-curl php8.3-ldap php8.3-bcmath
 ```
-- php8.2
+- php8.3
 - npm
 - composer
 - php ldap extension
 - php imagick extension
 - ghostscript
 - Replace imagick policy
-```sed -ri -e 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' /etc/ImageMagick-6/policy.xml```
+```sed -ri -e 's/<policy domain="resource" name="memory" value="256MiB"\/>/<policy domain="resource" name="memory" value="2GiB"\/>/g' /etc/ImageMagick-6/policy.xml
+
+sed -ri -e 's/<policy domain="resource" name="map" value="512MiB"\/>/<policy domain="resource" name="map" value="8GiB"\/>/g' /etc/ImageMagick-6/policy.xml
+
+sed -ri -e 's/<policy domain="resource" name="disk" value="1GiB"\/>/<policy domain="resource" name="disk" value="8GiB"\/>/g' /etc/ImageMagick-6/policy.xml
+
+```
 
 ### Installation
 - ```git clone https://github.com/bluecraank/open-signage```
