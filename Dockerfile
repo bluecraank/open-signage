@@ -6,7 +6,7 @@ USER root
 WORKDIR /var/www/html
 
 # Packages installieren
-RUN apk add --update libjpeg62-turbo-dev
+RUN apk add --update libjpeg-turbo-dev
 RUN apk add --update libpng-dev
 RUN apk add --update libzip-dev
 RUN apk add --update ghostscript
