@@ -6,18 +6,10 @@ USER root
 WORKDIR /var/www/html
 
 # Packages installieren
-RUN apk add --update libjpeg-turbo-dev
-RUN apk add --update libpng-dev
-RUN apk add --update libzip-dev
-RUN apk add --update ghostscript
+RUN apk add --update libjpeg-turbo-dev libpng-dev libzip-dev ghostscript openldap npm
 
-# Ldap installieren
-RUN apk add --update openldap
 # Ldap certificate prüfen auf never stellen
-RUN echo "TLS_REQCERT never" >> /etc/openldap/ldap.conf
-
-# Install the intl extension with root permissions
-RUN install-php-extensions ldap imagick gd
+RUN echo "TLS_REQCERT never" >> /etc/openldap/ldap.conf && install-php-extensions ldap imagick gd
 
 # Projekt kopieren
 COPY . /var/www/html
@@ -26,18 +18,9 @@ COPY . /var/www/html
 COPY .env.example.productive /var/www/html/.env
 
 # Laravel.log file erstellen
-RUN touch /var/www/html/storage/logs/laravel.log
-# Laravel.log file rechte zu www-data geben
-RUN chown -R www-data:www-data /var/www/html/storage/logs/laravel.log
-# Workdirectory rechte zu www-data geben
-RUN chown -R www-data:www-data /var/www/html
-# Composer und npm installieren
-RUN composer install --no-dev --optimize-autoloader
+RUN touch /var/www/html/storage/logs/laravel.log && chown -R www-data:www-data /var/www/html/storage/logs/laravel.log && chown -R www-data:www-data /var/www/html && composer install --no-dev --optimize-autoloader
 
-# NPM Tasks
-RUN apk add --update npm
-RUN npm i
-RUN npm run build
+RUN npm i && npm run build
 
 # Laravel App Key generieren
 RUN php artisan key:generate
