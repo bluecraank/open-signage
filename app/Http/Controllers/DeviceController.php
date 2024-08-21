@@ -198,6 +198,11 @@ class DeviceController extends Controller
     public function discover(Request $request) {
         $ip = request()->ip();
 
+        // If HTTP_X_FORWARDED_FOR is set, use that instead
+        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+
         $device = Device::where('ip_address', $ip)->first();
 
         if($device) {
