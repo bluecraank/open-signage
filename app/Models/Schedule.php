@@ -11,24 +11,45 @@ class Schedule extends Model
     protected static function booted(): void
     {
         static::created(function (Schedule $schedule) {
+            $ip = request()->ip();
+
+            // If HTTP_X_FORWARDED_FOR is set, use that instead
+            if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            }
+
             Log::create([
-                'ip_address' => request()->ip(),
+                'ip_address' => $ip,
                 'username' => Auth::user()->name,
                 'action' => __('log.schedule_created', ['name' => $schedule->name]),
             ]);
         });
 
         static::updated(function (Schedule $schedule) {
+            $ip = request()->ip();
+
+            // If HTTP_X_FORWARDED_FOR is set, use that instead
+            if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            }
+
             Log::create([
-                'ip_address' => request()->ip(),
+                'ip_address' => $ip,
                 'username' => Auth::user()->name ?? 'System',
                 'action' => __('log.schedule_updated', ['name' => $schedule->name]),
             ]);
         });
 
         static::deleted(function (Schedule $schedule) {
+            $ip = request()->ip();
+
+            // If HTTP_X_FORWARDED_FOR is set, use that instead
+            if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            }
+
             Log::create([
-                'ip_address' => request()->ip(),
+                'ip_address' => $ip,
                 'username' => Auth::user()->name,
                 'action' => __('log.schedule_deleted', ['name' => $schedule->name]),
             ]);
@@ -67,7 +88,8 @@ class Schedule extends Model
         return $groups;
     }
 
-    public function appliesTo() {
+    public function appliesTo()
+    {
         $groups = $this->groups();
         $devices = $this->devices();
         return $devices->count() . ' ' . trans_choice('Device|Devices', $devices->count()) . ', ' . $groups->count() . ' ' . trans_choice('Group|Groups', $groups->count());
@@ -84,18 +106,20 @@ class Schedule extends Model
         return $devices;
     }
 
-    public function startDate() {
+    public function startDate()
+    {
         $locale = config('app.locale');
-        if($locale == 'de') {
+        if ($locale == 'de') {
             return Carbon::parse($this->start_time)->format('d.m.Y H:i');
         }
 
         return Carbon::parse($this->start_time)->format('Y-m-d H:i');
     }
 
-    public function endDate() {
+    public function endDate()
+    {
         $locale = config('app.locale');
-        if($locale == 'de') {
+        if ($locale == 'de') {
             return Carbon::parse($this->end_time)->format('d.m.Y H:i');
         }
 

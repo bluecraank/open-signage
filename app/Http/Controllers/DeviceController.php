@@ -84,9 +84,16 @@ class DeviceController extends Controller
         $device->active = true;
         $device->registered = true;
 
+        $ip = request()->ip();
+
+        // If HTTP_X_FORWARDED_FOR is set, use that instead
+        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+
         Log::create([
             'username' => Auth::user()->name,
-            'ip_address' => request()->ip(),
+            'ip_address' => $ip,
             'action' => __('log.device_registered', ['name' => $device->name]),
         ]);
 
@@ -148,8 +155,13 @@ class DeviceController extends Controller
         $device->name = $name;
         $device->description = $description;
 
+        $ip = request()->ip();
+        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+
         Log::create([
-            'ip_address' => request()->ip(),
+            'ip_address' => $ip,
             'username' => Auth::user()->name,
             'action' => __('log.device_updated', ['name' => $device->name]),
         ]);
@@ -170,9 +182,14 @@ class DeviceController extends Controller
         $device->force_reload = true;
         $device->save();
 
+        $ip = request()->ip();
+        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+
         Log::create([
             'username' => Auth::user()->name,
-            'ip_address' => request()->ip(),
+            'ip_address' => $ip,
             'action' => __('log.device_force_reload', ['name' => $device->name]),
         ]);
 

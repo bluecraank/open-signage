@@ -44,8 +44,14 @@ class SettingsController extends Controller
         foreach ($updatedSettings as $key => $value) {
             Setting::where('key', $key)->update(['value' => $value['value']]);
 
+            $ip = request()->ip();
+            // If HTTP_X_FORWARDED_FOR is set, use that instead
+            if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            }
+
             Log::create([
-                'ip_address' => request()->ip(),
+                'ip_address' => $ip,
                 'username' => Auth::user()->name,
                 'action' => __('log.setting_updated', ['name' => $key, 'value' => $value['value']]),
             ]);
@@ -53,7 +59,7 @@ class SettingsController extends Controller
             $forceReload = true;
         }
 
-        if($forceReload) {
+        if ($forceReload) {
             Device::all()->each(function ($device) {
                 $device->force_reload = true;
                 $device->save();

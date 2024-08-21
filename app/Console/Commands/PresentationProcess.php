@@ -76,8 +76,15 @@ class PresentationProcess extends Command
         $presentation->total_slides = count($images);
         $presentation->save();
 
+        $ip = request()->ip();
+
+        // If HTTP_X_FORWARDED_FOR is set, use that instead
+        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+
         Log::create([
-            'ip_address' => request()->ip(),
+            'ip_address' => $ip,
             'username' => "System",
             'action' => __('log.presentation_file_success_updated', ['name' => $presentation->name, 'type' => 'pdf', 'pages' => $i]),
         ]);

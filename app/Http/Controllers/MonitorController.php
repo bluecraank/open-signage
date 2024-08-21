@@ -86,7 +86,14 @@ class MonitorController extends Controller
         $device->startup_timestamp = $datetime;
         $device->touch('last_seen');
 
-        $device->ip_address = $request->ip();
+
+        $ip = request()->ip();
+
+        // If HTTP_X_FORWARDED_FOR is set, use that instead
+        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+        $device->ip_address = $ip;
 
         $force_reload = $device->force_reload;
         if($device->force_reload) {

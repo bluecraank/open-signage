@@ -13,16 +13,30 @@ class Device extends Model
     protected static function booted(): void
     {
         static::created(function (Device $device) {
+            $ip = request()->ip();
+
+            // If HTTP_X_FORWARDED_FOR is set, use that instead
+            if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            }
+
             Log::create([
-                'ip_address' => request()->ip(),
+                'ip_address' => $ip,
                 'username' => Auth::user()?->name ?? 'System',
                 'action' => __('log.device_created', ['name' => $device->name]),
             ]);
         });
 
         static::deleted(function (Device $device) {
+            $ip = request()->ip();
+
+            // If HTTP_X_FORWARDED_FOR is set, use that instead
+            if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            }
+
             Log::create([
-                'ip_address' => request()->ip(),
+                'ip_address' => $ip,
                 'username' => Auth::user()->name,
                 'action' => __('log.device_deleted', ['name' => $device->name]),
             ]);
@@ -51,32 +65,34 @@ class Device extends Model
         return $this->belongsTo(Group::class);
     }
 
-    public function getPresentation() {
-        if($this->activeSchedule()) {
+    public function getPresentation()
+    {
+        if ($this->activeSchedule()) {
             return $this->activeSchedule()->presentation;
         }
 
-        if($this->group_id) {
+        if ($this->group_id) {
             return $this->group->presentation;
         }
 
-        if($this->presentation_id) {
+        if ($this->presentation_id) {
             return $this->presentation;
         }
 
         return null;
     }
 
-    public function getPresentationId() {
+    public function getPresentationId()
+    {
 
-        if($this->activeSchedule()) {
+        if ($this->activeSchedule()) {
             return $this->activeSchedule()->presentation_id;
         }
 
-        if($this->group_id) {
+        if ($this->group_id) {
             $group = $this->group;
 
-            if(!$group) {
+            if (!$group) {
                 $this->group_id = null;
                 $this->save();
             }
@@ -84,66 +100,70 @@ class Device extends Model
             return $group?->presentation_id;
         }
 
-        if($this->presentation_id) {
+        if ($this->presentation_id) {
             return $this->presentation_id;
         }
 
         return null;
     }
 
-    public function presentationFromGroup() {
-        if($this->group?->presentation_id) {
+    public function presentationFromGroup()
+    {
+        if ($this->group?->presentation_id) {
             return true;
         }
 
         return false;
     }
 
-    public function activeSchedule() {
+    public function activeSchedule()
+    {
         $activeSchedule = Schedule::where('start_time', '<', now())->where('end_time', '>', now())->get();
 
         $assignedOverDevice = null;
         $assignedOverGroup = null;
 
-        foreach($activeSchedule as $schedule) {
-            if($schedule->devices) {
+        foreach ($activeSchedule as $schedule) {
+            if ($schedule->devices) {
                 $devices = $schedule->devices;
-                if(in_array($this->id, $devices)) {
+                if (in_array($this->id, $devices)) {
                     $assignedOverDevice = $schedule;
                 }
             }
 
-            if($schedule->groups) {
+            if ($schedule->groups) {
                 $groups = $schedule->groups;
-                if(in_array($this->group_id, $groups)) {
+                if (in_array($this->group_id, $groups)) {
                     $assignedOverGroup = $schedule;
                 }
             }
         }
 
-        if($assignedOverDevice) {
+        if ($assignedOverDevice) {
             return $assignedOverDevice;
-        } else if($assignedOverGroup) {
+        } else if ($assignedOverGroup) {
             return $assignedOverGroup;
         }
 
         return null;
     }
 
-    public function presentationFromSchedule() {
-        if($this->activeSchedule()) {
+    public function presentationFromSchedule()
+    {
+        if ($this->activeSchedule()) {
             return true;
         }
 
         return false;
     }
 
-    public function isActive() {
+    public function isActive()
+    {
         $now = new \DateTime();
         $lastSeen = new \DateTime($this->last_seen);
         $this->active = true;
 
-        if(!$this->registered) {
+        if (!$this->registered) {
             $this->active = false;
         }
 
@@ -152,7 +172,7 @@ class Device extends Model
         $daysInSecs = $diff->format('%r%a') * 24 * 60 * 60;
 
         // Days to positive
-        if($daysInSecs < 0) {
+        if ($daysInSecs < 0) {
             $daysInSecs = $daysInSecs * -1;
         }
 
@@ -160,7 +180,7 @@ class Device extends Model
         $minsInSecs = $diff->i * 60;
 
         $seconds = $daysInSecs + $hoursInSecs + $minsInSecs + $diff->s;
-        if ($seconds > $refresh_interval*2.5 || $this->created_at == $this->updated_at) {
+        if ($seconds > $refresh_interval * 2.5 || $this->created_at == $this->updated_at) {
             $this->active = false;
         }
 
