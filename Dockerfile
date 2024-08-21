@@ -12,7 +12,7 @@ COPY . /var/www/html
 COPY .env.example.productive /var/www/html/.env
 
 # Packages installieren
-RUN apk add --no-cache --virtual build-depend --update libjpeg-turbo-dev libpng-dev libzip-dev ghostscript openldap npm imagemagick && \
+RUN apk add --no-cache --virtual build-depend --update libjpeg-turbo-dev libpng-dev libzip-dev ghostscript openldap npm && \
     echo "TLS_REQCERT never" >> /etc/openldap/ldap.conf && \
     install-php-extensions ldap imagick gd && \
     touch /var/www/html/storage/logs/laravel.log && \
