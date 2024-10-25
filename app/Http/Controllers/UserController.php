@@ -61,15 +61,16 @@ class UserController extends Controller
             return redirect()->route('users.show', $user->id)->withErrors(['message' =>'You must select a role']);
         }
 
-        // if($user->id == Auth::user()->id) {
-        //     return redirect()->route('users.show', $user->id)->withErrors(['message' => 'You cannot change your own roles']);
-        // }
+        if($user->id == Auth::user()->id) {
+            return redirect()->route('users.show', $user->id)->withErrors(['message' => 'You cannot change your own roles']);
+        }
 
+        $roles = (int) $request->roles;
         // Remove every role
         $user->roles()->detach();
 
         // Add the new roles
-        $user->assignRole($request->roles);
+        $user->assignRole($roles);
 
 
         return redirect()->route('users.show', $user->id)->with('success', 'Roles updated');

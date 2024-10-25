@@ -24,7 +24,7 @@ class CheckForFirstUser
             if(auth()->user() && auth()->user()->hasRole('Super Administrator')) {
                 return $next($request);
             } elseif(auth()->user() && !auth()->user()->hasRole('Super Administrator')) {
-                auth()->user()->assignRole(Role::findByName('Super Administrator')->first()->id);
+                auth()->user()->assignRole((int) Role::findByName('Super Administrator')->first()->id);
             }
         }
 
