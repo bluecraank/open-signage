@@ -29,7 +29,6 @@
                         <div class="col-8">
                             @cannot('update presentations')
                                 <p><b>Name:</b> {{ $presentation->name }}</p>
-                                <p><b>{{ __('Description') }}:</b> {{ $presentation->description }}</p>
                                 <p><b>{{ __('Slides') }}:</b> {{ $presentation->slides->count() }}</p>
                                 <p><b>{{ __('Used by') }}:</b> {{ $presentation->devices->count() }}</p>
                             @endcannot
@@ -46,11 +45,11 @@
 
 
                                     <div class="mb-3 mt-4">
-                                        <label class="form-label">{{ __('Upload file') }}<span class="text-danger">*</span></label>
+                                        <label class="form-label">{{ __('Upload file') }}</label>
                                         <div id="drop_zone" ondrop="window.dropHandler(event)"
                                             ondragover="window.dragOverHandler(event)">
                                             <div id="file-upload">
-                                                <input class="form-control file-input" type="file" name="file" required
+                                                <input class="form-control file-input" type="file" name="file"
                                                     accept="application/pdf,video/mp4" id="formFile">
                                                 <p class="mt-4" style="display: inline-block">
                                                     {{ __('or drag and drop to upload') }}</p>

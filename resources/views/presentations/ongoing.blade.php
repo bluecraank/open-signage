@@ -35,10 +35,12 @@
                                 <td>{{ $presentation->author }}</td>
                                 <td class="actions-cell">
 
-                                    <form action="{{ route('presentations.ongoing.stop', $presentation->id) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure to stop this processing?') }}')">
-                                        @csrf
-                                        <button class="btn btn-sm btn-danger" type="submit"><i class="bi-trash"></i></button>
-                                    </form>
+                                    @can('update presentations')
+                                        <form action="{{ route('presentations.ongoing.stop', $presentation->id) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure to stop this processing?') }}')">
+                                            @csrf
+                                            <button class="btn btn-sm btn-danger" type="submit"><i class="bi-trash"></i></button>
+                                        </form>
+                                    @endcan
                                 </td>
                             </tr>
                         @endforeach

@@ -11,7 +11,7 @@ class HasPermission implements Rule
     /**
      * Check if the rule passes validation.
      */
-    public function passes(LdapRecord $user, Eloquent $model = null): bool
+    public function passes(LdapRecord $user, ?Eloquent $model = null): bool
     {
         // Pass user if in correct ldap group
         return $user->groups()->exists(config('ldap.allowed_group'));

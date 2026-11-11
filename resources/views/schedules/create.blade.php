@@ -40,7 +40,7 @@
         <div class="card">
             <h5 class="card-header">{{ __('Create schedule') }}</h5>
             <div class="card-body">
-                <form action="{{ route('schedules.store') }}" method="POST">
+                <form action="{{ route('schedules.store') }}" method="POST" onsubmit="return validate()">
                     @csrf
                     <div class="mb-3">
                         <label for="name" class="form-label">{{ __('Description of schedule') }}<span class="text-danger">*</span></label>
@@ -72,7 +72,7 @@
                                 <label for="start_date" class="form-label">{{ __('Start date') }}<span
                                         class="text-danger">*</span></label>
                                 <input required type="datetime-local" class="form-control" name="start_date" id="start_date"
-                                    value="{{ now()->format('Y-m-d H:00') }}">
+                                    value="{{ now()->format('Y-m-d\TH:00') }}">
                             </div>
                         </div>
 
@@ -81,7 +81,7 @@
                                 <label for="end_date" class="form-label">{{ __('End date') }}<span
                                         class="text-danger">*</span></label>
                                 <input required type="datetime-local" class="form-control" name="end_date" id="end_date"
-                                    value="{{ now()->addHours(1)->format('Y-m-d H:00') }}">
+                                    value="{{ now()->addHours(1)->format('Y-m-d\TH:00') }}">
                             </div>
                         </div>
                     </div>

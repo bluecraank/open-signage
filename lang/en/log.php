@@ -21,5 +21,7 @@
         'setting_updated' => 'Setting ":name" updated to value ":value"',
         'device_force_reload' => 'Device ":name" will reload on next update',
         'device_registered' => 'Monitor ":name" registered',
+        'presentation_deleted_because_schedule' => 'Presentation ":name" automatically deleted because schedule ":schedule" has ended',
+        'presentation_not_deleted_because_schedule' => 'Presentation ":name" could not be deleted automatically because devices or groups are assigned',
     ];
 ?>

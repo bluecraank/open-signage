@@ -13,14 +13,10 @@ class Schedule extends Model
         static::created(function (Schedule $schedule) {
             $ip = request()->ip();
 
-            // If HTTP_X_FORWARDED_FOR is set, use that instead
-            if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            }
 
             Log::create([
                 'ip_address' => $ip,
-                'username' => Auth::user()->name,
+                'username' => Auth::user()?->name ?? 'System',
                 'action' => __('log.schedule_created', ['name' => $schedule->name]),
             ]);
         });
@@ -28,14 +24,10 @@ class Schedule extends Model
         static::updated(function (Schedule $schedule) {
             $ip = request()->ip();
 
-            // If HTTP_X_FORWARDED_FOR is set, use that instead
-            if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            }
 
             Log::create([
                 'ip_address' => $ip,
-                'username' => Auth::user()->name ?? 'System',
+                'username' => Auth::user()?->name ?? 'System',
                 'action' => __('log.schedule_updated', ['name' => $schedule->name]),
             ]);
         });
@@ -43,14 +35,10 @@ class Schedule extends Model
         static::deleted(function (Schedule $schedule) {
             $ip = request()->ip();
 
-            // If HTTP_X_FORWARDED_FOR is set, use that instead
-            if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            }
 
             Log::create([
                 'ip_address' => $ip,
-                'username' => Auth::user()->name,
+                'username' => Auth::user()?->name ?? 'System',
                 'action' => __('log.schedule_deleted', ['name' => $schedule->name]),
             ]);
         });

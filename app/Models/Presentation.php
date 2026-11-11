@@ -12,14 +12,10 @@ class Presentation extends Model
         static::created(function (Presentation $presentation) {
             $ip = request()->ip();
 
-            // If HTTP_X_FORWARDED_FOR is set, use that instead
-            if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            }
 
             Log::create([
                 'ip_address' => $ip,
-                'username' => Auth::user()->name,
+                'username' => Auth::user()?->name ?? 'System',
                 'action' => __('log.presentation_created', ['name' => $presentation->name]),
             ]);
         });
@@ -27,14 +23,10 @@ class Presentation extends Model
         static::deleted(function (Presentation $presentation) {
             $ip = request()->ip();
 
-            // If HTTP_X_FORWARDED_FOR is set, use that instead
-            if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            }
 
             Log::create([
                 'ip_address' => $ip,
-                'username' => Auth::user()->name,
+                'username' => Auth::user()?->name ?? 'System',
                 'action' => __('log.presentation_deleted', ['name' => $presentation->name]),
             ]);
         });

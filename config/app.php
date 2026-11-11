@@ -1,8 +1,6 @@
 <?php
 
-use App\Models\Setting;
 use Illuminate\Support\Facades\Facade;
-use Illuminate\Support\ServiceProvider;
 
 return [
 
@@ -16,7 +14,7 @@ return [
     | any other location as required by the application or its packages.
     |
     */
-    'version' => '2.0.0',
+    'version' => '3.0.0',
 
     'placeholder_image' => 'https://placehold.co/600x338?text=Assign\nTemplate',
 
@@ -152,32 +150,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Autoloaded Service Providers
-    |--------------------------------------------------------------------------
-    |
-    | The service providers listed here will be automatically loaded on the
-    | request to your application. Feel free to add your own services to
-    | this array to grant expanded functionality to your applications.
-    |
-    */
-
-    'providers' => ServiceProvider::defaultProviders()->merge([
-        /*
-         * Package Service Providers...
-         */
-
-        /*
-         * Application Service Providers...
-         */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-    ])->toArray(),
-
-    /*
-    |--------------------------------------------------------------------------
     | Class Aliases
     |--------------------------------------------------------------------------
     |
@@ -195,4 +167,7 @@ return [
     'sso_http_header_user_key' => env('SSO_HTTP_HEADER_USER_KEY', 'HTTP_AUTH_USER'),
     'sso_bypass_domain_verification' => env('SSO_BYPASS_DOMAIN_VERIFICATION') == "true" ? true : false,
     'sso_enabled' => env('SSO_ENABLED') == "true" ? true : false,
+
+    // Public url when running behind a reverse proxy (e.g. https://signage.example.com)
+    'proxy_url' => env('PROXY_URL'),
 ];

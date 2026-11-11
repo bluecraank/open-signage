@@ -1,5 +1,5 @@
 #Installiere Alpine, PHP und Nginx
-FROM serversideup/php:8.3-fpm-nginx-alpine
+FROM serversideup/php:8.4-fpm-nginx-alpine
 USER root
 
 # Workdirectory setzen
@@ -12,7 +12,8 @@ COPY . /var/www/html
 COPY .env.example.productive /var/www/html/.env
 
 # Packages installieren
-RUN apk add --no-cache --virtual build-depend --update libjpeg-turbo-dev libpng-dev libzip-dev ghostscript openldap npm && \
+RUN apk add --no-cache ghostscript && \
+    apk add --no-cache --virtual build-depend --update libjpeg-turbo-dev libpng-dev libzip-dev openldap npm && \
     echo "TLS_REQCERT never" >> /etc/openldap/ldap.conf && \
     install-php-extensions ldap imagick gd && \
     touch /var/www/html/storage/logs/laravel.log && \

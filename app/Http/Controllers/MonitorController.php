@@ -28,8 +28,9 @@ class MonitorController extends Controller
 
         $slides = $presentation->slides()->orderBy('order')->get();
 
-        if(!$slides) {
-            return "<meta http-equiv='refresh' content='1'>".json_encode(['error' => "No slides found."]);
+        // e.g. presentation is still being processed, the slideshow script needs at least one slide
+        if($slides->isEmpty()) {
+            return view('unassigned', ['error' => "no_slides"]);
         }
 
         $images = [];
@@ -89,10 +90,6 @@ class MonitorController extends Controller
 
         $ip = request()->ip();
 
-        // If HTTP_X_FORWARDED_FOR is set, use that instead
-        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        }
         $device->ip_address = $ip;
 
         $force_reload = $device->force_reload;

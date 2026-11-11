@@ -63,26 +63,25 @@
                             </div>
 
                             <div class="mb-3">
-                                @if ($device->presentationFromGroup())
-                                    <p><b>{{ __('Assigned template') }}:</b> <br>
-                                        {{ $device->getPresentation()?->name ?? __('No template assigned') }}
-                                        <br> <small class="text-success"><i class="bi bi-check2-circle"></i>
-                                            {{ __('Inherited by group') }}</small> - <a
-                                            href="{{ route('groups.show', $device->group->id) }}">{{ __('Go to group') }}</a></small>
-                                    </p>
-                                @elseif($device->presentationFromSchedule())
+                                @if ($device->presentationFromSchedule())
                                     <p><b>{{ __('Assigned template') }}:</b>
                                         {{ $device->getPresentation()?->name ?? __('No template assigned') }}
                                         <br> <small class="text-success"><i class="bi bi-check2-circle"></i>
                                             {{ __('Inherited by schedule') }} - <a
-                                                href="{{ route('schedules.show', $device->getPresentationId()) }}">{{ __('Go to schedule') }}</a></small>
+                                                href="{{ route('schedules.show', $device->activeSchedule()->id) }}">{{ __('Go to schedule') }}</a></small>
+                                    </p>
+                                @elseif($device->presentationFromGroup())
+                                    <p><b>{{ __('Assigned template') }}:</b> <br>
+                                        {{ $device->getPresentation()?->name ?? __('No template assigned') }}
+                                        <br> <small class="text-success"><i class="bi bi-check2-circle"></i>
+                                            {{ __('Inherited by group') }} - <a
+                                            href="{{ route('groups.show', $device->group->id) }}">{{ __('Go to group') }}</a></small>
                                     </p>
                                 @else
                                     <p><b>{{ __('Assigned template') }}:</b>
-                                        {{ $presentation[$device->getPresentationId()]['name'] ?? __('No template assigned') }}</p>
+                                        {{ $device->getPresentation()?->name ?? __('No template assigned') }}</p>
                                 @endif
                             </div>
-                        </div>
                     @endcannot
 
                     @can('update devices')
@@ -103,19 +102,19 @@
 
                             <div class="mb-3">
 
-                                @if ($device->presentationFromGroup())
+                                @if ($device->presentationFromSchedule())
+                                    <p><b>{{ __('Assigned template') }}:</b>
+                                        {{ $device->getPresentation()?->name ?? __('No template assigned') }}
+                                        <br> <small class="text-success"><i class="bi bi-check2-circle"></i>
+                                            {{ __('Inherited by schedule') }} - <a
+                                                href="{{ route('schedules.show', $device->activeSchedule()->id) }}">{{ __('Go to schedule') }}</a></small>
+                                    </p>
+                                @elseif($device->presentationFromGroup())
                                     <p><b>{{ __('Assigned template') }}:</b>
                                         {{ $device->getPresentation()?->name ?? __('No template assigned') }}
                                         <br> <small class="text-success"><i class="bi bi-check2-circle"></i>
                                             {{ __('Inherited by group') }} - <a
                                                 href="{{ route('groups.show', $device->group->id) }}">{{ __('Go to group') }}</a></small>
-                                    </p>
-                                @elseif($device->presentationFromSchedule())
-                                    <p><b>{{ __('Assigned template') }}:</b>
-                                        {{ $device->getPresentation()?->name ?? __('No template assigned') }}
-                                        <br> <small class="text-success"><i class="bi bi-check2-circle"></i>
-                                            {{ __('Inherited by schedule') }} - <a
-                                                href="{{ route('schedules.show', $device->getPresentationId()) }}">{{ __('Go to schedule') }}</a></small>
                                     </p>
                                 @else
                                     <div class="field">
@@ -157,12 +156,12 @@
 
                     <div class="col">
                         <p><b>{{ __('Last connection') }}:</b> <br>
-                            {{ Carbon::parse($device->last_seen)->diffForHumans() ?? 'N/A' }}</p>
+                            {{ $device->last_seen ? Carbon::parse($device->last_seen)->diffForHumans() : 'N/A' }}</p>
                     </div>
 
                     <div class="col">
                         <p><b>{{ __('Last monitor reload') }}:</b> <br>
-                            {{ Carbon::parse($device->startup_timestamp)->diffForHumans() ?? 'N/A' }}
+                            {{ $device->startup_timestamp ? Carbon::parse($device->startup_timestamp)->diffForHumans() : 'N/A' }}
                         </p>
                     </div>
                 @endcan

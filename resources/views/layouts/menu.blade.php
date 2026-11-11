@@ -10,7 +10,7 @@
                 @can('read devices')
                     <li class="nav-item">
                         <a href="{{ route('devices.index') }}"
-                            class="nav-link @if (str_contains(\Request::route()->getName(), 'devices.')) active @endif">
+                            class="nav-link @if (request()->routeIs('devices.*')) active @endif">
                             {{ __('Devices') }}
                         </a>
                     </li>
@@ -19,7 +19,7 @@
                 @can('read groups')
                     <li class="nav-item">
                         <a href="{{ route('groups.index') }}"
-                            class="nav-link @if (str_contains(\Request::route()->getName(), 'groups.')) active @endif">
+                            class="nav-link @if (request()->routeIs('groups.*')) active @endif">
                             {{ __('Groups') }}
                         </a>
                     </li>
@@ -28,7 +28,7 @@
                 @can('read presentations')
                     <li class="nav-item">
                         <a href="{{ route('presentations.index') }}"
-                            class="nav-link @if (str_contains(\Request::route()->getName(), 'presentations.')) active @endif">
+                            class="nav-link @if (request()->routeIs('presentations.*')) active @endif">
                             {{ __('Templates') }}
                         </a>
                     </li>
@@ -37,7 +37,7 @@
                 @can('read schedules')
                     <li class="nav-item">
                         <a href="{{ route('schedules.index') }}"
-                            class="nav-link @if (str_contains(\Request::route()->getName(), 'schedules.')) active @endif">
+                            class="nav-link @if (request()->routeIs('schedules.*')) active @endif">
                             {{ __('Schedules') }}
                         </a>
                     </li>
@@ -97,7 +97,7 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li class="text-center mb-1" style="font-size: 12px;">{{ Auth::user()->roles[0]->name }}</li>
+                        <li class="text-center mb-1" style="font-size: 12px;">{{ Auth::user()->getRoleNames()->first() ?? __('No roles') }}</li>
                         @if (!config('app.sso_enabled') || !isset($_SERVER[config('app.sso_http_header_user_key')]))
                             <li class="text-center"><a onclick="document.getElementById('logout-form').submit()"
                                     class="dropdown-item" href="#">{{ __('Logout') }}</a></li>

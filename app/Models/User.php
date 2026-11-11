@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Observers\UserObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-use LdapRecord\Laravel\Auth\LdapAuthenticatable;
 use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
 
+#[ObservedBy(UserObserver::class)]
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable, HasRoles, AuthenticatesWithLdap;
@@ -37,28 +39,24 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array<string, string>
+     * @return array<string, string>
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
-
-    public function casts(): array
+    protected function casts(): array
     {
-        return $this->casts;
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
 
     public function initials()
     {
-        $name = $this->name;
-        $nameParts = explode(' ', $name);
-        $initials = '';
-        foreach ($nameParts as $namePart) {
-            $initials .= $namePart[0];
-        }
-        return $initials;
+        // Ignore empty parts (e.g. double spaces), otherwise $part[0] fails
+        return collect(preg_split('/\s+/', trim((string) $this->name)))
+            ->filter()
+            ->map(fn ($part) => mb_strtoupper(mb_substr($part, 0, 1)))
+            ->implode('');
     }
 }
