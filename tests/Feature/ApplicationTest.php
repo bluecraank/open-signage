@@ -13,6 +13,7 @@ use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\SettingsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\File;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -371,6 +372,46 @@ class ApplicationTest extends TestCase
         $log = Log::create(['ip_address' => '127.0.0.1', 'username' => 'System', 'action' => str_repeat('x', 400)]);
 
         $this->assertLessThanOrEqual(255, strlen($log->fresh()->action));
+    }
+
+    public function test_uploaded_video_becomes_a_playable_slide(): void
+    {
+        $presentation = $this->presentation(0);
+        $presentation->update(['processed' => false]);
+
+        $source = storage_path("app/public/presentations/{$presentation->id}/{$presentation->id}.mp4");
+        $target = public_path("data/presentations/{$presentation->id}");
+        File::ensureDirectoryExists(dirname($source));
+        File::put($source, 'video');
+
+        try {
+            $this->artisan('presentation:process', ['id' => $presentation->id, 'type' => 'video'])->assertSuccessful();
+
+            $slide = $presentation->slides()->sole();
+            $this->assertSame('video', $slide->type);
+            $this->assertFileExists("$target/{$slide->name_on_disk}");
+            $this->assertFileDoesNotExist($source);
+            $this->assertTrue((bool) $presentation->fresh()->processed);
+            $this->assertSame(1, (int) $presentation->fresh()->total_slides);
+        } finally {
+            File::deleteDirectory($target);
+            File::deleteDirectory(dirname($source));
+        }
+    }
+
+    public function test_video_autoplays_muted_on_monitor_and_is_previewed(): void
+    {
+        $presentation = $this->presentation(0);
+        $slide = Slide::create(['presentation_id' => $presentation->id, 'order' => 1, 'type' => 'video', 'name' => 'v', 'name_on_disk' => 'v-v.mp4']);
+        $device = $this->device(['presentation_id' => $presentation->id]);
+
+        $this->get("/monitor/{$device->secret}")->assertOk()
+            ->assertSee('<video autoplay muted playsinline  loop', false)
+            ->assertSee('v-v.mp4', false);
+
+        $this->get("/presentations/{$presentation->id}")->assertOk()
+            ->assertSee('<video src="'.$slide->publicpath().'"', false)
+            ->assertDontSee('placehold.co/600x338?text=Video', false);
     }
 
     public function test_default_seeder_does_not_create_demo_data(): void

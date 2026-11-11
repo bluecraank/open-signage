@@ -40,7 +40,11 @@
         @foreach ($presentation->slides as $slide)
             <div class="col-auto mb-3 d-flex justify-content-center">
                 <div class="card d-flex justify-content-center" style="width: 18rem;">
-                    <img src="{{ $slide->publicpreviewpath() }}" class="card-img-top" alt="...">
+                    @if ($slide->type === 'video')
+                        <video src="{{ $slide->publicpath() }}" class="card-img-top" controls muted preload="metadata"></video>
+                    @else
+                        <img src="{{ $slide->publicpreviewpath() }}" class="card-img-top" alt="...">
+                    @endif
                     <div class="card-body">
                         <div>{{ __('Order') }}: {{ $slide->order }}</div>
                         <div>{{ __('Created') }}: {{ $slide->created_at }}</div>
