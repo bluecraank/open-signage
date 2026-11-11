@@ -4,6 +4,8 @@ services:
         container_name: open-signage
         volumes:
             - public:/var/www/html/public/data:rw
+            # Keep logins across container updates
+            - sessions:/var/www/html/storage/framework/sessions:rw
         networks:
             - open-signage
             - int_proxy
@@ -11,6 +13,10 @@ services:
             - db
         environment:
             APP_LOCALE: en
+            # Fixed key (php artisan key:generate --show), otherwise every image update logs out all users
+            APP_KEY: "base64:CHANGE_ME"
+            # Ip(s) of the reverse proxy, "*" trusts the directly connected proxy
+            TRUSTED_PROXIES: "*"
             DB_CONNECTION: mysql
             DB_HOST: db
             DB_PORT: 3306
@@ -46,6 +52,7 @@ services:
             - dbdata:/var/lib/mysql
 volumes:
     public:
+    sessions:
     dbdata:
 networks:
     open-signage:

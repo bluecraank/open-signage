@@ -174,6 +174,9 @@
 
             var slideInterval = setInterval(nextSlide, interval);
 
+            // Report independently of slide changes, a long video or slide interval would look like an offline monitor
+            setInterval(giveServerUpdate, {{ \App\Models\Setting::get('MONITOR_CHECK_UPDATE_TIME_SECONDS') }} * 1000);
+
             setTimeout(() => {
                 $(".loading").fadeOut(1000);
             }, 6000);

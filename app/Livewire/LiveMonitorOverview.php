@@ -4,12 +4,17 @@ namespace App\Livewire;
 
 use App\Models\Device;
 use App\Models\Presentation;
+use Livewire\Attributes\Locked;
+use Livewire\Attributes\Session;
 use Livewire\Component;
 
 class LiveMonitorOverview extends Component
 {
+    // Remember the selected sort order across page loads
+    #[Session]
     public $sort_by = 'name';
 
+    #[Locked]
     public $sortToColumn = [
         'name' => 'name',
         'group' => 'group_id',
@@ -20,15 +25,11 @@ class LiveMonitorOverview extends Component
 
     public function render()
     {
-        $validSorts = ['name', 'group', 'status', 'updated', 'presentation'];
-
-        if (!in_array($this->sort_by, $validSorts)) {
+        if (!array_key_exists($this->sort_by, $this->sortToColumn)) {
             $this->sort_by = 'name';
         }
 
         $devices = Device::all()->sortBy($this->sortToColumn[$this->sort_by]);
-
-
 
         $presentation = Presentation::all()->keyBy('id')->toArray();
 

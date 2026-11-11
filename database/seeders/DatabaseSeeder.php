@@ -22,8 +22,5 @@ class DatabaseSeeder extends Seeder
             SettingsSeeder::class,
             PermissionSeeder::class,
         ]);
-
-        \Database\Factories\DeviceFactory::times(10)->create();
-        \Database\Factories\GroupFactory::times(10)->create();
     }
 }

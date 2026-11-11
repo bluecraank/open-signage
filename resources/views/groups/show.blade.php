@@ -23,9 +23,8 @@
                 @can('read groups')
                     <div class="col-4">
                         @php
-                            $slides = $group->presentation?->slides;
-                            $currentSlide = $slides?->toArray()[$group->current_slide ?? 0];
-                            $preview = $currentSlide['publicpreviewpath'] ?? config('app.placeholder_image');
+                            // Presentation can have no slides (e.g. still processing)
+                            $preview = $group->presentation?->slides->first()?->publicpreviewpath ?? config('app.placeholder_image');
                         @endphp
                         <img class="monitor-border w-100" src="{{ $preview }}" alt="">
 

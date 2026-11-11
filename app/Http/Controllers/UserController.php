@@ -53,24 +53,20 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $request->validate([
-            'roles' => 'integer|in:1,2,3,4',
-        ]);
-
-        if(!$request->has('roles') || $request->roles == "") {
+        if(!$request->filled('roles')) {
             return redirect()->route('users.show', $user->id)->withErrors(['message' =>'You must select a role']);
         }
+
+        $request->validate([
+            'roles' => 'integer|exists:roles,id',
+        ]);
 
         if($user->id == Auth::user()->id) {
             return redirect()->route('users.show', $user->id)->withErrors(['message' => 'You cannot change your own roles']);
         }
 
-        $roles = (int) $request->roles;
-        // Remove every role
-        $user->roles()->detach();
-
-        // Add the new roles
-        $user->assignRole($roles);
+        // Replace all roles (also resets the permission cache)
+        $user->syncRoles([Role::findById((int) $request->roles, 'sanctum')]);
 
 
         return redirect()->route('users.show', $user->id)->with('success', 'Roles updated');
@@ -87,7 +83,11 @@ class UserController extends Controller
             return redirect()->route('users.index')->withErrors(['message' => 'User not found']);
         }
 
-        if($user->hasRole('admin')) {
+        if($user->id == Auth::user()->id) {
+            return redirect()->route('users.show', $user->id)->withErrors(['message' => 'You cannot delete yourself']);
+        }
+
+        if($user->hasRole('Super Administrator')) {
             return redirect()->route('users.show', $user->id)->withErrors(['message' => 'You cannot delete an admin']);
         }
 

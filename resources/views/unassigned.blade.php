@@ -40,6 +40,8 @@
                 {{ __('Device not found') }}
             @elseif($error == 'not_registered')
                 {{ __('Device not registered') }}
+            @elseif($error == 'no_slides')
+                {{ __('Presentation has no slides') }}
             @endif
         </div>
     </div>

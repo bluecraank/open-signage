@@ -81,7 +81,7 @@ class GroupController extends Controller
         $group = Group::whereId($id)->first();
 
         if (!$group) {
-            return redirect()->route('groups.index')->with('error', __('Group not found'));
+            return redirect()->route('groups.index')->withErrors(['message' => __('Group not found')]);
         }
 
         $request->validate([
@@ -107,10 +107,6 @@ class GroupController extends Controller
 
         $ip = request()->ip();
 
-        // If HTTP_X_FORWARDED_FOR is set, use that instead
-        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        }
 
         Log::create([
             'ip_address' => $ip,
@@ -129,7 +125,7 @@ class GroupController extends Controller
         $group = Group::whereId($id)->first();
 
         if (!$group) {
-            return redirect()->route('groups.index')->with('error', __('Group not found'));
+            return redirect()->route('groups.index')->withErrors(['message' => __('Group not found')]);
         }
 
         Device::where('group_id', $group->id)->update(['group_id' => null]);

@@ -15,10 +15,6 @@ class Device extends Model
         static::created(function (Device $device) {
             $ip = request()->ip();
 
-            // If HTTP_X_FORWARDED_FOR is set, use that instead
-            if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            }
 
             Log::create([
                 'ip_address' => $ip,
@@ -30,14 +26,10 @@ class Device extends Model
         static::deleted(function (Device $device) {
             $ip = request()->ip();
 
-            // If HTTP_X_FORWARDED_FOR is set, use that instead
-            if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            }
 
             Log::create([
                 'ip_address' => $ip,
-                'username' => Auth::user()->name,
+                'username' => Auth::user()?->name ?? 'System',
                 'action' => __('log.device_deleted', ['name' => $device->name]),
             ]);
         });
@@ -67,12 +59,12 @@ class Device extends Model
 
     public function getPresentation()
     {
-        if ($this->activeSchedule()) {
-            return $this->activeSchedule()->presentation;
+        if ($schedule = $this->activeSchedule()) {
+            return $schedule->presentation;
         }
 
         if ($this->group_id) {
-            return $this->group->presentation;
+            return $this->group?->presentation;
         }
 
         if ($this->presentation_id) {
@@ -159,6 +151,14 @@ class Device extends Model
 
     public function isActive()
     {
+        // Never connected, new \DateTime(null) would count as "seen right now"
+        if (!$this->last_seen) {
+            $this->active = false;
+            $this->save();
+
+            return false;
+        }
+
         $now = new \DateTime();
         $lastSeen = new \DateTime($this->last_seen);
         $this->active = true;

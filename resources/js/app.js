@@ -1,17 +1,25 @@
 import "bootstrap/dist/js/bootstrap.min.js";
 
+const fileInput = document.querySelector('#file-upload input[type=file]');
+const inputDescription = document.getElementById('inputDescription');
+
 window.checkIfFileIsNotValid = function (file) {
-    const fileType = file['type'];
-    const validImageTypes = ['application/pdf', 'video/mp4'];
-    if (!validImageTypes.includes(fileType)) {
+    const validFileTypes = ['application/pdf', 'video/mp4'];
+    if (!file || !validFileTypes.includes(file.type)) {
         alert('Invalid File Type. Only PDF and MP4 files are allowed.');
-        fileInput.value = '';
+        if (fileInput) fileInput.value = '';
         return true;
     }
     return false;
 }
 
-const fileInput = document.querySelector('#file-upload input[type=file]');
+// Use the file name as description if no description was entered
+function fillDescriptionFromFile(file) {
+    if (inputDescription && inputDescription.value == "") {
+        inputDescription.value = file.name.split('.').slice(0, -1).join('.');
+    }
+}
+
 if (fileInput) {
     fileInput.onchange = () => {
         if (fileInput.files.length > 0) {
@@ -19,10 +27,7 @@ if (fileInput) {
                 return;
             }
 
-            if (inputDescription.value == "") {
-                let fileNameWithoutExtension = fileInput.files[0].name.split('.').slice(0, -1).join('.');
-                inputDescription.value = fileNameWithoutExtension;
-            }
+            fillDescriptionFromFile(fileInput.files[0]);
         }
     }
 }
@@ -30,21 +35,16 @@ if (fileInput) {
 window.dropHandler = function (ev) {
     ev.preventDefault();
 
+    if (!fileInput || ev.dataTransfer.files.length == 0) {
+        return;
+    }
+
     if (checkIfFileIsNotValid(ev.dataTransfer.files[0])) {
         return;
     }
 
-    if (ev.dataTransfer.files.length > 0) {
-        fileInput.files = ev.dataTransfer.files;
-
-        let inputDescription = document.getElementById('inputDescription')
-
-        if (inputDescription.value == "") {
-            let fileNameWithoutExtension = fileInput.files[0].name.split('.').slice(0, -1).join('.');
-            inputDescription.value = fileNameWithoutExtension;
-        }
-
-    }
+    fileInput.files = ev.dataTransfer.files;
+    fillDescriptionFromFile(fileInput.files[0]);
 }
 
 window.dragOverHandler = function (ev) {
@@ -70,50 +70,25 @@ window.setTimeout(function () {
 }, 5000);
 
 document.addEventListener('DOMContentLoaded', function () {
-    const DeviceSortBy = document.getElementById('DeviceSort');
-
-    if(!DeviceSortBy) return;
-
-    DeviceSortBy.addEventListener('change', function () {
-        localStorage.setItem('sort', this.value);
-    });
-
-    let sort = localStorage.getItem('sort');
-    if (sort) {
-        DeviceSortBy.value = sort;
-        DeviceSortBy.dispatchEvent(new Event('change'));
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function () {
     const darkMode = document.querySelector('.dark-mode');
     const lightMode = document.querySelector('.light-mode');
     const body = document.querySelector('body');
     const switchMode = document.querySelector('.themeButton');
 
+    // Shows the icon of the theme the user can switch to
+    function applyTheme(theme) {
+        body.dataset.bsTheme = theme === 'dark' ? 'dark' : '';
+        if (darkMode) darkMode.classList.toggle('d-none', theme === 'dark');
+        if (lightMode) lightMode.classList.toggle('d-none', theme !== 'dark');
+    }
+
     if (switchMode) {
         switchMode.addEventListener('click', () => {
-            if (body.dataset.bsTheme === 'dark') {
-                body.dataset.bsTheme = '';
-                localStorage.setItem('theme', 'light');
-                darkMode.classList.remove('d-none');
-                lightMode.classList.add('d-none');
-            } else {
-                body.dataset.bsTheme = 'dark';
-                localStorage.setItem('theme', 'dark');
-                lightMode.classList.remove('d-none');
-                darkMode.classList.add('d-none');
-            }
-
+            const theme = body.dataset.bsTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('theme', theme);
+            applyTheme(theme);
         });
     }
 
-    if (localStorage.getItem('theme') === 'dark') {
-        body.dataset.bsTheme = 'dark';
-        if(darkMode) darkMode.classList.add('d-none');
-    } else {
-        body.dataset.bsTheme = '';
-        if(lightMode) lightMode.classList.add('d-none');
-        darkMode.classList.remove('d-none');
-    }
+    applyTheme(localStorage.getItem('theme'));
 });

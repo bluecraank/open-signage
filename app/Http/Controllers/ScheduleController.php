@@ -7,6 +7,7 @@ use App\Models\Group;
 use App\Models\Log;
 use App\Models\Presentation;
 use App\Models\Schedule;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -61,9 +62,9 @@ class ScheduleController extends Controller
             $del_pres_after_schedule_ends = false;
         }
 
-        // Date to timestamp
-        $start_date = strtotime($request->start_date);
-        $end_date = strtotime($request->end_date);
+        // datetime-local input, interpreted in the app timezone
+        $start_date = Carbon::parse($request->start_date);
+        $end_date = Carbon::parse($request->end_date);
 
         Schedule::create([
             'name' => $request->name,
@@ -123,9 +124,9 @@ class ScheduleController extends Controller
             return redirect()->back()->withErrors(['message' => __('You must select at least one device or group')]);
         }
 
-        // Date to timestamp
-        $start_date = strtotime($request->start_date);
-        $end_date = strtotime($request->end_date);
+        // datetime-local input, interpreted in the app timezone
+        $start_date = Carbon::parse($request->start_date);
+        $end_date = Carbon::parse($request->end_date);
 
         $schedule->update(
         [
@@ -167,11 +168,13 @@ class ScheduleController extends Controller
                 $presentation = $schedule->presentation;
 
                 if($presentation) {
-                    if($presentation->devices()->count() == 0 && $presentation->groups()->count() == 0) {
+                    $usedBySchedule = Schedule::where('presentation_id', $presentation->id)->where('end_time', '>=', $currentTimestamp)->exists();
+
+                    if($presentation->devices()->count() == 0 && $presentation->groups()->count() == 0 && !$usedBySchedule) {
                         try {
                             $presentation->slides()->delete();
 
-                            File::delete(storage_path('app/public/presentations/' . $presentation->id . '/' . $presentation->id) . '.pdf');
+                            File::deleteDirectory(public_path('data/presentations/' . $presentation->id));
                             File::deleteDirectory(storage_path('app/public/presentations/' . $presentation->id . '/'));
 
                             $oldName = $presentation->name;
@@ -198,10 +201,8 @@ class ScheduleController extends Controller
                 // Disable delete_presentation after deleting assigned presentation to avoid double deletion
                 $schedule->delete_presentation = false;
                 $schedule->save();
-
-                return true;
         }
 
-        return false;
+        return $expiredSchedules->isNotEmpty();
     }
 }

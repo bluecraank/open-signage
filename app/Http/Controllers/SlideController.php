@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Slide;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class SlideController extends Controller
 {
@@ -15,10 +15,15 @@ class SlideController extends Controller
         $slide = Slide::whereId($id)->first();
 
         if(!$slide) {
-            return redirect()->route('slides.index')->withErrors(['message' => __('Slide not found')]);
+            return redirect()->back()->withErrors(['message' => __('Slide not found')]);
         }
 
+        File::delete(public_path('data/presentations/' . $slide->presentation_id . '/' . $slide->name_on_disk));
+
         $slide->delete();
+
+        // Monitors reload when the presentation has been updated
+        $slide->presentation?->touch();
 
         return redirect()->back()->with('success', __('Slide deleted'));
     }

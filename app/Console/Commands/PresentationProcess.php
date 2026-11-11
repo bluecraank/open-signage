@@ -35,6 +35,11 @@ class PresentationProcess extends Command
 
         $presentation = Presentation::where('id', $id)->firstOrFail();
 
+        if ($this->argument('type') === 'video') {
+            $this->processVideo($presentation);
+            return;
+        }
+
         $this->processPdf($presentation);
     }
 
@@ -68,25 +73,51 @@ class PresentationProcess extends Command
             $i++;
         }
 
+        $this->finish($presentation, count($images), 'pdf');
+    }
 
-        File::delete(storage_path('app/public/presentations/' . $presentation->id . '/' . $presentation->id) . '.pdf');
+    /**
+     * Videos are not converted, the uploaded mp4 is used as a single slide.
+     */
+    public function processVideo($presentation)
+    {
+        $source = storage_path('app/public/presentations/' . $presentation->id . '/' . $presentation->id . '.mp4');
+        $slides = 0;
+
+        if (File::exists($source)) {
+            $random = Str::random(7);
+            $videoname = $random . '-v.mp4';
+
+            File::ensureDirectoryExists(public_path('data/presentations/' . $presentation->id));
+            File::move($source, public_path('data/presentations/' . $presentation->id . '/' . $videoname));
+
+            Slide::updateOrCreate([
+                'presentation_id' => $presentation->id,
+                'order' => 1,
+                'type' => 'video',
+            ], [
+                'name_on_disk' => $videoname,
+                'name' => $random,
+            ]);
+
+            $slides = 1;
+        }
+
+        $this->finish($presentation, $slides, 'video');
+    }
+
+    private function finish($presentation, int $slides, string $type)
+    {
         File::deleteDirectory(storage_path('app/public/presentations/' . $presentation->id . '/'));
 
         $presentation->processed = true;
-        $presentation->total_slides = count($images);
+        $presentation->total_slides = $slides;
         $presentation->save();
 
-        $ip = request()->ip();
-
-        // If HTTP_X_FORWARDED_FOR is set, use that instead
-        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        }
-
         Log::create([
-            'ip_address' => $ip,
+            'ip_address' => '127.0.0.1',
             'username' => "System",
-            'action' => __('log.presentation_file_success_updated', ['name' => $presentation->name, 'type' => 'pdf', 'pages' => $i]),
+            'action' => __('log.presentation_file_success_updated', ['name' => $presentation->name, 'type' => $type, 'pages' => $slides]),
         ]);
     }
 

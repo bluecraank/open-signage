@@ -76,10 +76,10 @@
                         <td>
                             @php $active = $device->isActive(); @endphp
                             @if ($active && $device->registered)
-                                <div class="badge bg-success">{{ Carbon::parse($device->last_seen)->diffForHumans() }}
+                                <div class="badge bg-success">{{ $device->last_seen ? Carbon::parse($device->last_seen)->diffForHumans() : 'N/A' }}
                                 </div>
                             @elseif(!$active && $device->registered)
-                                <div class="badge bg-danger">{{ Carbon::parse($device->last_seen)->diffForHumans() }}
+                                <div class="badge bg-danger">{{ $device->last_seen ? Carbon::parse($device->last_seen)->diffForHumans() : 'N/A' }}
                                 </div>
                             @elseif(!$device->registered)
                                 {{ __('Waiting for registration...') }}

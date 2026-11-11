@@ -28,7 +28,7 @@
                 <div class="mb-3">
                     <label class="form-label">{{ __('Template') }}<span class="text-danger">*</span></label>
                     <select required class="form-select" name="presentation_id">
-                        <option value="0">{{ __('Select a template') }}...</option>
+                        <option value="">{{ __('Select a template') }}...</option>
                         @foreach ($presentations as $presentation)
                             <option value="{{ $presentation->id }}" @if (!$presentation->processed) disabled @endif>
                                 {{ $presentation->name }} @if (!$presentation->processed)

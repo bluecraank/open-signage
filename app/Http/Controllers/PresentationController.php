@@ -155,14 +155,10 @@ class PresentationController extends Controller
 
         $presentation->description = "null";
 
-        if ($request->has('file')) {
+        if ($request->hasFile('file')) {
 
             $ip = request()->ip();
 
-            // If HTTP_X_FORWARDED_FOR is set, use that instead
-            if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            }
 
             Log::create([
                 'ip_address' => $ip,
@@ -190,15 +186,9 @@ class PresentationController extends Controller
             File::makeDirectory(public_path('data/presentations/' . $presentation->id), 0755, true, true);
 
             $presentation->processed = false;
-
-            proc_open('php ' . base_path('artisan') . ' presentation:process ' . $presentation->id . ' ' . $type . ' > /dev/null &', [], $pipes);
         } else {
             $ip = request()->ip();
 
-            // If HTTP_X_FORWARDED_FOR is set, use that instead
-            if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            }
 
             Log::create([
                 'ip_address' => $ip,
@@ -211,6 +201,11 @@ class PresentationController extends Controller
         $presentation->timestamps = false;
 
         $presentation->save();
+
+        // Start after saving, otherwise processed = false could overwrite a finished run
+        if ($request->hasFile('file')) {
+            proc_open('php ' . base_path('artisan') . ' presentation:process ' . $presentation->id . ' ' . $type . ' > /dev/null &', [], $pipes);
+        }
 
         return redirect()->back()->with('success', __('Presentation updated'));
     }
@@ -234,27 +229,22 @@ class PresentationController extends Controller
             return redirect()->back()->withErrors(['message' => __('Presentation is assigned to devices')]);
         }
 
-        if ($presentation->schedules->count() != 0) {
-            $schedules = $presentation->schedules;
-
-            foreach ($schedules as $schedule) {
-                if ($schedule->end_date < now()) {
-                    $schedule->presentation_id = 0;
-                    $schedule->save();
-                } else {
-                    return redirect()->back()->withErrors(['message' => __('Presentation is assigned to schedules')]);
-                }
-            }
+        // Active or upcoming schedules still need this presentation
+        if ($presentation->schedules()->where('end_time', '>=', now())->exists()) {
+            return redirect()->back()->withErrors(['message' => __('Presentation is assigned to schedules')]);
         }
 
+        // Detach finished schedules
+        $presentation->schedules()->update(['presentation_id' => 0]);
+
         // Delete all files
-        File::cleanDirectory(public_path('data/presentations/' . $id));
-        File::deleteDirectory(public_path('data/presentations/' . $id));
+        File::deleteDirectory(public_path('data/presentations/' . $presentation->id));
+        File::deleteDirectory(storage_path('app/public/presentations/' . $presentation->id));
 
         $presentation->slides()->delete();
-        Presentation::where('id', $id)->delete();
+        $presentation->delete();
 
-        return redirect()->route('presentations.index', $presentation->id)->with('success', __('Presentation deleted'));
+        return redirect()->route('presentations.index')->with('success', __('Presentation deleted'));
     }
 
     static function getCurrentPresentationsInProgress()

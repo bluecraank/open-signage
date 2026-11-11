@@ -60,3 +60,4 @@
             </div>
         @endforeach
     </div>
+</div>

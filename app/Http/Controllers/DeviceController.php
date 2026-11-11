@@ -86,10 +86,6 @@ class DeviceController extends Controller
 
         $ip = request()->ip();
 
-        // If HTTP_X_FORWARDED_FOR is set, use that instead
-        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        }
 
         Log::create([
             'username' => Auth::user()->name,
@@ -138,7 +134,8 @@ class DeviceController extends Controller
         $name = $request->input('name');
         $description = $request->input('description');
 
-        if(!$device->presentationFromGroup()) {
+        // The select is not shown while the presentation is inherited (group / schedule)
+        if(!$device->presentationFromGroup() && $request->has('presentation_id')) {
             $presentation_id = $request->input('presentation_id');
 
             if($presentation_id == 0 || $presentation_id == null) {
@@ -156,9 +153,6 @@ class DeviceController extends Controller
         $device->description = $description;
 
         $ip = request()->ip();
-        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        }
 
         Log::create([
             'ip_address' => $ip,
@@ -183,9 +177,6 @@ class DeviceController extends Controller
         $device->save();
 
         $ip = request()->ip();
-        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        }
 
         Log::create([
             'username' => Auth::user()->name,
@@ -215,10 +206,6 @@ class DeviceController extends Controller
     public function discover(Request $request) {
         $ip = request()->ip();
 
-        // If HTTP_X_FORWARDED_FOR is set, use that instead
-        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        }
 
         $device = Device::where('ip_address', $ip)->first();
 

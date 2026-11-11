@@ -71,11 +71,11 @@
                     <div class="row mb-3">
                         <div class="col-6">
                             <label class="form-label">{{ __('Start Date') }}<span class="text-danger">*</span></label>
-                            <input required type="datetime-local" class="form-control" name="start_date" value="{{ $schedule->start_time }}">
+                            <input required type="datetime-local" class="form-control" name="start_date" value="{{ $schedule->start_time?->format('Y-m-d\TH:i') }}">
                         </div>
                         <div class="col-6">
                             <label class="form-label">{{ __('End Date') }}<span class="text-danger">*</span></label>
-                            <input required type="datetime-local" class="form-control" name="end_date" value="{{ $schedule->end_time }}">
+                            <input required type="datetime-local" class="form-control" name="end_date" value="{{ $schedule->end_time?->format('Y-m-d\TH:i') }}">
                         </div>
                     </div>
 

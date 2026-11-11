@@ -8,10 +8,12 @@
             <h5 class="card-header">
                 {{ __('Running schedules') }}
 
-                <a href="{{ route('schedules.create') }}" class="btn btn-primary btn-sm float-end">
-                    <i class="bi-plus"></i>
-                    {{ __('Create schedule') }}
-                </a>
+                @can('create schedules')
+                    <a href="{{ route('schedules.create') }}" class="btn btn-primary btn-sm float-end">
+                        <i class="bi-plus"></i>
+                        {{ __('Create schedule') }}
+                    </a>
+                @endcan
             </h5>
             <div class="card-body">
                 <table class="table table-striped">
