@@ -66,7 +66,8 @@
                                     1
                                 @else
                                     0 @endif;">
-                    <video autoplay>
+                    {{-- Browsers block autoplay with sound, a muted video starts without user interaction --}}
+                    <video autoplay muted playsinline @if (count($slides) === 1) loop @endif>
                         <source src="{{ $slide['url'] }}" type="video/mp4">
                     </video>
                 </div>

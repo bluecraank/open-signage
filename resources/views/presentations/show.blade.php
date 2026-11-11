@@ -12,9 +12,14 @@
                 @can('read presentations')
                     <div class="row">
                         <div class="col-4">
-                            <img class="w-100"
-                                src="{{ $presentation->slides?->first()?->publicpreviewpath() ?? config('app.placeholder_image') }}"
-                                alt="">
+                            @php $firstSlide = $presentation->slides->first(); @endphp
+                            @if ($firstSlide?->type === 'video')
+                                <video class="w-100" src="{{ $firstSlide->publicpath() }}" controls muted preload="metadata"></video>
+                            @else
+                                <img class="w-100"
+                                    src="{{ $firstSlide?->publicpreviewpath() ?? config('app.placeholder_image') }}"
+                                    alt="">
+                            @endif
 
                             @can('delete presentations')
                                 <form class="mt-5" action="{{ route('presentations.destroy', $presentation->id) }}" method="POST"

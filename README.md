@@ -219,7 +219,7 @@ chromium --kiosk --noerrdialogs --disable-session-crashed-bubble --disable-pinch
   --app=https://signage.example.com/discover
 ```
 
-`--autoplay-policy=no-user-gesture-required` is needed for video slides.
+Videos play muted and on repeat. MP4 files should use H.264, because many browsers, including Chromium on a Raspberry Pi, cannot play H.265/HEVC.
 
 `/discover` looks up the monitor by IP address, or creates a new one. A new monitor shows "Device not registered" until you open it in the interface and accept it. Every monitor therefore needs its own IP address as seen by the server, monitors behind the same NAT address are treated as one device.
 
