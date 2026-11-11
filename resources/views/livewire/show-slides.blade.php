@@ -1,64 +1,48 @@
-<div wire:poll>
-    <h5 class="">
-        @if (!$presentation->processed)
-        {{ __('Slides') }} ({{ $presentation->slides->count() }}/{{ $presentation->total_slides }})
-        @else
-        {{ __('Slides') }} ({{ $presentation->slides->count() }})
-        @endif</h5>
+<div @if (!$presentation->processed) wire:poll.3s @endif>
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h5 mb-0">
+            {{ __('Slides') }}
+            <span class="badge rounded-pill count-badge ms-1">
+                @if (!$presentation->processed && $presentation->total_slides)
+                    {{ $presentation->slides->count() }}/{{ $presentation->total_slides }}
+                @else
+                    {{ $presentation->slides->count() }}
+                @endif
+            </span>
+        </h2>
+    </div>
 
     @if (!$presentation->processed)
-        <div class="alert alert-info">
-            <style>
-                .loader1 {
-                    width: 48px;
-                    height: 48px;
-                    border: 5px solid #FFF;
-                    border-bottom-color: transparent;
-                    border-radius: 50%;
-                    display: inline-block;
-                    box-sizing: border-box;
-                    animation: rotation 1s linear infinite;
-                }
-
-                @keyframes rotation {
-                    0% {
-                        transform: rotate(0deg);
-                    }
-
-                    100% {
-                        transform: rotate(360deg);
-                    }
-                }
-            </style>
-            <span class="loader1"></span>
-            <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"
-                class="is-size-4">{{ __('Slides are being processed, please wait...') }}</span>
+        <div class="alert alert-info align-items-center">
+            <span class="loader"></span>
+            <div>{{ __('Slides are being processed, please wait...') }}</div>
         </div>
     @endif
 
-    <div class="row">
+    <div class="row g-3">
         @foreach ($presentation->slides as $slide)
-            <div class="col-auto mb-3 d-flex justify-content-center">
-                <div class="card d-flex justify-content-center" style="width: 18rem;">
+            <div class="col-sm-6 col-lg-4 col-xl-3">
+                <div class="card slide-card position-relative">
+                    <span class="badge text-bg-dark slide-order">#{{ $slide->order }}</span>
                     @if ($slide->type === 'video')
                         <video src="{{ $slide->publicpath() }}" class="card-img-top" controls muted preload="metadata"></video>
                     @else
-                        <img src="{{ $slide->publicpreviewpath() }}" class="card-img-top" alt="...">
+                        <a href="{{ $slide->publicpath() }}" target="_blank">
+                            <img src="{{ $slide->publicpreviewpath() }}" class="card-img-top" alt="" loading="lazy">
+                        </a>
                     @endif
-                    <div class="card-body">
-                        <div>{{ __('Order') }}: {{ $slide->order }}</div>
-                        <div>{{ __('Created') }}: {{ $slide->created_at }}</div>
-                        <div>{{ __('Filename') }}: {{ $slide->name_on_disk }} </div>
-                        <div><a target="_blank" href="{{ $slide->publicpath() }}">{{ __('Preview') }}</a></div>
-                        @can('delete slides')
-                            <form action="{{ route('slides.destroy', $slide->id) }}" method="POST"
-                                onsubmit="return confirm('{{ __('Are you sure to delete this slide?') }}')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm float-end"><i
-                                        class="bi-trash"></i></button>
-                            </form>
-                        @endcan
+                    <div class="card-body d-flex justify-content-between align-items-center py-2">
+                        <div class="small text-muted text-truncate" title="{{ $slide->name_on_disk }}">
+                            <i class="bi bi-{{ $slide->type === 'video' ? 'film' : 'image' }} me-1"></i>{{ $slide->created_at?->format('d.m.Y H:i') }}
+                        </div>
+                        <div class="d-flex gap-1">
+                            <a class="btn btn-outline-secondary btn-sm icon-btn" target="_blank" href="{{ $slide->publicpath() }}"
+                                title="{{ __('Preview') }}"><i class="bi bi-box-arrow-up-right"></i></a>
+                            @can('delete slides')
+                                <x-delete-button :action="route('slides.destroy', $slide->id)"
+                                    :confirm="__('Are you sure to delete this slide?')" />
+                            @endcan
+                        </div>
                     </div>
                 </div>
             </div>

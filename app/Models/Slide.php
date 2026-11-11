@@ -29,7 +29,7 @@ class Slide extends Model
     public function publicpreviewpath() {
         // Videos have no preview image (would be rendered in an <img> tag)
         if ($this->type === 'video') {
-            return 'https://placehold.co/600x338?text=Video';
+            return asset('data/img/video.svg');
         }
 
         return asset('data/presentations/' . $this->presentation_id . '/' . $this->name_on_disk);

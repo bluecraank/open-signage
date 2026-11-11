@@ -1,71 +1,47 @@
 @extends('layouts.app')
 
+@section('title', $user->name)
+
 @section('content')
-    <h3 class="mb-3">{{ __('User') }}: {{ $user->name }}</h3>
+    <x-page-header :title="$user->name" :subtitle="$user->email ?? __('This user has no mail')"
+        :back="route('users.index')" :backLabel="__('Users')">
+        <x-slot:actions>
+            @can('delete users')
+                <x-delete-button size="md" :action="route('users.destroy', $user->id)"
+                    :confirm="__('Are you sure to delete this user?')" :label="__('Delete')" />
+            @endcan
+        </x-slot:actions>
+    </x-page-header>
+
     <div class="card">
-        <header class="card-header">
-            {{ __('Edit user') }}
-        </header>
+        <div class="card-header">{{ __('Assign Role') }}</div>
+        <div class="card-body p-4">
+            @php $currentRoles = $user->getRoleNames()->toArray(); @endphp
 
-        <div class="card-body">
-            <div class="row">
-                @can('read users')
-                    @can('update users')
-                        <div class="col">
-                            @can('delete users')
-                                <form id="deleteForm" action="{{ route('users.destroy', $user->id) }}" method="POST"
-                                    onsubmit="return confirm('{{ __('Are you sure to delete this user?') }}')">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                            @endcan
+            @can('update users')
+                <form action="{{ route('users.update', $user->id) }}" method="post">
+                    @method('PUT')
+                    @csrf
+            @endcan
 
-                            <div class="mb-3">
-                                <label for="name" class="form-label">{{ __('Name') }}</label>
-                                <input type="text" disabled readonly id="name" class="form-control"
-                                    value="{{ $user->name }}">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="email" class="form-label">{{ __('E-Mail') }}</label>
-                                <input type="text" disabled readonly id="email" class="form-control"
-                                    placeholder="{{ __('This user has no mail') }}" value="{{ $user->email }}">
-                            </div>
-
-                            <div class="mb-3">
-                                <form action="{{ route('users.update', $user->id) }}" method="post">
-                                    @method('PUT')
-                                    @csrf
-                                    <label class="form-label">{{ __('Assign Role') }}</label>
-                                    <div class="row">
-                                        @foreach ($roles as $role)
-                                            <div class="col-2">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" id="radio-{{ $role->id }}"
-                                                        @if (in_array($role->name, $user->getRoleNames()->toArray())) checked @endif type="radio"
-                                                        name="roles" value="{{ $role->id }}">
-                                                    <label class="form-check-label" for="radio-{{ $role->id }}">
-                                                        {{ $role->name }}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                            </div>
-
-                            <hr>
-
-                            <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
-                            @can('delete users')
-                                <button type="button" class="btn btn-danger"
-                                    onclick="return confirm('{{ __('Are you sure to delete this user?') }}') && document.getElementById('deleteForm').submit()">{{ __('Delete') }}</button>
-                            @endcan
-                            </form>
-                        </div>
+            <div class="row g-3">
+                @foreach ($roles as $role)
+                    <div class="col-sm-6 col-lg-3">
+                        <input class="btn-check" id="radio-{{ $role->id }}" type="radio" name="roles" value="{{ $role->id }}"
+                            @checked(in_array($role->name, $currentRoles)) @cannot('update users') disabled @endcannot>
+                        <label class="btn btn-outline-primary w-100 py-3" for="radio-{{ $role->id }}">
+                            <i class="bi bi-shield-lock d-block fs-4 mb-1"></i>{{ $role->name }}
+                        </label>
                     </div>
-                @endcan
+                @endforeach
+            </div>
+
+            @can('update users')
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                    </div>
+                </form>
             @endcan
         </div>
-    </div>
     </div>
 @endsection

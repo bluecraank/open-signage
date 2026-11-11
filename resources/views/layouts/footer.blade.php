@@ -1,4 +1,4 @@
-<footer>
-    Build with <a href="https://laravel.com">Laravel</a>, <a href="https://getbootstrap.com">Bootstrap</a> and <i
-        class="bi-heart-fill"></i> | v{{ config('app.version') }}
+<footer class="app-footer">
+    <a href="https://github.com/bluecraank/open-signage" target="_blank" rel="noopener">open-signage</a>
+    v{{ config('app.version') }} · Built with Laravel and Bootstrap
 </footer>

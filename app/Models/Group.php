@@ -32,7 +32,11 @@ class Group extends Model
         });
     }
 
-    protected $fillable = ['name', 'presentation_id', 'created_by'];
+    protected $fillable = ['name', 'presentation_id', 'created_by', 'synchronized'];
+
+    protected $casts = [
+        'synchronized' => 'boolean',
+    ];
 
     public function presentation()
     {

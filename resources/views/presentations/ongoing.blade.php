@@ -1,61 +1,50 @@
 @extends('layouts.app')
 
+@section('title', __('Ongoing processing'))
+
 @section('content')
-    @can('read logs')
-        <h3>{{ __('Ongoing processing') }}</h3>
-        <div class="card">
-            <h5 class="card-header">
-                {{ __('Overview') }}
-            </h5>
-            <div class="card-body">
-                <table class="table table-striped">
+    <x-page-header :title="__('Ongoing processing')" :subtitle="__('Uploads that are still being converted into slides')" />
+
+    <div class="card">
+        @if ($presentations->isEmpty())
+            <x-empty-state icon="check2-circle" :text="__('Nothing is being processed right now')" />
+        @else
+            <div class="table-responsive">
+                <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>{{ __('Preview') }}</th>
-                            <th>{{ __('Description') }}</th>
+                            <th class="ps-4">{{ __('Description') }}</th>
                             <th>{{ __('Slides') }}</th>
-                            <th>{{ __('Slides updated') }}</th>
                             <th>{{ __('Created by') }}</th>
-                            <th>{{ __('Actions') }}</th>
+                            <th>{{ __('Started') }}</th>
+                            <th class="pe-4 text-end">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         @foreach ($presentations as $presentation)
                             <tr>
-                                <td>
-                                    <a href="{{ route('presentations.show', ['id' => $presentation->id]) }}">
-                                        <img src="{{ $presentation->slides->first()?->publicpreviewpath ?? config('app.placeholder_image') }}"
-                                            class="img-thumbnail" style="max-height: 100px;">
-                                    </a>
+                                <td class="ps-4">
+                                    <a class="table-link" href="{{ route('presentations.show', ['id' => $presentation->id]) }}">{{ $presentation->name }}</a>
                                 </td>
-                                <td>{{ $presentation->name }}</td>
-                                <td>{{ $presentation->slides->count() }}</td>
-                                <td>{{ $presentation->slides->first()?->created_at?->format('d.m.Y H:i') ?? 'N/A' }}</td>
-                                <td>{{ $presentation->author }}</td>
-                                <td class="actions-cell">
-
+                                <td><span class="loader me-2 align-middle"></span>{{ $presentation->slides->count() }}</td>
+                                <td class="text-muted">{{ $presentation->author }}</td>
+                                <td class="text-muted">{{ $presentation->updated_at?->diffForHumans() }}</td>
+                                <td class="actions-cell pe-4">
                                     @can('update presentations')
-                                        <form action="{{ route('presentations.ongoing.stop', $presentation->id) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure to stop this processing?') }}')">
+                                        <form action="{{ route('presentations.ongoing.stop', $presentation->id) }}" method="POST"
+                                            onsubmit="return confirm(@js(__('Are you sure to stop this processing?')))">
                                             @csrf
-                                            <button class="btn btn-sm btn-danger" type="submit"><i class="bi-trash"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger" type="submit">
+                                                <i class="bi bi-stop-circle me-1"></i>{{ __('Stop') }}</button>
                                         </form>
                                     @endcan
                                 </td>
                             </tr>
                         @endforeach
-                        @if ($presentations->count() == 0)
-                            <tr>
-                                <td colspan="7" class="text-center">
-                                    {{ __('No templates found') }}</td>
-                            </tr>
-                        @endif
                     </tbody>
                 </table>
             </div>
-        </div>
-    @endcan
-    @cannot('read presentations')
-        @include('unauthorized')
-    @endcannot
+        @endif
+    </div>
 @endsection

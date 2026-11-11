@@ -1,195 +1,151 @@
-    @extends('layouts.app')
+@extends('layouts.app')
 
-    @section('content')
-        <h3 class="mb-3">
-            {{ __('Template') }}: {{ $presentation->name }}</h3>
-        <div class="card">
-            <h5 class="card-header">
-                {{ __('Edit template') }}
-            </h5>
+@section('title', $presentation->name)
 
-            <div class="card-body">
-                @can('read presentations')
-                    <div class="row">
-                        <div class="col-4">
-                            @php $firstSlide = $presentation->slides->first(); @endphp
-                            @if ($firstSlide?->type === 'video')
-                                <video class="w-100" src="{{ $firstSlide->publicpath() }}" controls muted preload="metadata"></video>
-                            @else
-                                <img class="w-100"
-                                    src="{{ $firstSlide?->publicpreviewpath() ?? config('app.placeholder_image') }}"
-                                    alt="">
-                            @endif
+@section('content')
+    @php
+        $firstSlide = $presentation->slides->first();
+        $schedules = $presentation->getSchedules();
+    @endphp
 
-                            @can('delete presentations')
-                                <form class="mt-5" action="{{ route('presentations.destroy', $presentation->id) }}" method="POST"
-                                    onsubmit="return confirm('{{ __('Are you sure to delete this template?') }}')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">{{ __('Delete template') }}</button>
-                                </form>
-                            @endcan
-                        </div>
+    <x-page-header :title="$presentation->name" :subtitle="__('Template') . ' · ' . $presentation->author"
+        :back="route('presentations.index')" :backLabel="__('Templates')">
+        <x-slot:actions>
+            @can('delete presentations')
+                <x-delete-button size="md" :action="route('presentations.destroy', $presentation->id)"
+                    :confirm="__('Are you sure to delete this template?')" :label="__('Delete template')" />
+            @endcan
+        </x-slot:actions>
+    </x-page-header>
 
-                        <div class="col-8">
-                            @cannot('update presentations')
-                                <p><b>Name:</b> {{ $presentation->name }}</p>
-                                <p><b>{{ __('Slides') }}:</b> {{ $presentation->slides->count() }}</p>
-                                <p><b>{{ __('Used by') }}:</b> {{ $presentation->devices->count() }}</p>
-                            @endcannot
-                            @can('update presentations')
-                                <form action="{{ route('presentations.update', $presentation->id) }}" method="post"
-                                    enctype="multipart/form-data">
-                                    @method('PUT')
-                                    @csrf
-                                    <div class="field">
-                                        <label class="form-label">{{ __('Description') }}<span class="text-danger">*</span></label>
-                                        <input class="form-control" id="inputDescription" type="text" name="name"
-                                            value="{{ $presentation->name }}" />
-                                    </div>
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title-sm">{{ __('Preview') }}</div>
+                    @if ($firstSlide?->type === 'video')
+                        <video class="screen" src="{{ $firstSlide->publicpath() }}" controls muted preload="metadata"></video>
+                    @else
+                        <img class="screen" src="{{ $firstSlide?->publicpreviewpath() ?? config('app.placeholder_image') }}" alt="">
+                    @endif
+                </div>
+            </div>
+        </div>
 
+        <div class="col-lg-7">
+            <div class="card h-100">
+                <div class="card-header">{{ __('Edit template') }}</div>
+                <div class="card-body">
+                    @cannot('update presentations')
+                        <dl class="meta-list">
+                            <div>
+                                <dt>Name</dt>
+                                <dd>{{ $presentation->name }}</dd>
+                            </div>
+                            <div>
+                                <dt>{{ __('Slides') }}</dt>
+                                <dd>{{ $presentation->slides->count() }}</dd>
+                            </div>
+                            <div>
+                                <dt>{{ __('Used by') }}</dt>
+                                <dd>{{ $presentation->devices->count() }} {{ trans_choice('Device|Devices', $presentation->devices->count()) }}</dd>
+                            </div>
+                        </dl>
+                    @endcannot
 
-                                    <div class="mb-3 mt-4">
-                                        <label class="form-label">{{ __('Upload file') }}</label>
-                                        <div id="drop_zone" ondrop="window.dropHandler(event)"
-                                            ondragover="window.dragOverHandler(event)">
-                                            <div id="file-upload">
-                                                <input class="form-control file-input" type="file" name="file"
-                                                    accept="application/pdf,video/mp4" id="formFile">
-                                                <p class="mt-4" style="display: inline-block">
-                                                    {{ __('or drag and drop to upload') }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                    @can('update presentations')
+                        <form action="{{ route('presentations.update', $presentation->id) }}" method="post"
+                            enctype="multipart/form-data">
+                            @method('PUT')
+                            @csrf
+                            <div class="mb-4">
+                                <label class="form-label" for="inputDescription">{{ __('Description') }}<span class="text-danger">*</span></label>
+                                <input class="form-control" id="inputDescription" type="text" name="name"
+                                    value="{{ $presentation->name }}" required />
+                            </div>
 
-                                    <hr>
+                            <label class="form-label">{{ __('Replace file') }}</label>
+                            @include('partials.file-upload')
 
-                                    @if ($presentation->processed)
-                                        <button @if (!$presentation->processed) disabled @endif type="submit"
-                                            class="btn btn-primary">{{ __('Save') }} @if (!$presentation->processed)
-                                                ({{ __('In process') }})
-                                            @endif
-                                        </button>
-                                    @else
-                                        <button disabled type="submit" class="btn btn-primary">{{ __('Save') }} @if (!$presentation->processed)
-                                                ({{ __('In process') }})
-                                            @endif
-                                        </button>
-                                    @endif
-                                </form>
-                            @endcan
-                        </div>
-
-                        <hr style="margin-top: 20px">
-
-                        <div class="p-3">
-                            <h5 class="pt-1">{{ __('Devices') }} ({{ $presentation->devices->count() }})</h5>
-
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>{{ __('Location') }}</th>
-                                        <th>{{ __('Assigned') }}</th>
-                                        <th style="width:150px">{{ __('Link') }}</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach ($presentation->devices as $device)
-                                        <tr>
-                                            <td>{{ $device->name }}</td>
-                                            <td>{{ $device->description }}</td>
-                                            <td>{{ $device->presentationFromGroup() ? __('By group') : __('Directly') }}</td>
-                                            <td class="text-center"><a
-                                                    href="{{ route('devices.show', $device->id) }}">{{ __('Go to device') }}</a>
-                                        </tr>
-                                    @endforeach
-
-                                    @if ($presentation->devices->count() == 0)
-                                        <tr>
-                                            <td class="text-center" colspan="4">{{ __('No devices assigned') }}</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <hr>
-
-                        <div class="p-3">
-                            <h5 class="pt-5">{{ __('Groups') }} ({{ $presentation->groups->count() }})</h5>
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>{{ __('Used by') }}</th>
-                                        <th style="width:150px">{{ __('Link') }}</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach ($presentation->groups as $group)
-                                        <tr>
-                                            <td>{{ $group->name }}</td>
-                                            <td>{{ $group->devices->count() }}
-                                                {{ trans_choice('Device|Devices', $group->devices->count()) }}</td>
-                                            <td class="text-center"><a
-                                                    href="{{ route('groups.show', $group->id) }}">{{ __('Go to group') }}</a>
-                                        </tr>
-                                    @endforeach
-
-                                    @if ($presentation->groups->count() == 0)
-                                        <tr>
-                                            <td class="text-center" colspan="3">{{ __('No groups assigned') }}</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <hr>
-
-                        <div class="p-3">
-                            <h5 class="pt-5">{{ __('Schedules') }} ({{ $presentation->getSchedules()->count() }})</h5>
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th style="width:150px">{{ __('Link') }}</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach ($presentation->getSchedules() as $schedule)
-                                        <tr>
-                                            <td>{{ $schedule->name }}</td>
-                                            <td class="text-center"><a
-                                                    href="{{ route('schedules.show', $schedule->id) }}">{{ __('Go to schedule') }}</a>
-                                        </tr>
-                                    @endforeach
-
-                                    @if ($presentation->getSchedules()->count() == 0)
-                                        <tr>
-                                            <td class="text-center" colspan="2">
-                                                {{ __('No schedules upcoming or active with this presentation') }}</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <hr>
-
-                        <div class="slides pt-5">
-                            @if (!$presentation->processed)
-                                @livewire('show-slides', ['presentation' => $presentation])
-                            @else
-                                @include('livewire.show-slides')
-                            @endif
-                        </div>
+                            <div class="form-actions">
+                                <button @disabled(!$presentation->processed) type="submit" class="btn btn-primary">
+                                    {{ __('Save') }} @if (!$presentation->processed) ({{ __('In process') }}) @endif
+                                </button>
+                            </div>
+                        </form>
                     @endcan
                 </div>
-
             </div>
-        @endsection
+        </div>
+    </div>
+
+    <div class="row g-4 mt-0">
+        <div class="col-lg-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <span><i class="bi bi-display me-1"></i>{{ __('Devices') }}</span>
+                    <span class="badge rounded-pill count-badge">{{ $presentation->devices->count() }}</span>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @forelse ($presentation->devices as $device)
+                        <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center">
+                            <div>
+                                <a class="table-link" href="{{ route('devices.show', $device->id) }}">{{ $device->name }}</a>
+                                <div class="small text-muted">{{ $device->description }}</div>
+                            </div>
+                            <span class="small text-muted">{{ $device->presentationFromGroup() ? __('By group') : __('Directly') }}</span>
+                        </li>
+                    @empty
+                        <li class="list-group-item bg-transparent text-muted small">{{ __('No devices assigned') }}</li>
+                    @endforelse
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <span><i class="bi bi-collection me-1"></i>{{ __('Groups') }}</span>
+                    <span class="badge rounded-pill count-badge">{{ $presentation->groups->count() }}</span>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @forelse ($presentation->groups as $group)
+                        <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center">
+                            <a class="table-link" href="{{ route('groups.show', $group->id) }}">{{ $group->name }}</a>
+                            <span class="small text-muted">{{ $group->devices->count() }} {{ trans_choice('Device|Devices', $group->devices->count()) }}</span>
+                        </li>
+                    @empty
+                        <li class="list-group-item bg-transparent text-muted small">{{ __('No groups assigned') }}</li>
+                    @endforelse
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <span><i class="bi bi-calendar-week me-1"></i>{{ __('Schedules') }}</span>
+                    <span class="badge rounded-pill count-badge">{{ $schedules->count() }}</span>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @forelse ($schedules as $schedule)
+                        <li class="list-group-item bg-transparent">
+                            <a class="table-link" href="{{ route('schedules.show', $schedule->id) }}">{{ $schedule->name }}</a>
+                            <div class="small text-muted">{{ $schedule->startDate() }} – {{ $schedule->endDate() }}</div>
+                        </li>
+                    @empty
+                        <li class="list-group-item bg-transparent text-muted small">{{ __('No schedules upcoming or active with this presentation') }}</li>
+                    @endforelse
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        @if (!$presentation->processed)
+            @livewire('show-slides', ['presentation' => $presentation])
+        @else
+            @include('livewire.show-slides')
+        @endif
+    </div>
+@endsection

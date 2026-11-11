@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">
@@ -8,11 +8,22 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name') }}</title>
+    <title>@hasSection('title')@yield('title') · @endif{{ config('app.name') }}</title>
 
     <link rel="icon" type="image/png" href="/data/img/favicon.png">
 
     <script>
+        // Set the theme before the first paint to prevent a flash of the wrong theme.
+        // Without a saved choice the theme follows the operating system.
+        (function() {
+            let theme = null;
+            try { theme = localStorage.getItem('theme'); } catch (e) {}
+            if (theme !== 'dark' && theme !== 'light') {
+                theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            document.documentElement.dataset.bsTheme = theme;
+        })();
+
         // After a longer inactivity (standby, expired session, container restart) the csrf token
         // is no longer valid and Livewire polling gets a 419. Instead of Livewire's
         // "This page has expired" dialog, reload the page (redirects to login if needed).
@@ -38,41 +49,32 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
-<body class="container">
-    <script>
-        // Instantly switch between light and dark mode to prevent flash of light mode
-        const body = document.querySelector('body');
-        if (localStorage.getItem('theme') === 'dark') {
-            body.dataset.bsTheme = 'dark';
-        } else {
-            body.dataset.bsTheme = '';
-        }
-    </script>
+<body>
     @auth
         @include('layouts.menu')
     @endauth
 
-    <div id="app">
+    <main id="app" class="@auth app-main container-xl @else d-flex flex-column flex-grow-1 @endauth">
         @auth
-            @if ($errors)
-                @foreach ($errors->all() as $error)
-                    <div class="alert alert-danger fade-out">
-                        {{ $error }}
-                    </div>
-                @endforeach
-            @endif
+            @foreach ($errors->all() as $error)
+                <div class="alert alert-danger fade-out" role="alert">
+                    <i class="bi bi-exclamation-octagon"></i>
+                    <div>{{ $error }}</div>
+                </div>
+            @endforeach
 
             @if (session()->has('success'))
-                <div class="alert alert-success fade-out">
-                    {{ session()->get('success') }}
+                <div class="alert alert-success fade-out" role="status">
+                    <i class="bi bi-check-circle"></i>
+                    <div>{{ session()->get('success') }}</div>
                 </div>
             @endif
         @endauth
 
         @yield('content')
+    </main>
 
-        @include('layouts.footer')
-    </div>
+    @include('layouts.footer')
 </body>
 
 </html>

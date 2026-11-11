@@ -186,6 +186,8 @@ class PresentationController extends Controller
             File::makeDirectory(public_path('data/presentations/' . $presentation->id), 0755, true, true);
 
             $presentation->processed = false;
+            // The old page count would show a wrong progress until the new file is processed
+            $presentation->total_slides = 0;
         } else {
             $ip = request()->ip();
 

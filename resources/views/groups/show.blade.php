@@ -1,102 +1,106 @@
 @extends('layouts.app')
 
+@section('title', $group->name)
+
 @section('content')
-    <script src="/data/js/jquery-3.7.1.min.js"></script>
-    <script src="/data/js/jquery.multi-select.js"></script>
-    <link rel="stylesheet" href="/data/css/multi-select.css ">
-    <script>
-        $(document).ready(function() {
-            $('#multiselect').multiSelect({
-                'selectableHeader': '<div class="text-center has-text-weight-bold">{{ __('Selectable') }}</div>',
-                'selectionHeader': '<div class="text-center has-text-weight-bold">{{ __('Selected') }}</div>'
-            });
-        });
-    </script>
-    <h3 class="mb-3">{{ __('Group') }}: {{ $group->name }}</h3>
-    <div class="card">
-        <h5 class="card-header">
-            {{ __('Edit group') }}
-        </h5>
+    @include('partials.multiselect')
 
-        <div class="card-body">
-            <div class="row">
-                @can('read groups')
-                    <div class="col-4">
-                        @php
-                            // Presentation can have no slides (e.g. still processing)
-                            $preview = $group->presentation?->slides->first()?->publicpreviewpath ?? config('app.placeholder_image');
-                        @endphp
-                        <img class="monitor-border w-100" src="{{ $preview }}" alt="">
+    <x-page-header :title="$group->name" :subtitle="trans_choice('Device|Devices', $group->devices->count()) . ': ' . $group->devices->count()"
+        :back="route('groups.index')" :backLabel="__('Groups')">
+        <x-slot:actions>
+            @can('delete groups')
+                <x-delete-button size="md" :action="route('groups.destroy', $group->id)"
+                    :confirm="__('Are you sure to delete this group?')" :label="__('Delete group')" />
+            @endcan
+        </x-slot:actions>
+    </x-page-header>
 
-                        @can('delete groups')
-                            <form class="pt-2" action="{{ route('groups.destroy', $group->id) }}" method="POST"
-                                onsubmit="return confirm('{{ __('Are you sure to delete this group?') }}')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">{{ __('Delete group') }}</button>
-                            </form>
-                        @endcan
-                    </div>
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title-sm">{{ __('Preview') }}</div>
+                    @php
+                        // Presentation can have no slides (e.g. still processing)
+                        $preview = $group->presentation?->slides->first()?->publicpreviewpath ?? config('app.placeholder_image');
+                    @endphp
+                    <img class="screen" src="{{ $preview }}" alt="">
+                    @if ($group->presentation)
+                        <a class="d-inline-block mt-3 small" href="{{ route('presentations.show', $group->presentation->id) }}">
+                            {{ $group->presentation->name }} <i class="bi bi-arrow-right"></i></a>
+                    @endif
+                </div>
+            </div>
+        </div>
 
-                    <div class="col-8">
-                        @cannot('update groups')
-                            <p><b>Name:</b> <br> {{ $group->name }}</p>
-                            <p><b>{{ __('Devices') }}:</b> <br> {{ $group->devices->count() }}</p>
-                            <p><b>{{ __('Assigned template') }}:</b> <br>
-                                @if ($group->presentation)
-                                    {{ $group->presentation->name }} - <a
-                                        href="{{ route('presentations.show', $group->presentation->id) }}">{{ __('Go to presentation') }}</a>
-                                @else
-                                    {{ __('No template assigned') }}
-                                @endif
-                            </p>
-                        @endcannot
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">{{ __('Edit group') }}</div>
+                <div class="card-body">
+                    @cannot('update groups')
+                        <dl class="meta-list">
+                            <div>
+                                <dt>{{ __('Assigned template') }}</dt>
+                                <dd>{{ $group->presentation?->name ?? __('No template assigned') }}</dd>
+                            </div>
+                            <div>
+                                <dt>{{ __('Synchronize monitors') }}</dt>
+                                <dd>{{ $group->synchronized ? __('Yes') : __('No') }}</dd>
+                            </div>
+                        </dl>
+                    @endcannot
 
-                        @can('update groups')
-                            <form action="{{ route('groups.update', $group->id) }}" method="post">
-                                @method('PUT')
-                                @csrf
-                                <div class="mb-3">
-                                    <label class="form-label">Name<span class="text-danger">*</span></label>
-                                    <input class="form-control" type="text" name="name" value="{{ $group->name }}" />
+                    @can('update groups')
+                        <form action="{{ route('groups.update', $group->id) }}" method="post">
+                            @method('PUT')
+                            @csrf
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="name">Name<span class="text-danger">*</span></label>
+                                    <input class="form-control" type="text" id="name" name="name" value="{{ $group->name }}" required />
                                 </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">{{ __('Assigned template') }}<span
-                                            class="text-danger">*</span></label>
-                                    <select class="form-select" name="presentation_id">
-                                        <option value="">{{ __('No template assigned') }}</option>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="presentation_id">{{ __('Assigned template') }}<span class="text-danger">*</span></label>
+                                    <select class="form-select" name="presentation_id" id="presentation_id" required>
+                                        <option value="">{{ __('Select a template') }}...</option>
                                         @foreach ($presentations as $presentation)
-                                            <option @if ($group->presentation_id == $presentation->id) selected @endif
-                                                value="{{ $presentation->id }}" @if (!$presentation->processed) disabled @endif>
-                                                {{ $presentation->name }}
-                                                @if (!$presentation->processed)
-                                                    ({{ __('In process') }})
-                                                @endif
+                                            <option @selected($group->presentation_id == $presentation->id) value="{{ $presentation->id }}"
+                                                @disabled(!$presentation->processed)>
+                                                {{ $presentation->name }} @if (!$presentation->processed) ({{ __('In process') }}) @endif
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
 
                                 @can('assign device to group')
-                                    <div class="mb-3">
-                                        <label class="form-label">{{ __('Devices') }}<span class="text-danger">*</span></label>
-                                        <select multiple="multiple" name="devices[]" id="multiselect">
+                                    <div class="col-12">
+                                        <label class="form-label">{{ __('Devices') }}</label>
+                                        <select multiple="multiple" name="devices[]" class="multiselect">
                                             @foreach ($devices as $device)
-                                                <option @if ($device->group_id == $group->id) selected @endif value="{{ $device->id }}">
+                                                <option @selected($device->group_id == $group->id) value="{{ $device->id }}">
                                                     {{ $device->description }} ({{ $device->name }})</option>
                                             @endforeach
                                         </select>
                                     </div>
                                 @endcan
 
-                                <hr>
+                                <div class="col-12">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" name="synchronized"
+                                            value="1" id="synchronized" @checked($group->synchronized)>
+                                        <label class="form-check-label" for="synchronized">{{ __('Synchronize monitors') }}</label>
+                                        <div class="form-text">{{ __('All monitors in this group show the same slide at the same time.') }}</div>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <div class="form-actions">
                                 <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
-                            </form>
-                        @endcan
-                    </div>
-                @endcan
+                            </div>
+                        </form>
+                    @endcan
+                </div>
             </div>
         </div>
     </div>

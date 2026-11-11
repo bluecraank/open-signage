@@ -128,7 +128,7 @@ class DeviceController extends Controller
         $request->validate([
             'name' => 'required|min:2|max:255|unique:devices,name,' . $device->id . ',id',
             'description' => 'required|min:2|max:255',
-            'presentation_id' => 'nullable|integer',
+            'presentation_id' => 'nullable|integer|exists:presentations,id',
         ]);
 
         $name = $request->input('name');

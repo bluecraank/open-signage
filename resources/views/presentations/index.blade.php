@@ -1,98 +1,91 @@
 @extends('layouts.app')
 
+@section('title', __('Templates'))
+
 @section('content')
     @can('read presentations')
-    <h3>{{ __('Templates') }}</h3>
-        <div class="card">
-            <h5 class="card-header">
-                {{ __('Overview') }}
-
-                <span style="font-size: 13px;position:absolute;margin-left:10px;margin-top:5px;">
-                    <span class="badge bg-primary mb-3">{{ $countUsed }} {{ __('in use') }}</span>
-                    <span class="badge bg-secondary mb-3 ml-2">{{ $countUnused }} {{ __('unused') }}</span>
-                </span>
-
+        <x-page-header :title="__('Templates')" :subtitle="$countUsed . ' ' . __('in use') . ' · ' . $countUnused . ' ' . __('unused')">
+            <x-slot:actions>
                 @can('create presentations')
-                    <a href="{{ route('presentations.create') }}" class="btn-primary btn btn-sm float-end">
-                        <span class="icon"><i class="bi-plus"></i></span>
-                        <span>{{ __('Create template') }}</span>
+                    <a href="{{ route('presentations.create') }}" class="btn btn-primary">
+                        <i class="bi bi-upload me-1"></i>{{ __('Create template') }}
                     </a>
                 @endcan
-            </h5>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>{{ __('Preview') }}</th>
-                            <th>{{ __('Description') }}</th>
-                            <th>{{ __('Slides') }}</th>
-                            <th>{{ __('Slides updated') }}</th>
-                            <th>{{ __('Used by') }}</th>
-                            <th>{{ __('Created by') }}</th>
-                            <th>{{ __('Actions') }}</th>
-                        </tr>
-                    </thead>
+            </x-slot:actions>
+        </x-page-header>
 
-                    <tbody>
-                        @foreach ($presentations as $presentation)
+        <div class="card">
+            @if ($presentations->isEmpty())
+                <x-empty-state icon="images" :text="__('No templates found')" />
+            @else
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
                             <tr>
-                                <td>
-                                    <a href="{{ route('presentations.show', ['id' => $presentation->id]) }}">
-                                        <img src="{{ $presentation->slides->first()?->publicpreviewpath ?? config('app.placeholder_image') }}"
-                                            class="img-thumbnail" style="max-height: 100px;">
-                                    </a>
-                                </td>
-                                <td>{{ $presentation->name }}</td>
-                                <td>{{ $presentation->slides->count() }}</td>
-                                <td>{{ $presentation->slides->first()?->created_at?->format('d.m.Y H:i') ?? 'N/A' }}</td>
-                                <td>
-                                    @php $list = []; @endphp
-                                    @if ($presentation->devices->count() > 0)
-                                        @php $list[] = $presentation->devices->count() . " " . trans_choice('Device|Devices', $presentation->devices->count()); @endphp
-                                    @endif
-
-                                    @if ($presentation->groups->count() > 0)
-                                        @php $list[] = $presentation->groups->count() . " " . trans_choice('Group|Groups', $presentation->groups->count()); @endphp
-                                    @endif
-
-                                    @if ($presentation->getSchedules()->count() > 0)
-                                        @php $list[] = $presentation->getSchedules()->count() . " " . trans_choice('Schedule|Schedules', $presentation->getSchedules()->count()); @endphp
-                                    @endif
-
-                                    @if (count($list) > 0)
-                                        {{ implode(', ', $list) }}
-                                    @endif
-                                </td>
-                                <td>{{ $presentation->author }}</td>
-                                <td class="actions-cell">
-
-                                    <form action="{{ route('presentations.destroy', ['id' => $presentation->id]) }}"
-                                        method="POST"
-                                        onsubmit="return confirm('{{ __('Are you sure to delete this template?') }}')">
-                                        @method('DELETE')
-                                        @csrf
-                                            @can('read presentations')
-                                                <a class="btn btn-sm btn-primary"
-                                                    href="{{ route('presentations.update', ['id' => $presentation->id]) }}"><i
-                                                        class="bi-pen"></i></a>
-                                            @endcan
-                                            @can('delete presentations')
-                                                <button class="btn btn-sm btn-danger" type="submit"><i
-                                                        class="bi-trash"></i></button>
-                                            @endcan
-                                    </form>
-                                </td>
+                                <th class="ps-4">{{ __('Preview') }}</th>
+                                <th>{{ __('Description') }}</th>
+                                <th>{{ __('Slides') }}</th>
+                                <th>{{ __('Used by') }}</th>
+                                <th>{{ __('Slides updated') }}</th>
+                                <th class="pe-4 text-end">{{ __('Actions') }}</th>
                             </tr>
-                        @endforeach
-                        @if ($presentations->count() == 0)
-                            <tr>
-                                <td colspan="7" class="text-center">
-                                    {{ __('No templates found') }}</td>
-                            </tr>
-                        @endif
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+
+                        <tbody>
+                            @foreach ($presentations as $presentation)
+                                @php
+                                    $list = [];
+                                    if ($presentation->devices->count() > 0) {
+                                        $list[] = $presentation->devices->count() . ' ' . trans_choice('Device|Devices', $presentation->devices->count());
+                                    }
+                                    if ($presentation->groups->count() > 0) {
+                                        $list[] = $presentation->groups->count() . ' ' . trans_choice('Group|Groups', $presentation->groups->count());
+                                    }
+                                    $scheduleCount = $presentation->getSchedules()->count();
+                                    if ($scheduleCount > 0) {
+                                        $list[] = $scheduleCount . ' ' . trans_choice('Schedule|Schedules', $scheduleCount);
+                                    }
+                                @endphp
+                                <tr>
+                                    <td class="ps-4">
+                                        <a href="{{ route('presentations.show', ['id' => $presentation->id]) }}">
+                                            <img src="{{ $presentation->slides->first()?->publicpreviewpath ?? config('app.placeholder_image') }}"
+                                                class="thumb" alt="" loading="lazy">
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="table-link" href="{{ route('presentations.show', ['id' => $presentation->id]) }}">{{ $presentation->name }}</a>
+                                        <div class="small text-muted">{{ $presentation->author }}</div>
+                                    </td>
+                                    <td>
+                                        @if ($presentation->processed)
+                                            {{ $presentation->slides->count() }}
+                                        @else
+                                            <span class="status status-pending">{{ __('In process') }}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if (count($list) > 0)
+                                            <span class="status status-online">{{ implode(', ', $list) }}</span>
+                                        @else
+                                            <span class="status status-neutral">{{ __('unused') }}</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-muted">{{ $presentation->slides->first()?->created_at?->format('d.m.Y H:i') ?? 'N/A' }}</td>
+                                    <td class="actions-cell pe-4">
+                                        <a class="btn btn-outline-secondary btn-sm icon-btn" title="{{ __('Edit template') }}"
+                                            href="{{ route('presentations.show', ['id' => $presentation->id]) }}"><i class="bi bi-pencil"></i></a>
+                                        @can('delete presentations')
+                                            <x-delete-button :action="route('presentations.destroy', ['id' => $presentation->id])"
+                                                :confirm="__('Are you sure to delete this template?')" />
+                                        @endcan
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
         </div>
     @endcan
     @cannot('read presentations')

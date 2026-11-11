@@ -67,7 +67,9 @@
                                 @else
                                     0 @endif;">
                     {{-- Browsers block autoplay with sound, a muted video starts without user interaction --}}
-                    <video autoplay muted playsinline @if (count($slides) === 1) loop @endif>
+                    {{-- In sync mode the script starts each video at the right moment --}}
+                    <video @if (!$sync) autoplay @endif muted playsinline preload="auto"
+                        @if (count($slides) === 1) loop @endif>
                         <source src="{{ $slide['url'] }}" type="video/mp4">
                     </video>
                 </div>
@@ -77,6 +79,30 @@
 
     <script>
         var currentSlide = 0;
+
+        // Synchronized groups: every monitor derives the current slide from the server clock
+        var SYNC = {{ $sync ? 'true' : 'false' }};
+        var SYNC_ANCHOR = {{ $sync_anchor }};
+        var serverOffset = {{ $server_time }} - Date.now();
+        var offsetSamples = [];
+
+        function serverNow() {
+            return Date.now() + serverOffset;
+        }
+
+        // The sample with the shortest round trip gives the most exact offset
+        function addOffsetSample(serverTime, sentAt) {
+            let receivedAt = Date.now();
+            let rtt = receivedAt - sentAt;
+            offsetSamples.push({
+                rtt: rtt,
+                offset: serverTime + rtt / 2 - receivedAt
+            });
+            if (offsetSamples.length > 8) {
+                offsetSamples.shift();
+            }
+            serverOffset = offsetSamples.reduce((a, b) => a.rtt <= b.rtt ? a : b).offset;
+        }
 
         // Refresh page to prevent memory leaks
         function reload_page() {
@@ -103,6 +129,7 @@
         var startup_timestamp = {{ time() }};
 
         function giveServerUpdate() {
+            let sentAt = Date.now();
             $.ajax({
                 url: '/api/devices/monitor/update',
                 type: 'POST',
@@ -130,6 +157,15 @@
                     if (data.force_reload) {
                         console.log("[MISMANAGER] A force reload was requested, reloading page");
                         location.reload();
+                    }
+
+                    if (typeof data.synchronized !== 'undefined' && data.synchronized !== SYNC) {
+                        console.log("[MISMANAGER] Group synchronization was changed, reloading page");
+                        location.reload();
+                    }
+
+                    if (data.server_time) {
+                        addOffsetSample(data.server_time, sentAt);
                     }
                 },
                 error: function(data) {
@@ -173,10 +209,121 @@
 
             var slides = document.querySelectorAll('.slide');
 
-            var slideInterval = setInterval(nextSlide, interval);
+            if (SYNC) {
+                // Measure the clock offset right away instead of waiting for the first regular report
+                giveServerUpdate();
+                startSync();
+            } else {
+                var slideInterval = setInterval(nextSlide, interval);
+            }
 
             // Report independently of slide changes, a long video or slide interval would look like an offline monitor
             setInterval(giveServerUpdate, {{ \App\Models\Setting::get('MONITOR_CHECK_UPDATE_TIME_SECONDS') }} * 1000);
+
+            // Image slides last one interval, video slides last as long as the video. Every monitor of the
+            // group loads the same files, so all of them compute the same timeline.
+            function startSync() {
+                let durations = [];
+                let pending = 0;
+
+                slides.forEach(function(slide, i) {
+                    let video = slide.querySelector('video');
+                    if (!video) {
+                        durations[i] = interval;
+                        return;
+                    }
+
+                    video.pause();
+                    pending++;
+                    let done = false;
+                    let finish = function() {
+                        if (done) return;
+                        done = true;
+                        durations[i] = isFinite(video.duration) && video.duration > 0 ?
+                            Math.round(video.duration * 1000) : interval;
+                        if (--pending === 0) runSync(durations);
+                    };
+
+                    if (video.readyState >= 1) {
+                        finish();
+                    } else {
+                        video.addEventListener('loadedmetadata', finish);
+                        // A broken video must not stop the slideshow
+                        setTimeout(finish, 15000);
+                    }
+                });
+
+                if (pending === 0) runSync(durations);
+            }
+
+            function runSync(durations) {
+                let total = durations.reduce((a, b) => a + b, 0);
+                console.log("[MISMANAGER] Synchronized mode, cycle length " + total + " ms");
+
+                function tick() {
+                    let position = ((serverNow() - SYNC_ANCHOR) % total + total) % total;
+                    let index = 0;
+                    while (index < durations.length - 1 && position >= durations[index]) {
+                        position -= durations[index];
+                        index++;
+                    }
+
+                    if (index !== currentSlide) {
+                        showSlide(index);
+                    }
+
+                    syncVideo(slides[currentSlide].querySelector('video'), position / 1000);
+                }
+
+                tick();
+                setInterval(tick, 100);
+            }
+
+            function showSlide(index) {
+                if ($('.loading')) {
+                    $(".loading").remove();
+                }
+
+                $(slides[currentSlide]).stop().animate({
+                    'opacity': '0'
+                }, {{ \App\Models\Setting::get('SLIDE_OUT_TIME_MS') }});
+
+                let oldVideo = slides[currentSlide].querySelector('video');
+                if (oldVideo) {
+                    oldVideo.pause();
+                    oldVideo.currentTime = 0;
+                }
+
+                currentSlide = index;
+                giveServerUpdate();
+
+                $(slides[currentSlide]).stop().animate({
+                    'opacity': '1'
+                }, {{ \App\Models\Setting::get('SLIDE_IN_TIME_MS') }});
+            }
+
+            // Keep the video at the position the server clock dictates
+            function syncVideo(video, target) {
+                // play() on an ended video would restart it, the next tick switches to the next slide anyway
+                if (!video || video.ended) return;
+
+                if (video.paused) {
+                    video.play().catch(() => {});
+                }
+
+                if (video.seeking) return;
+
+                let drift = video.currentTime - target;
+                if (Math.abs(drift) > 0.5) {
+                    video.currentTime = target;
+                    video.playbackRate = 1;
+                } else if (Math.abs(drift) > 0.05) {
+                    // Small drift is corrected by playing slightly faster or slower, seeking would stutter
+                    video.playbackRate = Math.min(1.05, Math.max(0.95, 1 - drift));
+                } else {
+                    video.playbackRate = 1;
+                }
+            }
 
             setTimeout(() => {
                 $(".loading").fadeOut(1000);

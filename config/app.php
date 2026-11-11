@@ -16,7 +16,8 @@ return [
     */
     'version' => '3.0.0',
 
-    'placeholder_image' => 'https://placehold.co/600x338?text=Assign\nTemplate',
+    // Local file, the interface must also work without internet access
+    'placeholder_image' => '/data/img/placeholder.svg',
 
     'name' => env('APP_NAME', 'MIS Manager'),
     'image_width' => env('IMAGE_WIDTH', 1920),
