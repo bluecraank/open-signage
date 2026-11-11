@@ -563,6 +563,15 @@ class ApplicationTest extends TestCase
         $this->assertStringNotContainsString('ui-avatars.com', $html);
     }
 
+    public function test_permission_migration_skips_existing_tables(): void
+    {
+        // Older installations recorded this migration under its previous file name
+        $migration = require database_path('migrations/2024_08_21_085652_create_permission_tables.php');
+        $migration->up();
+
+        $this->assertTrue(\Spatie\Permission\Models\Role::where('name', 'Manager')->exists());
+    }
+
     public function test_login_page_renders_for_guests(): void
     {
         $this->get('/login')->assertOk()->assertSee('name="username"', false)->assertSee('name="password"', false);
