@@ -8,8 +8,11 @@
 
 Upload a PDF or MP4, assign it to your screens, and every screen updates by itself. A screen only needs a web browser, there is nothing to install on it.
 
+![Device overview with live status and the slide each monitor is showing](docs/screenshots/devices.png)
+
 ## Contents
 
+- [Screenshots](#screenshots)
 - [Features](#features)
 - [How it works](#how-it-works)
 - [Requirements](#requirements)
@@ -22,6 +25,18 @@ Upload a PDF or MP4, assign it to your screens, and every screen updates by itse
 - [Updating](#updating)
 - [Development](#development)
 - [License](#license)
+
+## Screenshots
+
+| Templates | Template details |
+| --- | --- |
+| ![Template list with previews and usage](docs/screenshots/presentations.png) | ![Template with its slides, devices, groups and schedules](docs/screenshots/presentation.png) |
+| **Device** | **Schedules** |
+| ![Device page with current slide and inherited template](docs/screenshots/device.png) | ![Running, upcoming and past schedules](docs/screenshots/schedules.png) |
+
+What a monitor shows:
+
+![A slide in full screen on a monitor](docs/screenshots/monitor.png)
 
 ## Features
 
