@@ -99,6 +99,18 @@ class Device extends Model
         return null;
     }
 
+    // Preview of the slide the monitor reported last
+    public function currentSlidePreview(): string
+    {
+        $slides = $this->getPresentation()?->slides;
+
+        if (!$slides || $slides->isEmpty()) {
+            return config('app.placeholder_image');
+        }
+
+        return ($slides->get((int) $this->current_slide) ?? $slides->first())->publicpreviewpath();
+    }
+
     public function presentationFromGroup()
     {
         if ($this->group?->presentation_id) {
@@ -154,7 +166,7 @@ class Device extends Model
         // Never connected, new \DateTime(null) would count as "seen right now"
         if (!$this->last_seen) {
             $this->active = false;
-            $this->save();
+            $this->saveActiveState();
 
             return false;
         }
@@ -184,8 +196,16 @@ class Device extends Model
             $this->active = false;
         }
 
-        $this->save();
+        $this->saveActiveState();
 
         return $this->active;
+    }
+
+    // The device list polls every few seconds, only write when the state really changed
+    private function saveActiveState(): void
+    {
+        if ($this->isDirty('active')) {
+            $this->save();
+        }
     }
 }

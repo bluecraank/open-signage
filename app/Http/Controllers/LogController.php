@@ -9,7 +9,7 @@ class LogController extends Controller
 {
     public function index()
     {
-        $logs = Log::orderBy('created_at', 'desc')->take(100)->get();
+        $logs = Log::orderBy('created_at', 'desc')->orderBy('id', 'desc')->paginate(50);
         return view('logs.index', compact('logs'));
     }
 }

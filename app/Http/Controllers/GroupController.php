@@ -45,15 +45,11 @@ class GroupController extends Controller
             'name' => $request->name,
             'presentation_id' => $request->presentation_id,
             'created_by' => Auth::user()->name,
+            'synchronized' => $request->boolean('synchronized'),
         ]);
 
-        if ($request->devices) {
-            foreach ($request->devices as $device_id) {
-                $device = Device::find($device_id);
-                if(!$device) continue;
-                $device->group_id = $group->id;
-                $device->save();
-            }
+        if ($request->devices && Auth::user()->can('assign device to group')) {
+            Device::whereIn('id', $request->devices)->update(['group_id' => $group->id]);
         }
 
         return redirect()->route('groups.index')->with('success', __('Group created'));
@@ -92,16 +88,15 @@ class GroupController extends Controller
 
         $group->name = $request->name;
         $group->presentation_id = $request->presentation_id;
+        $group->synchronized = $request->boolean('synchronized');
         $group->save();
 
-        Device::where('group_id', $group->id)->update(['group_id' => null]);
+        // Without this permission the device list is not part of the form, it must stay as it is
+        if (Auth::user()->can('assign device to group')) {
+            Device::where('group_id', $group->id)->update(['group_id' => null]);
 
-        if ($request->devices) {
-            foreach ($request->devices as $device_id) {
-                $device = Device::find($device_id);
-                if(!$device) continue;
-                $device->group_id = $group->id;
-                $device->save();
+            if ($request->devices) {
+                Device::whereIn('id', $request->devices)->update(['group_id' => $group->id]);
             }
         }
 

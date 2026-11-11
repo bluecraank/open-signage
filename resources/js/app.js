@@ -52,43 +52,45 @@ window.dragOverHandler = function (ev) {
     ev.preventDefault();
 }
 
-// Hide alert after 5 seconds
+// Hide all success and error messages after 5 seconds
 window.setTimeout(function () {
-    let alert = document.querySelector('.fade-out');
-    if (alert) {
-        alert.animate([
-            { opacity: 1 },
-            { opacity: 0 }
-        ], {
-            duration: 1000
-        });
-
+    document.querySelectorAll('.fade-out').forEach(function (alert) {
+        alert.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600 });
         window.setTimeout(function () {
             alert.style.display = 'none';
-        }, 1000);
-    }
+        }, 600);
+    });
 }, 5000);
+
+// Highlight the drop zone while a file is dragged over it
+document.addEventListener('DOMContentLoaded', function () {
+    const dropZone = document.getElementById('drop_zone');
+    if (!dropZone) return;
+
+    ['dragenter', 'dragover'].forEach((event) => dropZone.addEventListener(event, () => dropZone.classList.add('dragover')));
+    ['dragleave', 'drop'].forEach((event) => dropZone.addEventListener(event, () => dropZone.classList.remove('dragover')));
+});
 
 document.addEventListener('DOMContentLoaded', function () {
     const darkMode = document.querySelector('.dark-mode');
     const lightMode = document.querySelector('.light-mode');
-    const body = document.querySelector('body');
+    const root = document.documentElement;
     const switchMode = document.querySelector('.themeButton');
 
     // Shows the icon of the theme the user can switch to
     function applyTheme(theme) {
-        body.dataset.bsTheme = theme === 'dark' ? 'dark' : '';
+        root.dataset.bsTheme = theme;
         if (darkMode) darkMode.classList.toggle('d-none', theme === 'dark');
         if (lightMode) lightMode.classList.toggle('d-none', theme !== 'dark');
     }
 
     if (switchMode) {
         switchMode.addEventListener('click', () => {
-            const theme = body.dataset.bsTheme === 'dark' ? 'light' : 'dark';
-            localStorage.setItem('theme', theme);
+            const theme = root.dataset.bsTheme === 'dark' ? 'light' : 'dark';
+            try { localStorage.setItem('theme', theme); } catch (e) {}
             applyTheme(theme);
         });
     }
 
-    applyTheme(localStorage.getItem('theme'));
+    applyTheme(root.dataset.bsTheme === 'dark' ? 'dark' : 'light');
 });

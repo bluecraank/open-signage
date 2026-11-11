@@ -48,7 +48,8 @@ class Presentation extends Model
 
     public function slides()
     {
-        return $this->hasMany(Slide::class);
+        // Monitors play the slides in this order, previews must use the same one
+        return $this->hasMany(Slide::class)->orderBy('order');
     }
 
     public function groups()

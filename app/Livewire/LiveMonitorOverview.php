@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use App\Models\Device;
-use App\Models\Presentation;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Session;
 use Livewire\Component;
@@ -29,10 +28,23 @@ class LiveMonitorOverview extends Component
             $this->sort_by = 'name';
         }
 
-        $devices = Device::all()->sortBy($this->sortToColumn[$this->sort_by]);
+        $devices = Device::with('group')->get();
 
-        $presentation = Presentation::all()->keyBy('id')->toArray();
+        // Refresh the online state first, the counters and the sorting depend on it
+        $online = [];
+        foreach ($devices as $device) {
+            $online[$device->id] = $device->isActive();
+        }
 
-        return view('livewire.live-monitor-overview', ['devices' => $devices, 'presentation' => $presentation]);
+        $devices = $devices->sortBy($this->sortToColumn[$this->sort_by]);
+
+        $stats = [
+            'total' => $devices->count(),
+            'online' => $devices->filter(fn ($d) => $d->registered && $online[$d->id])->count(),
+            'offline' => $devices->filter(fn ($d) => $d->registered && !$online[$d->id])->count(),
+            'pending' => $devices->where('registered', false)->count(),
+        ];
+
+        return view('livewire.live-monitor-overview', compact('devices', 'online', 'stats'));
     }
 }

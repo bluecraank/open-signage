@@ -24,12 +24,6 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/devices/register', function() {
-    return view('devices.register');
-})->name('devices.register');
-
-// Route::post('/devices/register', [DeviceController::class, 'register']);
-
 Route::get('/monitor/{secret}', [MonitorController::class, 'show'])->name('devices.monitor');
 
 Route::get('/discover', [DeviceController::class, 'discover'])->name('devices.discover');

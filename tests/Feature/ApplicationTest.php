@@ -406,12 +406,173 @@ class ApplicationTest extends TestCase
         $device = $this->device(['presentation_id' => $presentation->id]);
 
         $this->get("/monitor/{$device->secret}")->assertOk()
-            ->assertSee('<video autoplay muted playsinline  loop', false)
-            ->assertSee('v-v.mp4', false);
+            ->assertSeeInOrder(['<video', 'autoplay', 'muted playsinline', 'loop', 'v-v.mp4'], false);
 
         $this->get("/presentations/{$presentation->id}")->assertOk()
             ->assertSee('<video src="'.$slide->publicpath().'"', false)
             ->assertDontSee('placehold.co/600x338?text=Video', false);
+    }
+
+    public function test_group_synchronization_can_be_toggled(): void
+    {
+        $presentation = $this->presentation();
+        $device = $this->device();
+
+        $this->post('/groups', [
+            'name' => 'Lobby', 'presentation_id' => $presentation->id, 'devices' => [$device->id], 'synchronized' => '1',
+        ])->assertRedirect('/groups');
+
+        $group = Group::where('name', 'Lobby')->firstOrFail();
+        $this->assertTrue($group->synchronized);
+        $this->get("/groups/{$group->id}")->assertOk()->assertSee('id="synchronized" checked', false);
+
+        // An unchecked checkbox is not sent at all
+        $this->put("/groups/{$group->id}", [
+            'name' => 'Lobby', 'presentation_id' => $presentation->id, 'devices' => [$device->id],
+        ])->assertRedirect();
+
+        $this->assertFalse($group->fresh()->synchronized);
+    }
+
+    public function test_monitor_in_synchronized_group_follows_server_clock(): void
+    {
+        $presentation = $this->presentation(2);
+        $group = Group::create(['name' => 'Lobby', 'presentation_id' => $presentation->id, 'created_by' => 'Test', 'synchronized' => true]);
+        $device = $this->device(['group_id' => $group->id]);
+        auth()->logout();
+
+        $this->get("/monitor/{$device->secret}")->assertOk()
+            ->assertSee('var SYNC = true;', false)
+            ->assertSee('var SYNC_ANCHOR = '.($presentation->fresh()->updated_at->timestamp * 1000).';', false);
+
+        $response = $this->post('/api/devices/monitor/update', [
+            'secret' => $device->secret, 'currentSlide' => 0, 'last_update' => 1,
+            'startup_timestamp' => time(), 'presentation_id' => $presentation->id,
+        ])->assertOk()->assertJsonPath('synchronized', true);
+
+        $this->assertEqualsWithDelta(microtime(true) * 1000, $response->json('server_time'), 5000);
+
+        $group->update(['synchronized' => false]);
+        $this->get("/monitor/{$device->secret}")->assertOk()->assertSee('var SYNC = false;', false);
+    }
+
+    public function test_monitor_without_group_is_not_synchronized(): void
+    {
+        $device = $this->device(['presentation_id' => $this->presentation()->id]);
+
+        $this->get("/monitor/{$device->secret}")->assertOk()->assertSee('var SYNC = false;', false);
+    }
+
+    public function test_saving_a_group_without_device_permission_keeps_its_devices(): void
+    {
+        $presentation = $this->presentation();
+        $group = Group::create(['name' => 'Lobby', 'presentation_id' => $presentation->id, 'created_by' => 'Test']);
+        $device = $this->device(['group_id' => $group->id]);
+
+        $role = \Spatie\Permission\Models\Role::create(['name' => 'Group editor', 'guard_name' => 'sanctum']);
+        $role->givePermissionTo(['read groups', 'update groups']);
+
+        // The device list is not part of the form for this user
+        $this->actingAs($this->user('Group editor', 'Editor'))
+            ->put("/groups/{$group->id}", ['name' => 'Lobby 2', 'presentation_id' => $presentation->id])
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame($group->id, (int) $device->fresh()->group_id);
+        $this->assertSame('Lobby 2', $group->fresh()->name);
+    }
+
+    public function test_pages_have_balanced_markup(): void
+    {
+        $presentation = $this->presentation(2);
+        $device = $this->device(['presentation_id' => $presentation->id]);
+        $group = Group::create(['name' => 'Lobby', 'presentation_id' => $presentation->id, 'created_by' => 'Test']);
+        $admin = $this->user('Super Administrator', 'Admin');
+        $this->actingAs($admin);
+
+        // An unclosed element pulled the footer into the template card
+        foreach (['/devices', "/devices/{$device->id}", "/presentations/{$presentation->id}", '/presentations',
+            "/groups/{$group->id}", '/schedules', '/schedules/create', "/users/{$admin->id}", '/users', '/logs', '/settings'] as $url) {
+            $this->assertSame(0, $this->divBalance($this->get($url)->assertOk()->getContent()), $url);
+        }
+    }
+
+    public function test_settings_and_logs_are_reachable_from_the_menu(): void
+    {
+        // Supporters may read logs but not change settings. The only user would become administrator.
+        $this->user('Super Administrator', 'Admin');
+        $html =$this->actingAs($this->user('Supporter'))->get('/devices')->assertOk()->getContent();
+
+        $this->assertStringContainsString(route('logs.index'), $html);
+        $this->assertStringNotContainsString(route('settings.index'), $html);
+        $this->get('/settings')->assertForbidden();
+        $this->get('/logs')->assertOk();
+    }
+
+    public function test_all_running_schedules_are_listed(): void
+    {
+        $presentation = $this->presentation();
+        for ($i = 1; $i <= 12; $i++) {
+            Schedule::create([
+                'name' => "Running $i", 'presentation_id' => $presentation->id, 'devices' => [], 'groups' => [],
+                'start_time' => now()->subHour(), 'end_time' => now()->addHour(), 'enabled' => true, 'created_by' => 'Test',
+            ]);
+        }
+
+        $this->get('/schedules')->assertOk()->assertSee('Running 12')->assertSee('Running 1<', false);
+    }
+
+    public function test_every_delete_asks_for_confirmation(): void
+    {
+        $presentation = $this->presentation();
+        $schedule = Schedule::create([
+            'name' => 'Later', 'presentation_id' => $presentation->id, 'devices' => [], 'groups' => [],
+            'start_time' => now()->addDay(), 'end_time' => now()->addDays(2), 'enabled' => true, 'created_by' => 'Test',
+        ]);
+
+        $html = $this->get("/schedules/{$schedule->id}")->assertOk()->getContent();
+
+        preg_match_all('/<form[^>]*>(?:(?!<\/form>).)*name="_method" value="DELETE"/s', $html, $forms);
+        $this->assertNotEmpty($forms[0]);
+        foreach ($forms[0] as $form) {
+            $this->assertStringContainsString('onsubmit="return confirm(', $form);
+        }
+    }
+
+    public function test_device_preview_follows_slide_order(): void
+    {
+        $presentation = $this->presentation(0);
+        // Inserted in reverse, the monitor plays them by "order"
+        Slide::create(['presentation_id' => $presentation->id, 'order' => 2, 'type' => 'image', 'name' => 'b', 'name_on_disk' => 'second.jpg']);
+        Slide::create(['presentation_id' => $presentation->id, 'order' => 1, 'type' => 'image', 'name' => 'a', 'name_on_disk' => 'first.jpg']);
+        $device = $this->device(['presentation_id' => $presentation->id]);
+        $device->current_slide = 1;
+
+        $this->assertStringEndsWith('second.jpg', $device->currentSlidePreview());
+    }
+
+    public function test_interface_does_not_load_external_images(): void
+    {
+        $presentation = $this->presentation(0);
+        Slide::create(['presentation_id' => $presentation->id, 'order' => 1, 'type' => 'video', 'name' => 'v', 'name_on_disk' => 'v.mp4']);
+        $this->device();
+
+        // Monitor networks often have no internet access
+        $html = $this->get('/devices')->getContent().$this->get('/presentations')->getContent();
+
+        $this->assertStringNotContainsString('placehold.co', $html);
+        $this->assertStringNotContainsString('ui-avatars.com', $html);
+    }
+
+    public function test_login_page_renders_for_guests(): void
+    {
+        $this->get('/login')->assertOk()->assertSee('name="username"', false)->assertSee('name="password"', false);
+    }
+
+    public function test_legacy_register_page_is_gone(): void
+    {
+        auth()->logout();
+
+        $this->get('/devices/register')->assertRedirect('/login');
     }
 
     public function test_default_seeder_does_not_create_demo_data(): void

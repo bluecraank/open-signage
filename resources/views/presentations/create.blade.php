@@ -1,34 +1,28 @@
 @extends('layouts.app')
 
+@section('title', __('Create template'))
+
 @section('content')
-    <h3 class="mb-3">{{ __('Templates') }}</h3>
+    <x-page-header :title="__('Create template')" :back="route('presentations.index')" :backLabel="__('Templates')" />
+
     <div class="card">
-        <h5 class="card-header">{{ __('Create template') }}</h5>
-        <div class="card-body">
+        <div class="card-body p-4">
             <form action="{{ route('presentations.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <div class="mb-3">
-                    <label class="form-label">{{ __('Description of presentation') }}<span class="text-danger">*</span></label>
+                <div class="mb-4">
+                    <label class="form-label" for="inputDescription">{{ __('Description of presentation') }}<span class="text-danger">*</span></label>
                     <input required type="text" class="form-control" id="inputDescription" name="name"
-                        placeholder="{{ __('Description of presentation') }}">
+                        value="{{ old('name') }}" placeholder="{{ __('Description of presentation') }}">
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">{{ __('Upload file') }}<span class="text-danger">*</span></label>
-                    <div id="drop_zone" ondrop="window.dropHandler(event)" ondragover="window.dragOverHandler(event)">
-                        <div id="file-upload">
-                            <input class="form-control file-input" type="file" name="file" required
-                                accept="application/pdf,video/mp4" id="formFile">
-                            <p class="mt-4" style="display: inline-block">{{ __('or drag and drop to upload') }}</p>
-                        </div>
-                    </div>
+                <label class="form-label">{{ __('Upload file') }}<span class="text-danger">*</span></label>
+                @include('partials.file-upload', ['required' => true])
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-upload me-1"></i>{{ __('Create') }}</button>
+                    <a href="{{ route('presentations.index') }}" class="btn btn-link text-muted">{{ __('Cancel') }}</a>
                 </div>
-
-                <hr>
-
-                <button type="submit" class="btn btn-primary">{{ __('Create') }}</button>
-                <button type="reset" class="btn btn-danger">{{ __('Reset') }}</button>
             </form>
         </div>
     </div>

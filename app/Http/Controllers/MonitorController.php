@@ -44,7 +44,25 @@ class MonitorController extends Controller
 
         $slides = $images;
 
-        return view('monitor', ['slides' => $slides, 'last_update' => $presentation->updated_at->timestamp, 'device' => $device]);
+        return view('monitor', [
+            'slides' => $slides,
+            'last_update' => $presentation->updated_at->timestamp,
+            'device' => $device,
+            'sync' => self::isSynchronized($device),
+            // Every monitor of the group counts the slideshow from this point, so all of them land on the same slide
+            'sync_anchor' => $presentation->updated_at->timestamp * 1000,
+            'server_time' => self::serverTimeMs(),
+        ]);
+    }
+
+    private static function isSynchronized(Device $device): bool
+    {
+        return (bool) $device->group?->synchronized;
+    }
+
+    private static function serverTimeMs(): int
+    {
+        return (int) floor(microtime(true) * 1000);
     }
 
     public function hasUpdate(Request $request) {
@@ -104,6 +122,8 @@ class MonitorController extends Controller
             'last_update' => $presentation->updated_at->timestamp,
             'presentation_id' => $presentation->id,
             'force_reload' => $force_reload,
+            'synchronized' => self::isSynchronized($device),
+            'server_time' => self::serverTimeMs(),
         ];
 
         return json_encode($return);

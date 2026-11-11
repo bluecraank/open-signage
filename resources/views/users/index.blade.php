@@ -1,57 +1,50 @@
 @extends('layouts.app')
 
+@section('title', __('Users'))
+
 @section('content')
     @can('read users')
-    <h3 class="mb-3">{{ __('Users') }}</h3>
+        <x-page-header :title="__('Users')" :subtitle="__('Users are created on their first login through Active Directory')" />
 
         <div class="card">
-            <h5 class="card-header">
-                {{ __('Overview') }}
-            </h5>
-            <div class="card-body">
-                <table class="table table-striped">
+            <div class="table-responsive">
+                <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th class="ps-4">Name</th>
                             <th>{{ __('Mail') }}</th>
                             <th>{{ __('Role') }}</th>
-                            <th>{{ __('Actions') }}</th>
+                            <th class="pe-4 text-end">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         @foreach ($users as $user)
                             <tr>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->email ?? __('This user has no mail') }}</td>
-                                <td>{{ $user->getRoleNames()[0] ?? __('No roles') }}</td>
-                                <td class="actions-cell">
-
-                                    <form action="{{ route('users.destroy', ['id' => $user->id]) }}" method="POST"
-                                        onsubmit="return confirm('{{ __('Are you sure to delete this user?') }}')">
-                                        @method('DELETE')
-                                        @csrf
-                                        <div class="btn-group" role="group">
-                                        @can('update users')
-                                            <a class="btn btn-primary btn-sm"
-                                                href="{{ route('users.update', ['id' => $user->id]) }}"><i
-                                                    class="bi-pen"></i></a>
-                                        @endcan
-                                        @can('delete users')
-                                            <button class="btn btn-primary btn-sm" type="submit"><i
-                                                    class="bi-trash"></i></button>
-                                        @endcan
-                                        </div>
-                                    </form>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="avatar">{{ $user->initials() }}</span>
+                                        <a class="table-link" href="{{ route('users.show', ['id' => $user->id]) }}">{{ $user->name }}</a>
+                                    </div>
+                                </td>
+                                <td class="text-muted">{{ $user->email ?? __('This user has no mail') }}</td>
+                                <td>
+                                    @php $role = $user->getRoleNames()->first(); @endphp
+                                    <span class="status {{ $role ? ($role === 'Super Administrator' ? 'status-online' : 'status-neutral') : 'status-pending' }}">
+                                        {{ $role ?? __('No roles') }}</span>
+                                </td>
+                                <td class="actions-cell pe-4">
+                                    @can('update users')
+                                        <a class="btn btn-outline-secondary btn-sm icon-btn" title="{{ __('Edit user') }}"
+                                            href="{{ route('users.show', ['id' => $user->id]) }}"><i class="bi bi-pencil"></i></a>
+                                    @endcan
+                                    @can('delete users')
+                                        <x-delete-button :action="route('users.destroy', ['id' => $user->id])"
+                                            :confirm="__('Are you sure to delete this user?')" />
+                                    @endcan
                                 </td>
                             </tr>
                         @endforeach
-                        @if ($users->count() == 0)
-                            <tr>
-                                <td colspan="5" class="text-center">
-                                    {{ __('No users found, should not be possible :D') }}</td>
-                            </tr>
-                        @endif
                     </tbody>
                 </table>
             </div>

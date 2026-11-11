@@ -42,6 +42,7 @@ What a monitor shows:
 
 - PDF presentations are converted to one image per page, MP4 files play as video
 - Assign content to single monitors, to groups, or for a limited time with schedules
+- Synchronized groups, where every monitor shows the same slide at the same time
 - Monitors pick up changes on their own, and can be reloaded remotely
 - Zero-touch rollout through a single discover URL that recognizes monitors by IP address
 - Login through Active Directory (LDAP), with optional single sign-on
@@ -67,6 +68,12 @@ If several assignments apply to a monitor, the most specific active one wins:
 A schedule can delete its template when it ends. The template is kept if a device, a group or another schedule still uses it.
 
 No cron job or queue worker is required. Uploads are processed by a background process, and finished schedules are cleaned up when a monitor next reports to the server.
+
+### Synchronized groups
+
+Turn on **Synchronize monitors** in a group to show the same slide on all of its monitors at the same time, for example on a video wall or several screens in one room. Each monitor works out the current slide from the server clock, so a monitor that starts or reloads later joins at the right slide. Image slides last for the configured slide interval, and video slides last as long as the video. The slideshow starts from the first slide whenever the template is updated.
+
+All monitors of the group must be able to load every video. A monitor that cannot read a video's length falls back to the slide interval and runs out of step.
 
 ## Requirements
 
