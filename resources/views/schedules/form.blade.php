@@ -44,11 +44,47 @@
                 <option value="">{{ __('Select a template') }}...</option>
                 @foreach ($presentations as $presentation)
                     <option value="{{ $presentation->id }}" @selected(old('presentation_id', $schedule?->presentation_id) == $presentation->id)
-                        @disabled(!$presentation->processed)>
+                        @disabled(!$presentation->processed)
+                        data-preview="{{ $presentation->slides->first()?->publicpreviewpath ?? config('app.placeholder_image') }}"
+                        data-url="{{ route('presentations.show', ['id' => $presentation->id]) }}">
                         {{ $presentation->name }} @if (!$presentation->processed) ({{ __('In process') }}) @endif
                     </option>
                 @endforeach
             </select>
+            <div id="presentation-preview" class="mt-3 d-none">
+                <a id="presentation-preview-link" href="#" target="_blank" rel="noopener">
+                    <img id="presentation-preview-image" class="screen" src="" alt="{{ __('Preview') }}" style="max-width: 360px">
+                </a>
+                <a id="presentation-preview-name" class="d-inline-block mt-2 small" href="#" target="_blank" rel="noopener"></a>
+            </div>
+            <script>
+                (function() {
+                    var select = document.getElementById('presentation_id');
+                    var box = document.getElementById('presentation-preview');
+                    var image = document.getElementById('presentation-preview-image');
+                    var link = document.getElementById('presentation-preview-link');
+                    var name = document.getElementById('presentation-preview-name');
+
+                    function update() {
+                        var option = select.options[select.selectedIndex];
+                        if (!option || !option.value) {
+                            box.classList.add('d-none');
+                            return;
+                        }
+                        image.src = option.dataset.preview;
+                        link.href = name.href = option.dataset.url;
+                        name.innerHTML = '';
+                        name.append(option.textContent.trim() + ' ');
+                        var icon = document.createElement('i');
+                        icon.className = 'bi bi-box-arrow-up-right';
+                        name.append(icon);
+                        box.classList.remove('d-none');
+                    }
+
+                    select.addEventListener('change', update);
+                    update();
+                })();
+            </script>
         </div>
 
         <div class="col-md-6">

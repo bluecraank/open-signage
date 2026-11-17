@@ -33,7 +33,7 @@ class ScheduleController extends Controller
     {
         $devices = Device::all();
         $groups = Group::all();
-        $presentations = Presentation::all();
+        $presentations = Presentation::with('slides')->get();
         return view('schedules.create', compact('devices', 'groups', 'presentations'));
     }
 
@@ -92,7 +92,7 @@ class ScheduleController extends Controller
             return redirect()->route('schedules.index')->withErrors(['message' => __('Schedule not found')]);
         }
 
-        $presentations = Presentation::all();
+        $presentations = Presentation::with('slides')->get();
         $groups = Group::all();
         $devices = Device::all();
 
