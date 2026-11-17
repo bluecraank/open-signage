@@ -14,7 +14,7 @@ return [
     | any other location as required by the application or its packages.
     |
     */
-    'version' => '3.1.1',
+    'version' => '3.2.0',
 
     // Local file, the interface must also work without internet access
     'placeholder_image' => '/data/img/placeholder.svg',
