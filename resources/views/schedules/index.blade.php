@@ -31,7 +31,8 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th class="ps-4">Name</th>
+                                    <th class="ps-4">{{ __('Preview') }}</th>
+                                    <th>Name</th>
                                     <th>{{ __('Template') }}</th>
                                     <th>{{ __('Period') }}</th>
                                     <th>{{ __('Applies to') }}</th>
@@ -41,8 +42,20 @@
                             </thead>
                             <tbody>
                                 @foreach ($schedules as $schedule)
+                                    @php
+                                        $preview = $schedule->presentation?->slides->first()?->publicpreviewpath ?? config('app.placeholder_image');
+                                    @endphp
                                     <tr>
                                         <td class="ps-4">
+                                            @if ($schedule->presentation)
+                                                <a href="{{ route('presentations.show', ['id' => $schedule->presentation->id]) }}">
+                                                    <img src="{{ $preview }}" class="thumb" alt="" loading="lazy">
+                                                </a>
+                                            @else
+                                                <img src="{{ $preview }}" class="thumb" alt="" loading="lazy">
+                                            @endif
+                                        </td>
+                                        <td>
                                             @if ($editable)
                                                 <a class="table-link" href="{{ route('schedules.show', ['id' => $schedule->id]) }}">{{ $schedule->name }}</a>
                                             @else
@@ -50,7 +63,13 @@
                                             @endif
                                             <div><span class="status {{ $statusClass }} mt-1">{{ $statusLabel }}</span></div>
                                         </td>
-                                        <td>{{ $schedule->presentation?->name ?? '–' }}</td>
+                                        <td>
+                                            @if ($schedule->presentation)
+                                                <a class="table-link" href="{{ route('presentations.show', ['id' => $schedule->presentation->id]) }}">{{ $schedule->presentation->name }}</a>
+                                            @else
+                                                –
+                                            @endif
+                                        </td>
                                         <td class="text-nowrap">
                                             {{ $schedule->startDate() }}<br>
                                             <span class="text-muted">{{ $schedule->endDate() }}</span>

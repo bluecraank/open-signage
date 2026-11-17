@@ -19,9 +19,9 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        $upcomingSchedules = Schedule::where('start_time', '>', now())->orderBy('start_time', 'asc')->get();
-        $activeSchedules = Schedule::where('start_time', '<', now())->where('end_time', '>', now())->orderBy('start_time', 'asc')->get();
-        $pastSchedules = Schedule::where('end_time', '<', now())->orderBy('end_time', 'desc')->take(10)->get();
+        $upcomingSchedules = Schedule::with('presentation.slides')->where('start_time', '>', now())->orderBy('start_time', 'asc')->get();
+        $activeSchedules = Schedule::with('presentation.slides')->where('start_time', '<', now())->where('end_time', '>', now())->orderBy('start_time', 'asc')->get();
+        $pastSchedules = Schedule::with('presentation.slides')->where('end_time', '<', now())->orderBy('end_time', 'desc')->take(10)->get();
 
         return view('schedules.index', compact('upcomingSchedules', 'activeSchedules', 'pastSchedules'));
     }
