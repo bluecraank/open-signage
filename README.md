@@ -1,12 +1,14 @@
 <h1 align="center">open-signage</h1>
 
-<p align="center">Browser-based digital signage, managed from one web interface and built with Laravel.</p>
+<p align="center">Self-hosted, open-source digital signage software. Manage all your screens from one web interface.</p>
 
 <p align="center">
   <a href="https://github.com/bluecraank/open-signage/actions/workflows/docker-publish.yml"><img src="https://github.com/bluecraank/open-signage/actions/workflows/docker-publish.yml/badge.svg" alt="Docker build status"></a>
+  <a href="https://github.com/bluecraank/open-signage/releases/latest"><img src="https://img.shields.io/github/v/release/bluecraank/open-signage" alt="Latest release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/bluecraank/open-signage" alt="License"></a>
 </p>
 
-Upload a PDF or MP4, assign it to your screens, and every screen updates by itself. A screen only needs a web browser, there is nothing to install on it.
+Upload a PDF or MP4, assign it to your screens, and every screen updates by itself. A screen only needs a web browser, there is nothing to install on it: a Raspberry Pi in kiosk mode or any PC with a browser works as a display. Use it for info screens in offices, reception and lobby displays, canteen menus, schools or video walls. Runs in Docker, built with Laravel.
 
 ![Device overview with live status and the slide each monitor is showing](docs/screenshots/devices.png)
 
@@ -33,6 +35,8 @@ Upload a PDF or MP4, assign it to your screens, and every screen updates by itse
 | ![Template list with previews and usage](docs/screenshots/presentations.png) | ![Template with its slides, devices, groups and schedules](docs/screenshots/presentation.png) |
 | **Device** | **Schedules** |
 | ![Device page with current slide and inherited template](docs/screenshots/device.png) | ![Running, upcoming and past schedules](docs/screenshots/schedules.png) |
+| **Edit schedule** | **Synchronized group** |
+| ![Schedule form with a preview of the selected template](docs/screenshots/schedule.png) | ![Group with synchronized monitors](docs/screenshots/group.png) |
 
 What a monitor shows:
 
